@@ -95,6 +95,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
+            "baseHref": "/dytest/",
             "name": "jxes6102",
             "email": "jxes6102@gmail.com"
           }
