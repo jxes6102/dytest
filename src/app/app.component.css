@@ -1,6 +1,8 @@
 .background {
+    position: fixed;
     width: 100vw;
     height: 100vh;
     background: linear-gradient(to bottom right,#002f4b,#dc4225);
 	opacity: 0.6; 
+    z-index: -1;
 }

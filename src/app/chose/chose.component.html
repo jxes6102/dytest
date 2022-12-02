@@ -1,0 +1,6 @@
+<div class="wrap">
+    <ng-container *ngFor="let item of buttonTData">
+        <button (click)="action(item.mode)">{{item.text}}</button>
+    </ng-container>
+    <button (click)="test()">getmode</button>
+</div>
