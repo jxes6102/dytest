@@ -91,6 +91,13 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "name": "jxes6102",
+            "email": "jxes6102@gmail.com"
+          }
         }
       }
     }
