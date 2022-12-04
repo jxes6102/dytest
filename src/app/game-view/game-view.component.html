@@ -1,3 +1,12 @@
-<div>game-view works!</div>
-<button (click)="test()">test get serve data</button>
-<button (click)="back()">back</button>
+<div class="wrap">
+  <div>
+    <div>game-view works!</div>
+    <button (click)="test()">test get serve data</button>
+    <button (click)="back()">back</button>
+  </div>
+  <div class="playView">
+    <ng-container *ngFor="let item of viewData;let i = index">
+      <div [ngClass]="item.className">{{item.data}}</div>
+    </ng-container>
+  </div>
+</div>
