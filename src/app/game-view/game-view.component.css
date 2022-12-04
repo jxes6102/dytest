@@ -22,44 +22,80 @@
   grid-area: area0;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square1 {
   grid-area: area1;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square2 {
   grid-area: area2;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square3 {
   grid-area: area3;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square4 {
   grid-area: area4;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square5 {
   grid-area: area5;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square6 {
   grid-area: area6;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square7 {
   grid-area: area7;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .square8 {
   grid-area: area8;
 	background-color: #f3a8a8;
   border: 1px solid #252a34;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
 }

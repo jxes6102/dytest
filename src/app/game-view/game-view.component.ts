@@ -15,7 +15,7 @@ export class GameViewComponent implements OnInit{
   viewData = this.gameService.getViewData()
 
   test(): void {
-    console.log('getMode:',this.gameService.getMode())
+    // console.log('getMode:',this.gameService.getMode())
   }
 
   back(): void {
@@ -23,4 +23,7 @@ export class GameViewComponent implements OnInit{
     this.gameService.clearMode()
   }
 
+  action(name:string): void{
+    this.gameService.playerCilck(name)
+  }
 }
