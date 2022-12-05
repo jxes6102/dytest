@@ -4,11 +4,13 @@
       <div [ngClass]="item.className" (click)="action(item.className)">{{item.data | displayPipe}}</div>
     </ng-container>
   </div>
-  <div class="menu">
-    <button class="backStyle" *ngIf="mode === 'record'">上一步</button>
+  <div class="menu" *ngIf="mode === 'record'">
+    <button class="backStyle">上一步</button>
+    <button class="backStyle">下一步</button>
+  </div>
+  <div class="menu" *ngIf="mode === 'battle'">
     <button class="backStyle" (click)="back()">回上頁</button>
-    <button class="backStyle" *ngIf="mode === 'record'">下一步</button>
-    <button class="backStyle" *ngIf="mode === 'battle'" (click)="renewGame()">重置遊戲</button>
+    <button class="backStyle" (click)="renewGame()">重置遊戲</button>
   </div>
   <div class="winStyle" *ngIf="whoWin !== 0">{{whoWin | winerPipe}}</div>
 </div>

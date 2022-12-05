@@ -29,19 +29,19 @@ export class GameService {
       {className:"square8",data:0}
     ]
   }
-
+  // 拿取模式
   getMode() {
     return this.mode
   }
-
+  // 設定模式
   setMode(name: string) {
     this.mode = name
   }
-
+  // 重置模式
   clearMode() {
     this.mode = ''
   }
-
+  // 拿取頁面資料
   getViewData() {
     return this.viewData
   }
@@ -76,7 +76,7 @@ export class GameService {
     }
 
   }
-
+  // 拿取勝利者
   getWin() {
     return this.win
   }
