@@ -68,7 +68,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square1 {
   grid-area: area1;
@@ -81,7 +81,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square2 {
   grid-area: area2;
@@ -93,7 +93,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square3 {
   grid-area: area3;
@@ -106,7 +106,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square4 {
   grid-area: area4;
@@ -120,7 +120,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square5 {
   grid-area: area5;
@@ -133,7 +133,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square6 {
   grid-area: area6;
@@ -145,7 +145,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square7 {
   grid-area: area7;
@@ -158,7 +158,7 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }
 .square8 {
   grid-area: area8;
@@ -170,5 +170,5 @@
   justify-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 5em;
 }

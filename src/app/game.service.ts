@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType } from "./gamemodel.model";
+import { viewType,stepType } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -7,14 +7,16 @@ export class GameService {
   mode:string
   viewData:viewType[]
   step:number
-  // gameData:any[]
   win:number
+  gameRecord:any[]
+  gameStep:stepType[]
 
   constructor() {
     this.win = 0
-    // this.gameData = []
+    this.gameRecord = []
     this.mode = ''
     this.step = 0
+    this.gameStep = []
     this.viewData = [
       {className:"square0",data:0},
       {className:"square1",data:0},
@@ -50,8 +52,13 @@ export class GameService {
 
     this.step++
     if (this.step === 9) this.win = 9
-    if(this.step % 2 == 1) this.viewData[index].data = 1
-    else this.viewData[index].data = -1
+    if(this.step % 2 == 1) {
+      this.viewData[index].data = 1
+      this.gameStep.push({wherePlace: index,content: 1})
+    } else {
+      this.viewData[index].data = -1
+      this.gameStep.push({wherePlace: index,content: -1})
+    }
 
     this.judgeVictory()
   }
@@ -67,7 +74,7 @@ export class GameService {
       this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
         ? this.viewData[i].data : this.win
     }
-
+    
   }
 
   getWin() {
@@ -78,5 +85,7 @@ export class GameService {
     this.step = 0
     this.win = 0
     for(let key in this.viewData) this.viewData[key].data = 0
+    this.gameRecord.push(this.gameStep)
+    this.gameStep = []
   }
 }
