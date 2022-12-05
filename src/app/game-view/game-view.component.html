@@ -6,6 +6,7 @@
   </div>
   <div class="menu">
     <button class="backStyle" (click)="back()">回上頁</button>
+    <button class="backStyle" (click)="renewGame()">重置遊戲</button>
   </div>
-  <div class="winStyle">{{whoWin | winerPipe}}</div>
+  <div class="winStyle" *ngIf="whoWin !== 0">{{whoWin | winerPipe}}</div>
 </div>

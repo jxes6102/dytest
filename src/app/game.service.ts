@@ -7,12 +7,12 @@ export class GameService {
   mode:string
   viewData:viewType[]
   step:number
-  gameData:any[]
+  // gameData:any[]
   win:number
 
   constructor() {
     this.win = 0
-    this.gameData = []
+    // this.gameData = []
     this.mode = ''
     this.step = 0
     this.viewData = [
@@ -43,18 +43,19 @@ export class GameService {
   getViewData() {
     return this.viewData
   }
-
+  // 點擊紀錄
   playerCilck(name:string) {
     const index = this.viewData.findIndex((item) => item.className == name)
     if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.win) return
 
     this.step++
+    if (this.step === 9) this.win = 9
     if(this.step % 2 == 1) this.viewData[index].data = 1
     else this.viewData[index].data = -1
 
     this.judgeVictory()
   }
-
+  // 判斷勝負
   judgeVictory () {
     let condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
     let condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
@@ -71,5 +72,11 @@ export class GameService {
 
   getWin() {
     return this.win
+  }
+  //重置遊戲
+  resetGame() {
+    this.step = 0
+    this.win = 0
+    for(let key in this.viewData) this.viewData[key].data = 0
   }
 }

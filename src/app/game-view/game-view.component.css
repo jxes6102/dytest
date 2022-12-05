@@ -11,9 +11,12 @@
   height: auto;
   margin-top: 20px;
   display: flex;
+  flex-direction: row;
   justify-items: center;
+  justify-content: center;
   align-items: center;
-  flex-direction: column;
+  align-content: center;
+  gap: 20px;
 }
 .backStyle{
   border: none;
@@ -45,10 +48,9 @@
   font-size: 5em;
 }
 .playView {
-  width: 500px;
-  height: 500px;
+  width: 450px;
+  height: 450px;
   margin-top: 100px;
-  background-color: bisque;
   display: grid;
   grid-template-areas:
 			"area0 area1 area2"
@@ -58,7 +60,8 @@
   }
 .square0 {
   grid-area: area0;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-right: 1px solid #252a34;
   border-bottom: 1px solid #252a34;
   display: flex;
@@ -69,7 +72,8 @@
 }
 .square1 {
   grid-area: area1;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-left: 1px solid #252a34;
   border-right: 1px solid #252a34;
   border-bottom: 1px solid #252a34;
@@ -81,7 +85,8 @@
 }
 .square2 {
   grid-area: area2;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-left: 1px solid #252a34;
   border-bottom: 1px solid #252a34;
   display: flex;
@@ -92,7 +97,8 @@
 }
 .square3 {
   grid-area: area3;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-right: 1px solid #252a34;
   border-top: 1px solid #252a34;
   border-bottom: 1px solid #252a34;
@@ -104,7 +110,8 @@
 }
 .square4 {
   grid-area: area4;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-left: 1px solid #252a34;
   border-right: 1px solid #252a34;
   border-top: 1px solid #252a34;
@@ -117,7 +124,8 @@
 }
 .square5 {
   grid-area: area5;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-left: 1px solid #252a34;
   border-top: 1px solid #252a34;
   border-bottom: 1px solid #252a34;
@@ -129,7 +137,8 @@
 }
 .square6 {
   grid-area: area6;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-right: 1px solid #252a34;
   border-top: 1px solid #252a34;
   display: flex;
@@ -140,7 +149,8 @@
 }
 .square7 {
   grid-area: area7;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-left: 1px solid #252a34;
   border-right: 1px solid #252a34;
   border-top: 1px solid #252a34;
@@ -152,7 +162,8 @@
 }
 .square8 {
   grid-area: area8;
-	background-color: #f3a8a8;
+  width: 150px;
+  height: 150px;
   border-left: 1px solid #252a34;
   border-top: 1px solid #252a34;
   display: flex;

@@ -22,10 +22,17 @@ export class GameViewComponent implements OnInit{
   back(): void {
     this.router.navigate(['/'])
     this.gameService.clearMode()
+    this.gameService.resetGame()
+    this.whoWin = this.gameService.getWin()
   }
 
   action(name:string): void{
     this.gameService.playerCilck(name)
+    this.whoWin = this.gameService.getWin()
+  }
+
+  renewGame(): void {
+    this.gameService.resetGame()
     this.whoWin = this.gameService.getWin()
   }
 
