@@ -13,6 +13,7 @@ export class GameViewComponent implements OnInit{
     // console.log(this.gameService.getViewData())
   }
   viewData = this.gameService.getViewData()
+  whoWin = this.gameService.getWin()
 
   test(): void {
     // console.log('getMode:',this.gameService.getMode())
@@ -25,7 +26,7 @@ export class GameViewComponent implements OnInit{
 
   action(name:string): void{
     this.gameService.playerCilck(name)
+    this.whoWin = this.gameService.getWin()
   }
 
-  whoWin = this.gameService.getWin()
 }

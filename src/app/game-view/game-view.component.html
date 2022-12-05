@@ -9,4 +9,5 @@
       <div [ngClass]="item.className" (click)="action(item.className)">{{item.data | displayPipe}}</div>
     </ng-container>
   </div>
+  <div class="winStyle">{{whoWin | winerPipe}}</div>
 </div>
