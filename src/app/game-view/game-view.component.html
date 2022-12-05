@@ -5,8 +5,9 @@
     </ng-container>
   </div>
   <div class="menu" *ngIf="mode === 'record'">
-    <button class="backStyle">上一步</button>
-    <button class="backStyle">下一步</button>
+    <button class="backStyle" (click)="last()">上一步</button>
+    <button class="backStyle" (click)="back()">回上頁</button>
+    <button class="backStyle" (click)="next()">下一步</button>
   </div>
   <div class="menu" *ngIf="mode === 'battle'">
     <button class="backStyle" (click)="back()">回上頁</button>

@@ -8,12 +8,13 @@ export class GameService {
   viewData:viewType[]
   step:number
   win:number
-  gameRecord:any[]
+  gameRecords:any
+  // gameRecords:any[]
   gameStep:stepType[]
 
   constructor() {
     this.win = 0
-    this.gameRecord = []
+    // this.gameRecords = []
     this.mode = ''
     this.step = 0
     this.gameStep = []
@@ -82,14 +83,19 @@ export class GameService {
   }
   //重置遊戲
   resetGame() {
+    this.noteGame()
     this.step = 0
     this.win = 0
     for(let key in this.viewData) this.viewData[key].data = 0
-    this.noteGame()
   }
   //記錄此次遊戲
   noteGame() {
-    this.gameRecord.push(this.gameStep)
+    if((this.gameStep.length === 0) || (this.win === 0)){
+      this.gameStep = []
+      return
+    }
+    this.gameRecords = this.gameStep 
+    // this.gameRecords.push(this.gameStep)
     this.gameStep = []
   }
 }

@@ -11,7 +11,7 @@ export class ChoseComponent {
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.gameService.getMode())
+    // console.log(this.gameService.getMode())
   }
 
   buttonTData = buttonTData
