@@ -36,11 +36,13 @@ export class GameViewComponent implements OnInit{
   }
 
   last(): void {
-    console.log('last')
+    // console.log('last')
+    this.gameService.actionRecord()
   }
 
   next(): void {
-    console.log('next')
+    // console.log('next')
+    this.gameService.actionRecord()
   }
 
 }

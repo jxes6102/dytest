@@ -17,6 +17,10 @@ export class ChoseComponent {
   buttonTData = buttonTData
   // 選擇模式
   action(mode:string): void {
+    if((!this.gameService.getRecord()) && (mode === 'record')){
+      console.log('Record is null !!!!!')
+      return
+    }
     this.gameService.setMode(mode)
     this.router.navigate(['/game']);
   }

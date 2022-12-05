@@ -11,9 +11,11 @@ export class GameService {
   gameRecords:any
   // gameRecords:any[]
   gameStep:stepType[]
+  recordStep:number
 
   constructor() {
     this.win = 0
+    this.recordStep = 0
     // this.gameRecords = []
     this.mode = ''
     this.step = 0
@@ -97,5 +99,13 @@ export class GameService {
     this.gameRecords = this.gameStep 
     // this.gameRecords.push(this.gameStep)
     this.gameStep = []
+  }
+  // 拿取紀錄
+  getRecord() {
+    return this.gameRecords
+  }
+  // 執行紀錄
+  actionRecord() {
+    console.log(this.gameRecords)
   }
 }
