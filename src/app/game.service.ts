@@ -9,6 +9,7 @@ export class GameService {
   step:number
   gameData:any[]
   win:number
+
   constructor() {
     this.win = 0
     this.gameData = []
@@ -55,17 +56,17 @@ export class GameService {
   }
 
   judgeVictory () {
-    let test1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
-    let test2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
-    if((test1 === 3) || (test2 === 3)) this.win = this.viewData[4].data
+    let condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
+    let condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
+    this.win = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.win
 
     for(let i = 0 ;i<3; i++) {
-      let test3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
-      let test4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
-      if(test3 === 3) this.win = this.viewData[3*i].data
-      if(test4 === 3) this.win = this.viewData[i].data
+      let condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
+      let condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
+      this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
+        ? this.viewData[i].data : this.win
     }
-    // console.log(this.win)
+
   }
 
   getWin() {
