@@ -9,7 +9,7 @@ export const buttonTData = [
         text:'紀錄模式',
         mode:'record',
         className:'recordStyle',
-        isClose:true
+        isClose:false
     },
   ];
   

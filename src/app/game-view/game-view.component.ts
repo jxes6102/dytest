@@ -10,14 +10,11 @@ export class GameViewComponent implements OnInit{
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // console.log(this.gameService.getViewData())
+    console.log(this.mode)
   }
   viewData = this.gameService.getViewData()
   whoWin = this.gameService.getWin()
-
-  test(): void {
-    // console.log('getMode:',this.gameService.getMode())
-  }
+  mode = this.gameService.getMode()
 
   back(): void {
     this.router.navigate(['/'])

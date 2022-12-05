@@ -34,8 +34,8 @@ export class GameService {
     return this.mode
   }
 
-  setMode(val: string) {
-    this.mode = val
+  setMode(name: string) {
+    this.mode = name
   }
 
   clearMode() {
@@ -74,7 +74,7 @@ export class GameService {
       this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
         ? this.viewData[i].data : this.win
     }
-    
+
   }
 
   getWin() {
@@ -85,6 +85,10 @@ export class GameService {
     this.step = 0
     this.win = 0
     for(let key in this.viewData) this.viewData[key].data = 0
+    this.noteGame()
+  }
+  //記錄此次遊戲
+  noteGame() {
     this.gameRecord.push(this.gameStep)
     this.gameStep = []
   }

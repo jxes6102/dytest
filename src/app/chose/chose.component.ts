@@ -11,10 +11,9 @@ export class ChoseComponent {
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // console.log('inchoseview')
+    console.log(this.gameService.getMode())
   }
 
-  title = 'dytest'
   buttonTData = buttonTData
 
   action(mode:string): void {
@@ -22,7 +21,4 @@ export class ChoseComponent {
     this.router.navigate(['/game']);
   }
 
-  test(): void {
-    console.log('getMode:',this.gameService.getMode())
-  }
 }
