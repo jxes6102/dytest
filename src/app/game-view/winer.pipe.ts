@@ -1,5 +1,4 @@
 import { Pipe,PipeTransform  } from '@angular/core';
-
 @Pipe({
   name: 'winerPipe',
 })
@@ -8,4 +7,3 @@ export class winerPipe implements PipeTransform{
     return n == 1 ? "O贏了!" : n == -1 ? "X贏了!" : " "
   }
 }
-

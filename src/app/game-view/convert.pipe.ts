@@ -1,5 +1,4 @@
 import { Pipe,PipeTransform  } from '@angular/core';
-
 @Pipe({
   name: 'displayPipe',
 })
@@ -8,4 +7,3 @@ export class displayPipe implements PipeTransform{
     return n == 1 ? "O" : n == -1 ? "X" : " "
   }
 }
-
