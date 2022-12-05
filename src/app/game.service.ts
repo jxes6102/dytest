@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-
+import { viewType } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   mode:string
-  viewData:any[]
+  viewData:viewType[]
   step:number
   gameData:any[]
   win:number
@@ -45,20 +45,16 @@ export class GameService {
 
   playerCilck(name:string) {
     const index = this.viewData.findIndex((item) => item.className == name)
-    if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.win) return 
+    if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.win) return
+
     this.step++
-    if(this.step % 2 == 1) {
-      this.viewData[index].data = 1
-    }else {
-      this.viewData[index].data = -1
-    }
+    if(this.step % 2 == 1) this.viewData[index].data = 1
+    else this.viewData[index].data = -1
 
     this.judgeVictory()
   }
 
   judgeVictory () {
-    // console.log('judgeVictory')
-    
     let test1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
     let test2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
     if((test1 === 3) || (test2 === 3)) this.win = this.viewData[4].data
@@ -69,7 +65,7 @@ export class GameService {
       if(test3 === 3) this.win = this.viewData[3*i].data
       if(test4 === 3) this.win = this.viewData[i].data
     }
-    console.log(this.win)
+    // console.log(this.win)
   }
 
   getWin() {
