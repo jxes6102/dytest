@@ -26,4 +26,6 @@ export class GameViewComponent implements OnInit{
   action(name:string): void{
     this.gameService.playerCilck(name)
   }
+
+  whoWin = this.gameService.getWin()
 }

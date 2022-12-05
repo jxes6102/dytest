@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { displayPipe } from './convert.pipe';
+import { displayPipe } from './game-view/convert.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChoseComponent } from './chose/chose.component';
