@@ -79,7 +79,7 @@ export class GameService {
         ? this.viewData[i].data : this.win
     }
 
-    if ((this.step === 9) || (this.recordStep === 9)) this.win = 9
+    if (((this.step === 9) && (this.win === 0)) || ((this.recordStep === 9) && (this.win === 0))) this.win = 9
 
   }
   // 拿取勝利者
