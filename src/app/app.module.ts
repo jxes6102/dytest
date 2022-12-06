@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChoseComponent } from './chose/chose.component';
 import { GameViewComponent } from './game-view/game-view.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { GameViewComponent } from './game-view/game-view.component';
     ChoseComponent,
     GameViewComponent,
     displayPipe,
-    winerPipe
+    winerPipe,
+    HistoryComponent
   ],
   imports: [
     CommonModule ,

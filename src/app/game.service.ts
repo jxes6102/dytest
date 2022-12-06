@@ -5,6 +5,7 @@ import { viewType,stepType } from "./gamemodel.model";
 })
 export class GameService {
   gameID:number
+  allID:number[]
   mode:string
   viewData:viewType[]
   step:number
@@ -17,6 +18,7 @@ export class GameService {
 
   constructor() {
     this.gameID = 0
+    this.allID = []
     this.result = 0
     this.recordStep = 0
     // this.gameRecords = []
@@ -116,7 +118,6 @@ export class GameService {
   }
   // 執行紀錄
   actionRecord(stepVal:number) {
-    console.log('testRecords', this.testRecords)
     switch (stepVal) {
       case 1: {
         if((this.recordStep === this.gameRecords.length)) return
@@ -140,5 +141,11 @@ export class GameService {
   // 設定遊戲ID
   setGameID() {
     this.gameID++
+  }
+  // 拿取所有遊戲ID
+  getAllID() {
+    console.log('testRecords',this.testRecords)
+    this.allID = this.testRecords.map((item)=> item[0].id)
+    console.log('this.allID',this.allID)
   }
 }

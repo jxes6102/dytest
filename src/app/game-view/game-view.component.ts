@@ -12,7 +12,8 @@ export class GameViewComponent implements OnInit{
   ngOnInit(): void {
     if(this.mode === '') this.router.navigate(['/'])
 
-    this.gameService.setGameID()
+    if(this.mode === 'battle') this.gameService.setGameID()
+    if(this.mode === 'record') this.gameService.getAllID()
   }
 
   viewData = this.gameService.getViewData()

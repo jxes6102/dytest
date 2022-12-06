@@ -24,8 +24,11 @@ export class ChoseComponent {
       return
     }
 
-    this.alertMessage = '';
+    this.alertMessage = ''
     this.gameService.setMode(mode)
+    
+    // if(mode === 'battle') this.router.navigate(['/game'])
+
     this.router.navigate(['/game'])
   }
 
