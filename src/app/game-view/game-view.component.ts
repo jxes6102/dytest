@@ -10,8 +10,9 @@ export class GameViewComponent implements OnInit{
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // console.log(this.mode)
+    if(this.mode === '') this.router.navigate(['/'])
   }
+
   viewData = this.gameService.getViewData()
   whoWin = this.gameService.getWin()
   mode = this.gameService.getMode()
@@ -36,13 +37,11 @@ export class GameViewComponent implements OnInit{
   }
   //上一步
   last(): void {
-    // console.log('last')
     this.gameService.actionRecord(-1)
     this.whoWin = this.gameService.getWin()
   }
   //下一步
   next(): void {
-    // console.log('next')
     this.gameService.actionRecord(1)
     this.whoWin = this.gameService.getWin()
   }

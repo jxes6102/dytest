@@ -2,4 +2,5 @@
     <ng-container *ngFor="let item of buttonTData">
         <button [ngClass]="item.className" [disabled]="item.isClose" (click)="action(item.mode)">{{item.text + (item.isClose ? '(尚未完成)' : '')}}</button>
     </ng-container>
+    <div class="warnStyle" *ngIf="alertMessage.length !== 0">{{alertMessage}}</div>
 </div>

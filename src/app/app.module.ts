@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
 import { displayPipe } from './game-view/convert.pipe';
 import { winerPipe } from './game-view/winer.pipe';
@@ -16,6 +17,7 @@ import { GameViewComponent } from './game-view/game-view.component';
     winerPipe
   ],
   imports: [
+    CommonModule ,
     BrowserModule,
     AppRoutingModule
   ],

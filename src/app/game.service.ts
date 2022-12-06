@@ -49,9 +49,10 @@ export class GameService {
   getViewData() {
     return this.viewData
   }
-  // 玩家點擊和紀錄
+  // 玩家點擊時紀錄
   playerCilck(name:string) {
     const index = this.viewData.findIndex((item) => item.className == name)
+    // 當點擊數大於等於9、格子已被點擊、已有勝負時不可點擊
     if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.win) return
 
     this.step++
@@ -78,7 +79,7 @@ export class GameService {
       this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
         ? this.viewData[i].data : this.win
     }
-
+    //當玩家總步數或記錄步數等於9且都未分勝敗時是平手
     if (((this.step === 9) && (this.win === 0)) || ((this.recordStep === 9) && (this.win === 0))) this.win = 9
 
   }
@@ -94,7 +95,7 @@ export class GameService {
     this.win = 0
     for(let key in this.viewData) this.viewData[key].data = 0
   }
-  //記錄此次遊戲
+  //記錄此次遊戲，只記錄有分勝敗的局，只記一筆
   noteGame() {
     if((this.gameStep.length === 0) || (this.win === 0)){
       this.gameStep = []

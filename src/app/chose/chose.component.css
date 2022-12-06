@@ -49,3 +49,10 @@
 .recordStyle:hover {
     background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
 }
+
+.warnStyle {
+    color: rgb(220 38 38);
+    font-size: 2em;
+    line-height: 1.5em;
+    font-weight: 600;
+}
