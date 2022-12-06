@@ -49,13 +49,12 @@ export class GameService {
   getViewData() {
     return this.viewData
   }
-  // 點擊紀錄
+  // 玩家點擊和紀錄
   playerCilck(name:string) {
     const index = this.viewData.findIndex((item) => item.className == name)
     if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.win) return
 
     this.step++
-    if (this.step === 9) this.win = 9
     if(this.step % 2 == 1) {
       this.viewData[index].data = 1
       this.gameStep.push({wherePlace: index,content: 1})
@@ -79,7 +78,8 @@ export class GameService {
       this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
         ? this.viewData[i].data : this.win
     }
-    console.log('judgeVictory',this.viewData,this.win)
+
+    if ((this.step === 9) || (this.recordStep === 9)) this.win = 9
 
   }
   // 拿取勝利者
