@@ -1,4 +1,10 @@
 export const buttonTData = [
+    // {
+    //     text:'人機模式',
+    //     mode:'robot',
+    //     className:'battleStyle',
+    //     isClose:true
+    // },
     {
         text:'對戰模式',
         mode:'battle',

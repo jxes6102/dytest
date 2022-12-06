@@ -20,4 +20,5 @@ export interface viewType {
 export interface stepType {
     wherePlace: number;
     content: number;
+    id:number
 }

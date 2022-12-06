@@ -4,20 +4,24 @@ import { viewType,stepType } from "./gamemodel.model";
   providedIn: 'root'
 })
 export class GameService {
+  gameID:number
   mode:string
   viewData:viewType[]
   step:number
   result:number
   gameRecords:any
   // gameRecords:any[]
+  testRecords:any[]
   gameStep:stepType[]
   recordStep:number
 
   constructor() {
+    this.gameID = 0
     this.result = 0
     this.recordStep = 0
     // this.gameRecords = []
     this.gameRecords = null
+    this.testRecords = []
     this.mode = ''
     this.step = 0
     this.gameStep = []
@@ -58,10 +62,10 @@ export class GameService {
     this.step++
     if(this.step % 2 == 1) {
       this.viewData[index].data = 1
-      this.gameStep.push({wherePlace: index,content: 1})
+      this.gameStep.push({wherePlace: index,content: 1,id:this.gameID})
     } else {
       this.viewData[index].data = -1
-      this.gameStep.push({wherePlace: index,content: -1})
+      this.gameStep.push({wherePlace: index,content: -1,id:this.gameID})
     }
 
     this.judgeVictory()
@@ -102,6 +106,7 @@ export class GameService {
       return
     }
     this.gameRecords = this.gameStep 
+    this.testRecords.push(this.gameStep)
     // this.gameRecords.push(this.gameStep)
     this.gameStep = []
   }
@@ -111,6 +116,7 @@ export class GameService {
   }
   // 執行紀錄
   actionRecord(stepVal:number) {
+    console.log('testRecords', this.testRecords)
     switch (stepVal) {
       case 1: {
         if((this.recordStep === this.gameRecords.length)) return
@@ -130,5 +136,9 @@ export class GameService {
         break
       }
     }
+  }
+  // 設定遊戲ID
+  setGameID() {
+    this.gameID++
   }
 }

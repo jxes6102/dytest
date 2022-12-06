@@ -11,6 +11,8 @@ export class GameViewComponent implements OnInit{
 
   ngOnInit(): void {
     if(this.mode === '') this.router.navigate(['/'])
+
+    this.gameService.setGameID()
   }
 
   viewData = this.gameService.getViewData()
@@ -27,11 +29,13 @@ export class GameViewComponent implements OnInit{
   // 點擊格子
   action(name:string): void{
     if(this.mode === 'record') return
+
     this.gameService.playerCilck(name)
     this.whoWin = this.gameService.getWin()
   }
   // 重置遊戲
   renewGame(): void {
+    this.gameService.setGameID()
     this.gameService.resetGame()
     this.whoWin = this.gameService.getWin()
   }
