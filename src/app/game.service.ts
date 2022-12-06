@@ -5,14 +5,14 @@ import { viewType,stepType } from "./gamemodel.model";
 })
 export class GameService {
   gameID:number
-  allID:number[]
+  allID:string[]
   mode:string
   viewData:viewType[]
   step:number
   result:number
   gameRecords:any
   // gameRecords:any[]
-  testRecords:any[]
+  testRecords:any
   gameStep:stepType[]
   recordStep:number
 
@@ -23,7 +23,7 @@ export class GameService {
     this.recordStep = 0
     // this.gameRecords = []
     this.gameRecords = null
-    this.testRecords = []
+    this.testRecords = {}
     this.mode = ''
     this.step = 0
     this.gameStep = []
@@ -108,7 +108,8 @@ export class GameService {
       return
     }
     this.gameRecords = this.gameStep 
-    this.testRecords.push(this.gameStep)
+
+    this.testRecords[this.gameID] = this.gameStep
     // this.gameRecords.push(this.gameStep)
     this.gameStep = []
   }
@@ -145,7 +146,7 @@ export class GameService {
   // 拿取所有遊戲ID
   getAllID() {
     console.log('testRecords',this.testRecords)
-    this.allID = this.testRecords.map((item)=> item[0].id)
+    this.allID = Object.keys(this.testRecords)
     console.log('this.allID',this.allID)
   }
 }
