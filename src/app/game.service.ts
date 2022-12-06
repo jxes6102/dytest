@@ -17,6 +17,7 @@ export class GameService {
     this.win = 0
     this.recordStep = 0
     // this.gameRecords = []
+    this.gameRecords = null
     this.mode = ''
     this.step = 0
     this.gameStep = []
@@ -77,6 +78,7 @@ export class GameService {
       this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
         ? this.viewData[i].data : this.win
     }
+    console.log('judgeVictory',this.viewData,this.win)
 
   }
   // 拿取勝利者
@@ -87,6 +89,7 @@ export class GameService {
   resetGame() {
     this.noteGame()
     this.step = 0
+    this.recordStep = 0
     this.win = 0
     for(let key in this.viewData) this.viewData[key].data = 0
   }
@@ -105,7 +108,34 @@ export class GameService {
     return this.gameRecords
   }
   // 執行紀錄
-  actionRecord() {
-    console.log(this.gameRecords)
+  actionRecord(stepVal:number) {
+    // console.log(val)
+    switch (stepVal) {
+      case 1: {
+        if((this.recordStep === this.gameRecords.length)) {
+          console.log('no Next')
+          return
+        }
+        this.recordStep += stepVal
+
+        this.viewData[this.gameRecords[this.recordStep - 1].wherePlace].data = this.gameRecords[this.recordStep - 1].content
+        this.judgeVictory()
+        // console.log(this.gameRecords[this.recordStep - 1].wherePlace,this.gameRecords[this.recordStep - 1].content)
+        break;
+      }
+      case -1: {
+        if((this.recordStep <= 1)) {
+          console.log('no Last')
+          return
+        }
+        this.recordStep += stepVal
+
+        this.viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
+        this.viewData[this.gameRecords[this.recordStep - 1].wherePlace].data = this.gameRecords[this.recordStep - 1].content
+        this.judgeVictory()
+        // console.log(this.gameRecords[this.recordStep - 1].wherePlace,this.gameRecords[this.recordStep - 1].content)
+        break;
+      }
+    }
   }
 }

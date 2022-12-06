@@ -34,15 +34,17 @@ export class GameViewComponent implements OnInit{
     this.gameService.resetGame()
     this.whoWin = this.gameService.getWin()
   }
-
+  //上一步
   last(): void {
     // console.log('last')
-    this.gameService.actionRecord()
+    this.gameService.actionRecord(-1)
+    this.whoWin = this.gameService.getWin()
   }
-
+  //下一步
   next(): void {
     // console.log('next')
-    this.gameService.actionRecord()
+    this.gameService.actionRecord(1)
+    this.whoWin = this.gameService.getWin()
   }
 
 }
