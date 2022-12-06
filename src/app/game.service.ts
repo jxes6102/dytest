@@ -7,14 +7,14 @@ export class GameService {
   mode:string
   viewData:viewType[]
   step:number
-  win:number
+  result:number
   gameRecords:any
   // gameRecords:any[]
   gameStep:stepType[]
   recordStep:number
 
   constructor() {
-    this.win = 0
+    this.result = 0
     this.recordStep = 0
     // this.gameRecords = []
     this.gameRecords = null
@@ -53,7 +53,7 @@ export class GameService {
   playerCilck(name:string) {
     const index = this.viewData.findIndex((item) => item.className == name)
     // 當點擊數大於等於9、格子已被點擊、已有勝負時不可點擊
-    if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.win) return
+    if((this.step >= 9) || (Math.abs(this.viewData[index].data) === 1) || this.result) return
 
     this.step++
     if(this.step % 2 == 1) {
@@ -68,36 +68,36 @@ export class GameService {
   }
   // 判斷勝負
   judgeVictory () {
-    this.win = 0
+    this.result = 0
     let condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
     let condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
-    this.win = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.win
+    this.result = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.result
 
     for(let i = 0 ;i<3; i++) {
       let condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
       let condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
-      this.win = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
-        ? this.viewData[i].data : this.win
+      this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
+        ? this.viewData[i].data : this.result
     }
     //當玩家總步數或記錄步數等於9且都未分勝敗時是平手
-    if (((this.step === 9) && (this.win === 0)) || ((this.recordStep === 9) && (this.win === 0))) this.win = 9
+    if (((this.step === 9) && (this.result === 0)) || ((this.recordStep === 9) && (this.result === 0))) this.result = 9
 
   }
   // 拿取勝利者
   getWin() {
-    return this.win
+    return this.result
   }
   //重置遊戲
   resetGame() {
     this.noteGame()
     this.step = 0
     this.recordStep = 0
-    this.win = 0
+    this.result = 0
     for(let key in this.viewData) this.viewData[key].data = 0
   }
   //記錄此次遊戲，只記錄有分勝敗的局，只記一筆
   noteGame() {
-    if((this.gameStep.length === 0) || (this.win === 0)){
+    if((this.gameStep.length === 0) || (this.result === 0)){
       this.gameStep = []
       return
     }

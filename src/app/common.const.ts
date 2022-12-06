@@ -12,6 +12,8 @@ export const buttonTData = [
         isClose:false
     },
   ];
+
+  export const version = '1.0'
   
   
   

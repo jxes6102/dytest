@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
-import { buttonTData } from '../common.const';
+import { buttonTData,version } from '../common.const';
 import { GameService } from '../game.service';
 @Component({
   selector: 'app-chose',
@@ -11,9 +11,9 @@ export class ChoseComponent {
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // console.log(this.gameService.getMode())
   }
 
+  version = version
   buttonTData = buttonTData
   alertMessage = ''
 
