@@ -11,14 +11,16 @@ export class GameViewComponent implements OnInit{
 
   ngOnInit(): void {
     if(this.mode === '') this.router.navigate(['/'])
-
-    if(this.mode === 'battle') this.gameService.setGameID()
-    if(this.mode === 'record') this.gameService.getAllID()
+    else if(this.mode === 'battle') {
+      this.gameService.setGameID()
+      this.gameID = this.gameService.getGameID()
+    }
   }
 
   viewData = this.gameService.getViewData()
   whoWin = this.gameService.getWin()
   mode = this.gameService.getMode()
+  gameID = this.gameService.getGameID()
 
   // 回上頁
   back(): void {
@@ -36,8 +38,11 @@ export class GameViewComponent implements OnInit{
   }
   // 重置遊戲
   renewGame(): void {
-    this.gameService.setGameID()
     this.gameService.resetGame()
+
+    this.gameService.setGameID()
+    this.gameID = this.gameService.getGameID()
+    
     this.whoWin = this.gameService.getWin()
   }
   //上一步

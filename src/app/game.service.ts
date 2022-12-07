@@ -99,7 +99,7 @@ export class GameService {
     this.result = 0
     for(let key in this.viewData) this.viewData[key].data = 0
   }
-  //記錄此次遊戲，只記錄有分勝敗的局
+  //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
     if((this.gameStep.length === 0) || (this.result === 0)){
       this.gameStep = []
@@ -107,6 +107,8 @@ export class GameService {
     }
 
     this.allRecords[this.gameID] = this.gameStep
+    if(Object.keys(this.allRecords).length > 5) delete this.allRecords[Object.keys(this.allRecords)[0]]
+
     this.gameStep = []
   }
   // 執行紀錄
@@ -134,6 +136,10 @@ export class GameService {
   // 設定遊戲ID
   setGameID() {
     this.gameID++
+  }
+  // 拿取遊戲ID
+  getGameID() {
+    return this.gameID
   }
   // 拿取所有遊戲ID
   getAllID() {

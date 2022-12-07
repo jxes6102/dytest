@@ -15,7 +15,6 @@ export class ChoseComponent {
   }
 
   ngOnInit(): void {
-    // console.log('init ChoseComponent')
   }
 
   version = version

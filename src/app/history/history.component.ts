@@ -17,7 +17,6 @@ export class HistoryComponent {
   }
 
   ngOnInit(): void {
-    // console.log('test', this.listData)
   }
   
   listData = this.gameService.getAllID()

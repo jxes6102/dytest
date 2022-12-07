@@ -47,6 +47,16 @@
   flex-direction: column;
   font-size: 5em;
 }
+.idStyle{
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 18ox;
+}
 .playView {
   width: 450px;
   height: 450px;

@@ -49,6 +49,7 @@
     height: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
+    background: rgb(238, 180, 132);
     display: flex;
     justify-items: center;
     justify-content: center;
