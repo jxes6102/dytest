@@ -25,13 +25,13 @@ export class ChoseComponent {
 
   // 選擇模式
   action(name:string): void {
-    this.mode = name
-
-    if((!this.gameService.getRecord()) && (this.mode === 'record')){
+    
+    if((!this.gameService.getAllID().length) && (name === 'record')){
       this.alertMessage = 'Record is null !!'
       return
     }
 
+    this.mode = name
     this.alertMessage = ''
     this.gameService.setMode(this.mode)
     

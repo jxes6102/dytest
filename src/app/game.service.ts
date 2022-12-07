@@ -11,8 +11,7 @@ export class GameService {
   step:number
   result:number
   gameRecords:any
-  // gameRecords:any[]
-  testRecords:any
+  allRecords:any
   gameStep:stepType[]
   recordStep:number
 
@@ -21,9 +20,8 @@ export class GameService {
     this.allID = []
     this.result = 0
     this.recordStep = 0
-    // this.gameRecords = []
     this.gameRecords = null
-    this.testRecords = {}
+    this.allRecords = {}
     this.mode = ''
     this.step = 0
     this.gameStep = []
@@ -101,21 +99,15 @@ export class GameService {
     this.result = 0
     for(let key in this.viewData) this.viewData[key].data = 0
   }
-  //記錄此次遊戲，只記錄有分勝敗的局，只記一筆
+  //記錄此次遊戲，只記錄有分勝敗的局
   noteGame() {
     if((this.gameStep.length === 0) || (this.result === 0)){
       this.gameStep = []
       return
     }
-    this.gameRecords = this.gameStep 
 
-    this.testRecords[this.gameID] = this.gameStep
-    // this.gameRecords.push(this.gameStep)
+    this.allRecords[this.gameID] = this.gameStep
     this.gameStep = []
-  }
-  // 拿取紀錄
-  getRecord() {
-    return this.gameRecords
   }
   // 執行紀錄
   actionRecord(stepVal:number) {
@@ -145,9 +137,11 @@ export class GameService {
   }
   // 拿取所有遊戲ID
   getAllID() {
-    
-    this.allID = Object.keys(this.testRecords)
-
+    this.allID = Object.keys(this.allRecords)
     return this.allID
+  }
+  // 拿取選擇的紀錄
+  getChose(id:string){
+    this.gameRecords = this.allRecords[id]
   }
 }

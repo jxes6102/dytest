@@ -17,7 +17,7 @@ export class HistoryComponent {
   }
 
   ngOnInit(): void {
-    console.log('test', this.listData)
+    // console.log('test', this.listData)
   }
   
   listData = this.gameService.getAllID()
@@ -25,5 +25,10 @@ export class HistoryComponent {
   cancel(): void{
     this.gameService.setMode('')
     this.changeModeName()
+  }
+
+  action(val:string): void{
+    this.gameService.getChose(val)
+    this.router.navigate(['/game'])
   }
 }

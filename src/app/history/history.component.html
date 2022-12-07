@@ -1,4 +1,7 @@
-<div class="historyStyle" (click)="cancel()">
-    <div class="listStyle">history works! {{nowMode}}</div>
+<div class="historyStyle" (click)="cancel()"></div>
+<div class="listStyle">
+    <div class="gameList">
+        <div class="choseStyle" *ngFor="let item of listData" (click)="action(item)">{{item}}</div>
+    </div>
 </div>
 
