@@ -1,0 +1,26 @@
+.historyStyle {
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgb(30 41 59);
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    opacity: 0.5;
+    z-index: 30;
+}
+
+.listStyle {
+    width: 200px;
+    height: 200px;
+    background: rgb(236, 238, 240);
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}

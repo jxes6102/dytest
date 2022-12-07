@@ -10,26 +10,33 @@ import { GameService } from '../game.service';
 export class ChoseComponent {
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
+  getChange(val:any): void {
+    this.mode = ''
+  }
+
   ngOnInit(): void {
+    // console.log('init ChoseComponent')
   }
 
   version = version
   buttonTData = buttonTData
   alertMessage = ''
+  mode = ''
 
   // 選擇模式
-  action(mode:string): void {
-    if((!this.gameService.getRecord()) && (mode === 'record')){
+  action(name:string): void {
+    this.mode = name
+
+    if((!this.gameService.getRecord()) && (this.mode === 'record')){
       this.alertMessage = 'Record is null !!'
       return
     }
 
     this.alertMessage = ''
-    this.gameService.setMode(mode)
+    this.gameService.setMode(this.mode)
     
-    // if(mode === 'battle') this.router.navigate(['/game'])
+    if(this.mode === 'battle') this.router.navigate(['/game'])
 
-    this.router.navigate(['/game'])
   }
 
 }

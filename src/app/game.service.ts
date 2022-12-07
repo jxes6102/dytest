@@ -145,8 +145,9 @@ export class GameService {
   }
   // 拿取所有遊戲ID
   getAllID() {
-    console.log('testRecords',this.testRecords)
+    
     this.allID = Object.keys(this.testRecords)
-    console.log('this.allID',this.allID)
+
+    return this.allID
   }
 }
