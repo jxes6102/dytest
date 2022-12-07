@@ -4,6 +4,18 @@ import { viewType,stepType } from "./gamemodel.model";
   providedIn: 'root'
 })
 export class GameService {
+  /*
+    gameID 該局遊戲ID
+    allID 紀錄中所有遊戲ID
+    mode  模式名稱
+    viewData  畫面資料
+    step 遊戲步數
+    result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
+    gameRecords 該局遊戲紀錄
+    allRecords 所有遊戲紀錄
+    gameStep 紀錄該局遊戲紀錄
+    recordStep 紀錄狀態時的遊戲步數
+  */
   gameID:number
   allID:string[]
   mode:string

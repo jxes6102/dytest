@@ -12,10 +12,6 @@ export class HistoryComponent {
   @Input() nowMode?: string;
   @Output() changeMode = new EventEmitter();
 
-  changeModeName() {
-    this.changeMode.emit('');
-  }
-
   ngOnInit(): void {
   }
   
@@ -23,7 +19,7 @@ export class HistoryComponent {
 
   cancel(): void{
     this.gameService.setMode('')
-    this.changeModeName()
+    this.changeMode.emit('');
   }
 
   action(val:string): void{
