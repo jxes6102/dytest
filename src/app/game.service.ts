@@ -8,7 +8,7 @@ export class GameService {
     gameID 該局遊戲ID
     allID 紀錄中所有遊戲ID
     mode  模式名稱
-    viewData  畫面資料
+    viewData  畫面資料 className識別所點區域 data紀錄圈叉
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
     gameRecords 該局遊戲紀錄
