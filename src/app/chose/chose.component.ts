@@ -10,7 +10,7 @@ import { GameService } from '../game.service';
 export class ChoseComponent {
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
-  getChange(val:any): void {
+  getChange(): void {
     this.mode = ''
   }
 
