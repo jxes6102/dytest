@@ -16,13 +16,15 @@ export class GameService {
     gameStep 紀錄該局遊戲紀錄
     recordStep 紀錄狀態時的遊戲步數
   */
+  //強型別 
+  //js  ts 
   gameID:number
   allID:string[]
   mode:string
   viewData:viewType[]
   step:number
   result:number
-  gameRecords:any
+  gameRecords:stepType[]
   allRecords:any
   gameStep:stepType[]
   recordStep:number
@@ -32,11 +34,18 @@ export class GameService {
     this.allID = []
     this.result = 0
     this.recordStep = 0
-    this.gameRecords = null
+    this.gameRecords = []
     this.allRecords = {}
     this.mode = ''
     this.step = 0
     this.gameStep = []
+    //代碼是中立的
+    //class  css
+    //html+css  component         service1   service2
+    //view     邏輯(商業邏輯)      服務s  (抽象)
+    //耦合  解耦
+    //html   component service2 service1
+    //html   component service1
     this.viewData = [
       {className:"square0",data:0},
       {className:"square1",data:0},
@@ -74,10 +83,10 @@ export class GameService {
     this.step++
     if(this.step % 2 == 1) {
       this.viewData[index].data = 1
-      this.gameStep.push({wherePlace: index,content: 1,id:this.gameID})
+      this.gameStep.push({wherePlace: index,content: 1})
     } else {
       this.viewData[index].data = -1
-      this.gameStep.push({wherePlace: index,content: -1,id:this.gameID})
+      this.gameStep.push({wherePlace: index,content: -1})
     }
 
     this.judgeVictory()
