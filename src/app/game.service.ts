@@ -17,6 +17,7 @@ export class GameService {
     recordStep 紀錄狀態時的遊戲步數
   */
   gameID:number
+  recordID:string
   allID:string[]
   mode:string
   viewData:viewType[]
@@ -28,6 +29,7 @@ export class GameService {
   recordStep:number
 
   constructor() {
+    this.recordID = ''
     this.gameID = 0
     this.allID = []
     this.result = 0
@@ -167,6 +169,11 @@ export class GameService {
   }
   // 拿取選擇的紀錄
   getChose(id:string){
+    this.recordID = id
     this.gameRecords = this.allRecords[id]
+  }
+  // 拿取紀錄ID
+  getRecordID(){
+    return this.recordID
   }
 }

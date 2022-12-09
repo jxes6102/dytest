@@ -15,7 +15,7 @@ export class HistoryComponent {
   ngOnInit(): void {
   }
   
-  listData = this.gameService.getAllID()
+  listData:string[] = this.gameService.getAllID()
   // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')

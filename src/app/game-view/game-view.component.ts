@@ -1,6 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GameService } from '../game.service';
+import { viewType } from "../gamemodel.model";
 @Component({
   selector: 'app-game-view',
   templateUrl: './game-view.component.html',
@@ -17,10 +18,11 @@ export class GameViewComponent implements OnInit{
     }
   }
 
-  viewData = this.gameService.getViewData()
-  whoWin = this.gameService.getWin()
-  mode = this.gameService.getMode()
-  gameID = this.gameService.getGameID()
+  viewData:viewType[] = this.gameService.getViewData()
+  whoWin:number = this.gameService.getWin()
+  mode:string = this.gameService.getMode()
+  gameID:number = this.gameService.getGameID()
+  recordID:string = this.gameService.getRecordID()
 
   // 回上頁
   back(): void {

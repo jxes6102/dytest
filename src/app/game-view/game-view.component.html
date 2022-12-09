@@ -1,5 +1,5 @@
 <div class="wrap">
-  <div class="idStyle">GAMEID: {{gameID}}</div>
+  <div class="idStyle">GAMEID: {{mode === 'battle' ? gameID : recordID}}</div>
   <div class="playView">
     <ng-container *ngFor="let item of viewData;let i = index">
       <div [ngClass]="item.className" (click)="action(item.className)">{{item.data | displayPipe}}</div>

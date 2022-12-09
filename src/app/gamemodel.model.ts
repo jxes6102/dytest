@@ -11,3 +11,10 @@ export interface stepType {
 export interface recordType {
     [propName: string]: stepType[];
 }
+
+export interface buttonType {
+    text:string;
+    mode:string;
+    className:string;
+    isClose:boolean;
+}

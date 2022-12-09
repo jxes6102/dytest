@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { buttonTData,version } from '../common.const';
 import { GameService } from '../game.service';
+import { buttonType } from "../gamemodel.model";
 @Component({
   selector: 'app-chose',
   templateUrl: './chose.component.html',
@@ -17,10 +18,10 @@ export class ChoseComponent {
   ngOnInit(): void {
   }
 
-  version = version
-  buttonTData = buttonTData
-  alertMessage = ''
-  mode = ''
+  version:string = version
+  buttonTData:buttonType[] = buttonTData
+  alertMessage:string = ''
+  mode:string = ''
 
   // 選擇模式
   action(name:string): void {
