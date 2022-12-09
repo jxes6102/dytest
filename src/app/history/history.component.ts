@@ -16,12 +16,12 @@ export class HistoryComponent {
   }
   
   listData = this.gameService.getAllID()
-
+  // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')
     this.changeMode.emit('');
   }
-
+  // 進入紀錄模式
   action(val:string): void{
     this.gameService.getChose(val)
     this.router.navigate(['/game'])
