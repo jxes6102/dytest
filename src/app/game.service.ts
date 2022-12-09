@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType } from "./gamemodel.model";
+import { viewType,stepType,recordType } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -11,21 +11,19 @@ export class GameService {
     viewData  畫面資料 className識別所點區域 data紀錄圈叉
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
-    gameRecords 該局遊戲紀錄
     allRecords 所有遊戲紀錄
+    gameRecords 該局遊戲紀錄
     gameStep 紀錄該局遊戲紀錄
     recordStep 紀錄狀態時的遊戲步數
   */
-  //強型別 
-  //js  ts 
   gameID:number
   allID:string[]
   mode:string
   viewData:viewType[]
   step:number
   result:number
+  allRecords:recordType
   gameRecords:stepType[]
-  allRecords:any
   gameStep:stepType[]
   recordStep:number
 
