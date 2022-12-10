@@ -45,7 +45,7 @@
   justify-items: center;
   align-items: center;
   flex-direction: column;
-  font-size: 5em;
+  font-size: 4em;
 }
 .idStyle{
   width: 100%;
@@ -55,12 +55,12 @@
   justify-items: center;
   align-items: center;
   flex-direction: column;
-  font-size: 18ox;
+  font-size: 18px;
 }
 .playView {
   width: 450px;
   height: 450px;
-  margin-top: 100px;
+  margin-top: 50px;
   display: grid;
   grid-template-areas:
 			"area0 area1 area2"

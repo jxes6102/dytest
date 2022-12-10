@@ -91,6 +91,22 @@ export class GameService {
 
     this.judgeVictory()
   }
+  TestplayerCilck(place:number) {
+    // 當點擊數大於等於9、已有勝負時不可點擊
+    if((this.step >= 9) || this.result) return
+
+    this.step++
+    if(this.step % 2 == 1) {
+      this.gameStep.push({wherePlace: place,content: 1})
+      this.TestjudgeVictory()
+      return 1
+    } else {
+      this.gameStep.push({wherePlace: place,content: -1})
+      this.TestjudgeVictory()
+      return -1
+    }
+
+  }
   // 判斷勝負
   judgeVictory () {
     this.result = 0
@@ -101,11 +117,28 @@ export class GameService {
     for(let i = 0 ;i<3; i++) {
       let condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
       let condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
-      this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3) 
+      this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
         ? this.viewData[i].data : this.result
     }
     //當玩家總步數或記錄步數等於9且都未分勝敗時是平手
     if (((this.step === 9) && (this.result === 0)) || ((this.recordStep === 9) && (this.result === 0))) this.result = 9
+
+  }
+  TestjudgeVictory() {
+    console.log('qq')
+    // this.result = 0
+    // let condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
+    // let condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
+    // this.result = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.result
+
+    // for(let i = 0 ;i<3; i++) {
+    //   let condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
+    //   let condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
+    //   this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
+    //     ? this.viewData[i].data : this.result
+    // }
+    // //當玩家總步數或記錄步數等於9且都未分勝敗時是平手
+    // if (((this.step === 9) && (this.result === 0)) || ((this.recordStep === 9) && (this.result === 0))) this.result = 9
 
   }
   // 拿取勝利者

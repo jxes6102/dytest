@@ -17,7 +17,17 @@ export class GameViewComponent implements OnInit{
       this.gameID = this.gameService.getGameID()
     }
   }
-
+  TestviewData:viewType[] = [
+    {className:"square0",data:0},
+    {className:"square1",data:0},
+    {className:"square2",data:0},
+    {className:"square3",data:0},
+    {className:"square4",data:0},
+    {className:"square5",data:0},
+    {className:"square6",data:0},
+    {className:"square7",data:0},
+    {className:"square8",data:0}
+  ]
   viewData:viewType[] = this.gameService.getViewData()
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
@@ -35,7 +45,11 @@ export class GameViewComponent implements OnInit{
   action(name:string): void{
     if(this.mode === 'record') return
 
-    this.gameService.playerCilck(name)
+    // this.gameService.playerCilck(name)
+
+    const index = this.TestviewData.findIndex((item) => item.className == name)
+    if((Math.abs(this.TestviewData[index].data) !== 1)) this.TestviewData[index].data = this.gameService.TestplayerCilck(index) || 0
+
     this.whoWin = this.gameService.getWin()
   }
   // 重置遊戲
@@ -44,7 +58,7 @@ export class GameViewComponent implements OnInit{
 
     this.gameService.setGameID()
     this.gameID = this.gameService.getGameID()
-    
+
     this.whoWin = this.gameService.getWin()
   }
   //上一步
