@@ -19,7 +19,6 @@ export const buttonTData = [
     },
   ];
 
-  export const version = '1.2'
-  
-  
-  
+  export const version = '1.3'
+
+
