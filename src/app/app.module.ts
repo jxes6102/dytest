@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { ChoseComponent } from './chose/chose.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { HistoryComponent } from './history/history.component';
+import { Test1Component } from './test1/test1.component';
+import { PickComponent } from './pick/pick.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { HistoryComponent } from './history/history.component';
     GameViewComponent,
     displayPipe,
     winerPipe,
-    HistoryComponent
+    HistoryComponent,
+    Test1Component,
+    PickComponent
   ],
   imports: [
     CommonModule ,

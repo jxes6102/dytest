@@ -18,3 +18,10 @@ export interface buttonType {
     className:string;
     isClose:boolean;
 }
+
+export interface xoType {
+    styleName:string;
+    amount:number;
+    isChose:boolean;
+    weight:number;
+}

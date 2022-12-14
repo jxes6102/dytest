@@ -51,7 +51,7 @@ export class GameService {
     this.mode = ''
   }
   // 玩家點擊時紀錄
-  TestplayerCilck(place:number) {
+  playerCilck(place:number) {
     // 當點擊數大於等於9、已有勝負時不可點擊
     if((this.step >= 9) || this.result) return
 

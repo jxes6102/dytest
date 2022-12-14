@@ -1,0 +1,8 @@
+<div class="wrap">
+    <ng-container *ngFor="let item of pickData;let i = index">
+        <div class="block" [ngClass]="item.isChose ? ' selectColor' : '' " (click)="select(item.styleName)">
+            <div  class="countStyle" [ngClass]="item.styleName">{{sign}}</div>
+            <div  class="countStyle">{{'剩餘數量: ' + item.amount}}</div>
+        </div>
+    </ng-container>
+</div>
