@@ -1,11 +1,14 @@
 export interface viewType {
     className: string;
     data: number;
+    size: string
+    weight: number
 }
 
 export interface stepType {
     wherePlace: number;
     content: number;
+    useSize:string
 }
 
 export interface recordType {

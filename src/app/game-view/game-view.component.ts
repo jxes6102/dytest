@@ -21,13 +21,12 @@ export class GameViewComponent implements OnInit{
     gameID 該局遊戲ID
     recordID 紀錄模式時的遊戲ID
     mode  模式名稱
-    viewData  畫面資料 className識別所點區域 data紀錄圈叉
+    viewData  畫面資料 className識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
-    round 判斷是誰需選擇
+    round 判斷是屬於O或X的回合
     whichSize O或X選到的大小
   */
-  nowSign:string = '' 
-  whichSize:string = ''
+  whichSize:number = 0
   round:number = 0
   xData:xoType[] = [
     {styleName:"bigSize",amount:3,isChose:false,weight:3},
@@ -40,15 +39,15 @@ export class GameViewComponent implements OnInit{
     {styleName:"smallSize",amount:3,isChose:false,weight:1},
   ]
   viewData:viewType[] = [
-    {className:"square0",data:0},
-    {className:"square1",data:0},
-    {className:"square2",data:0},
-    {className:"square3",data:0},
-    {className:"square4",data:0},
-    {className:"square5",data:0},
-    {className:"square6",data:0},
-    {className:"square7",data:0},
-    {className:"square8",data:0}
+    {className:"square0",data:0,size:'',weight:0},
+    {className:"square1",data:0,size:'',weight:0},
+    {className:"square2",data:0,size:'',weight:0},
+    {className:"square3",data:0,size:'',weight:0},
+    {className:"square4",data:0,size:'',weight:0},
+    {className:"square5",data:0,size:'',weight:0},
+    {className:"square6",data:0,size:'',weight:0},
+    {className:"square7",data:0,size:'',weight:0},
+    {className:"square8",data:0,size:'',weight:0}
   ]
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
@@ -65,25 +64,30 @@ export class GameViewComponent implements OnInit{
   }
   // 點擊格子
   action(name:string): void{
-    this.nowSign = this.round %2 === 0 ? "O" : "X"
-    this.whichSize = this.nowSign === 'O' ? this.oData.findIndex((item) => item.isChose).toString() : this.xData.findIndex((item) => item.isChose).toString() 
     const index = this.viewData.findIndex((item) => item.className == name)
-    const canClickO = this.oData.some(item => item.isChose === true) && (this.round%2 === 0) && (this.oData[parseInt(this.whichSize)].amount > 0)
-    const canClickX = this.xData.some(item => item.isChose === true) && (this.round%2 === 1) && (this.xData[parseInt(this.whichSize)].amount > 0)
-    
-    // 判斷有無內容(OX)、模式、勝負狀態、是否有選擇大小下且有剩餘數量
-    if((Math.abs(this.viewData[index].data) === 1) || (this.mode === 'record') || (this.whoWin !== 0) || !(canClickO || canClickX)) return
-    
-    if(this.nowSign === 'O') {
-      this.oData[parseInt(this.whichSize)].amount--
+
+    const nowSign = this.round %2 === 0 ? "O" : "X"
+    this.whichSize = nowSign === 'O' ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+
+    const canClick = this.gameService.test(this.oData,this.xData,nowSign,this.whichSize,this.viewData[index])
+    // 判斷格子有無內容、模式、勝負狀態、是否有選擇大小下且有剩餘數量
+    if((this.whichSize === -1) || (Math.abs(this.viewData[index].data) === 1) || (this.mode === 'record') || (this.whoWin !== 0) || canClick) return
+    console.log('dodo')
+    if(nowSign === 'O') {
+      this.oData[this.whichSize].amount--
     }else {
-      this.xData[parseInt(this.whichSize)].amount--
+      this.xData[this.whichSize].amount--
     }
     
     this.round++
-    
-    if((Math.abs(this.viewData[index].data) !== 1)) this.viewData[index].data = this.gameService.playerCilck(index) || 0
+    const sizeName = this.oData[this.whichSize].styleName
+    this.viewData[index].data = this.gameService.playerCilck(index,sizeName) || 0
+    this.viewData[index].size = sizeName
+    this.viewData[index].weight = (nowSign === 'O' ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
     this.gameService.judgeVictory(this.viewData)
+    // console.log('viewData', this.viewData)
+    // console.log('whichSize', this.whichSize)
+    
     this.whoWin = this.gameService.getWin()
   }
   // 重置遊戲
@@ -91,7 +95,7 @@ export class GameViewComponent implements OnInit{
     this.gameService.resetGame()
     // 清除遊戲畫面
     for(let key in this.viewData) this.viewData[key].data = 0
-    // 清除選擇效果
+    // 重置選擇效果
     this.round = 0
     for(let item of this.oData){
       item.isChose = false
@@ -120,21 +124,24 @@ export class GameViewComponent implements OnInit{
   // 更新選擇效果
   getChose(data:string[]): void {
     // 當不是自己的回合時無法選擇自己的大小
-    if(((this.round %2 == 0) && (data[1] === 'X')) || ((this.round %2 == 1) && (data[1] === 'O'))) return
-    // this.nowSign = data[1]
-    if(data[1] === 'O') {
-      for(let key in this.oData) {
-        if(this.oData[key].styleName === data[0]) {
-          this.oData[key].isChose = true
-          // this.whichSize = key
-        } else this.oData[key].isChose = false
+    const sign = data[1]
+    const choseName = data[0]
+    if(((this.round %2 == 0) && (sign === 'X')) || ((this.round %2 == 1) && (sign === 'O'))) return
+
+    switch (sign) {
+      case 'O': {
+        for(let key in this.oData) {
+          if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
+          else this.oData[key].isChose = false
+        }
+        break
       }
-    } else {
-      for(let key in this.xData) {
-        if(this.xData[key].styleName === data[0]) {
-          this.xData[key].isChose = true
-          // this.whichSize = key
-        } else this.xData[key].isChose = false
+      case 'X': {
+        for(let key in this.xData) {
+          if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
+          else this.xData[key].isChose = false
+        }
+        break
       }
     }
 

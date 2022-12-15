@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType,recordType } from "./gamemodel.model";
+import { viewType,stepType,recordType,xoType } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -51,18 +51,42 @@ export class GameService {
     this.mode = ''
   }
   // 玩家點擊時紀錄
-  playerCilck(place:number) {
+  playerCilck(place:number,size:string) {
     // 當點擊數大於等於9、已有勝負時不可點擊
     if((this.step >= 9) || this.result) return
-
+    // console.log('size',size)
     this.step++
     if(this.step % 2 == 1) {
-      this.gameStep.push({wherePlace: place,content: 1})
+      this.gameStep.push({wherePlace: place,content: 1,useSize:size})
       return 1
     } else {
-      this.gameStep.push({wherePlace: place,content: -1})
+      this.gameStep.push({wherePlace: place,content: -1,useSize:size})
       return -1
     }
+  }
+  // 判斷所選尺寸和數量是否可放入當前格子
+  test(oData:xoType[],xData:xoType[],sign:string,where:number,viewData:viewType) {
+    if(this.mode === 'record' || this.result !== 0 || (where === -1)) return
+    // 判斷是敵對格子或空格才能下
+    if(!(((viewData.data < 0) && (sign === "O")) || ((viewData.data > 0) && (sign === "X")))) return
+    const canClickO = oData.some(item => item.isChose === true) && (sign === "O") && (oData[where].amount > 0)
+    const canClickX = xData.some(item => item.isChose === true) && (sign === "X") && (xData[where].amount > 0)
+    const canClick = !(canClickO || canClickX)
+    const choseWeight = (sign === "O" ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
+    // console.log('test',oData)
+    // console.log('test',xData)
+    // console.log('test',viewData)
+    // console.log('choseWeight',choseWeight)
+    // console.log('viewData.weight',viewData.weight)
+    // console.log(viewData.data)
+  
+    if(choseWeight > viewData.weight) {
+      console.log('can cover')
+    }else {
+      console.log('no cover')
+    }
+    return canClick
+    
   }
   // 判斷勝負
   judgeVictory(viewData:viewType[]) {
@@ -111,6 +135,7 @@ export class GameService {
 
         this.recordStep += stepVal
         viewData[this.gameRecords[this.recordStep - 1].wherePlace].data = this.gameRecords[this.recordStep - 1].content
+        viewData[this.gameRecords[this.recordStep - 1].wherePlace].size = this.gameRecords[this.recordStep - 1].useSize
         this.judgeVictory(viewData)
         break
       }
@@ -119,6 +144,7 @@ export class GameService {
 
         this.recordStep += stepVal
         viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
+        viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
         this.judgeVictory(viewData)
         break
       }
