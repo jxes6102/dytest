@@ -52,9 +52,12 @@ export class GameService {
   }
   // 玩家點擊時紀錄
   playerCilck(place:number,size:string) {
+    // 已有勝負時不可點擊
+    if(this.result) return
+
     // 當點擊數大於等於9、已有勝負時不可點擊
-    if((this.step >= 9) || this.result) return
-    // console.log('size',size)
+    // if((this.step >= 9) || this.result) return
+
     this.step++
     if(this.step % 2 == 1) {
       this.gameStep.push({wherePlace: place,content: 1,useSize:size})
@@ -64,45 +67,53 @@ export class GameService {
       return -1
     }
   }
-  // 判斷所選尺寸和數量是否可放入當前格子
-  test(oData:xoType[],xData:xoType[],sign:string,where:number,viewData:viewType) {
-    if(this.mode === 'record' || this.result !== 0 || (where === -1)) return
-    // 判斷是敵對格子或空格才能下
-    if(!(((viewData.data < 0) && (sign === "O")) || ((viewData.data > 0) && (sign === "X")))) return
-    const canClickO = oData.some(item => item.isChose === true) && (sign === "O") && (oData[where].amount > 0)
-    const canClickX = xData.some(item => item.isChose === true) && (sign === "X") && (xData[where].amount > 0)
-    const canClick = !(canClickO || canClickX)
-    const choseWeight = (sign === "O" ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
-    // console.log('test',oData)
-    // console.log('test',xData)
-    // console.log('test',viewData)
-    // console.log('choseWeight',choseWeight)
-    // console.log('viewData.weight',viewData.weight)
-    // console.log(viewData.data)
-  
-    if(choseWeight > viewData.weight) {
-      console.log('can cover')
-    }else {
-      console.log('no cover')
-    }
-    return canClick
+  // 判斷是否可放入當前格子
+  ableClick(oData:xoType[],xData:xoType[],sign:string,where:number,viewData:viewType) {
+    // 檢查模式、結果、是否選擇尺寸
+    if(this.mode === 'record' || this.result !== 0 || (where === -1)) return false
+    // 檢查數量、是否點擊敵對格或空白格
+    const canClickO = (oData[where].amount > 0) && (sign === "O") && (viewData.data <= 0)
+    const canClickX = (xData[where].amount > 0) && (sign === "X") && (viewData.data >= 0)
     
+    return (sign === "O") ? canClickO : canClickX
+  }
+  // 是否能覆蓋
+  canCover (nowSign:string,oData:xoType[],xData:xoType[],viewWeight:number) {
+    const choseWeight = (nowSign === "O" ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
+    return choseWeight > viewWeight
+  }
+  // 拿取畫面權重
+  getViewWeight (nowSign:string,oData:xoType[],xData:xoType[]) {
+    return (nowSign === 'O' ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
-  judgeVictory(viewData:viewType[]) {
+  judgeVictory(viewData:viewType[],oData:xoType[],xData:xoType[]) {
     this.result = 0
-    let condition1 = Math.abs(viewData[0].data + viewData[4].data + viewData[8].data)
-    let condition2 = Math.abs(viewData[2].data + viewData[4].data + viewData[6].data)
+    const condition1 = Math.abs(viewData[0].data + viewData[4].data + viewData[8].data)
+    const condition2 = Math.abs(viewData[2].data + viewData[4].data + viewData[6].data)
     this.result = ((condition1 === 3) || (condition2 === 3)) ? viewData[4].data : this.result
 
     for(let i = 0 ;i<3; i++) {
-      let condition3 = Math.abs(viewData[3*i].data + viewData[3*i+1].data + viewData[3*i+2].data)
-      let condition4 = Math.abs(viewData[i].data + viewData[i+3].data + viewData[i+6].data)
+      const condition3 = Math.abs(viewData[3*i].data + viewData[3*i+1].data + viewData[3*i+2].data)
+      const condition4 = Math.abs(viewData[i].data + viewData[i+3].data + viewData[i+6].data)
       this.result = (condition3 === 3) ? viewData[3*i].data : (condition4 === 3)
         ? viewData[i].data : this.result
     }
+
+    // 整合OX資料
+    let allArr = oData.concat(xData)
+    // 畫面上最小重
+    let minViewWeight = Math.min(...viewData.map(item => item.weight))
+    // 選擇欄位剩餘的最大重
+    let aliveArr = allArr.filter(item => item.amount > 0)
+    let maxChose = Math.max(...aliveArr.map(item => item.weight))
+    // 選擇欄位剩餘數量
+    let count = allArr.reduce((acc, item) => acc + item.amount,0)
+    // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
+    if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChose) && (this.result === 0))) this.result = 9
+
     //當玩家總步數或記錄步數等於9且都未分勝敗時是平手
-    if (((this.step === 9) && (this.result === 0)) || ((this.recordStep === 9) && (this.result === 0))) this.result = 9
+    // if (((this.step === 9) && (this.result === 0)) || ((this.recordStep === 9) && (this.result === 0))) this.result = 9
   }
   // 拿取勝利者
   getWin() {
@@ -136,7 +147,7 @@ export class GameService {
         this.recordStep += stepVal
         viewData[this.gameRecords[this.recordStep - 1].wherePlace].data = this.gameRecords[this.recordStep - 1].content
         viewData[this.gameRecords[this.recordStep - 1].wherePlace].size = this.gameRecords[this.recordStep - 1].useSize
-        this.judgeVictory(viewData)
+        // this.judgeVictory(viewData)
         break
       }
       case -1: {
@@ -145,7 +156,7 @@ export class GameService {
         this.recordStep += stepVal
         viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
         viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
-        this.judgeVictory(viewData)
+        // this.judgeVictory(viewData)
         break
       }
     }

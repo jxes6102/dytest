@@ -64,37 +64,40 @@ export class GameViewComponent implements OnInit{
   }
   // 點擊格子
   action(name:string): void{
+    /*
+      index 選擇的畫面位置
+      nowSign 屬於O或X的回合
+    */
     const index = this.viewData.findIndex((item) => item.className == name)
-
     const nowSign = this.round %2 === 0 ? "O" : "X"
     this.whichSize = nowSign === 'O' ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+    // 判斷是否可點擊
+    const canClick = this.gameService.ableClick(this.oData,this.xData,nowSign,this.whichSize,this.viewData[index])
+    // 判斷是否可覆蓋
+    const canCover = this.gameService.canCover(nowSign,this.oData,this.xData,this.viewData[index].weight)
+    if(!canClick || !canCover) return
 
-    const canClick = this.gameService.test(this.oData,this.xData,nowSign,this.whichSize,this.viewData[index])
-    // 判斷格子有無內容、模式、勝負狀態、是否有選擇大小下且有剩餘數量
-    if((this.whichSize === -1) || (Math.abs(this.viewData[index].data) === 1) || (this.mode === 'record') || (this.whoWin !== 0) || canClick) return
-    console.log('dodo')
-    if(nowSign === 'O') {
-      this.oData[this.whichSize].amount--
-    }else {
-      this.xData[this.whichSize].amount--
-    }
-    
-    this.round++
     const sizeName = this.oData[this.whichSize].styleName
     this.viewData[index].data = this.gameService.playerCilck(index,sizeName) || 0
     this.viewData[index].size = sizeName
-    this.viewData[index].weight = (nowSign === 'O' ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
-    this.gameService.judgeVictory(this.viewData)
-    // console.log('viewData', this.viewData)
-    // console.log('whichSize', this.whichSize)
+    this.viewData[index].weight = this.gameService.getViewWeight(nowSign,this.oData,this.xData)
     
+    if(nowSign === 'O') this.oData[this.whichSize].amount--
+    else this.xData[this.whichSize].amount--
+    
+    this.gameService.judgeVictory(this.viewData,this.oData,this.xData)
     this.whoWin = this.gameService.getWin()
+    this.round++
+ 
   }
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()
     // 清除遊戲畫面
     for(let key in this.viewData) this.viewData[key].data = 0
+    for(let key in this.viewData) this.viewData[key].size = ''
+    for(let key in this.viewData) this.viewData[key].weight = 0
+    
     // 重置選擇效果
     this.round = 0
     for(let item of this.oData){
@@ -124,6 +127,10 @@ export class GameViewComponent implements OnInit{
   // 更新選擇效果
   getChose(data:string[]): void {
     // 當不是自己的回合時無法選擇自己的大小
+    /*
+      sign 選擇的O OR X
+      choseName 樣式名稱
+    */
     const sign = data[1]
     const choseName = data[0]
     if(((this.round %2 == 0) && (sign === 'X')) || ((this.round %2 == 1) && (sign === 'O'))) return
