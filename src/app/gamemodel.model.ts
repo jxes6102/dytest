@@ -8,7 +8,8 @@ export interface viewType {
 export interface stepType {
     wherePlace: number;
     content: number;
-    useSize:string
+    useSize:string;
+    nowStatus:number;
 }
 
 export interface recordType {

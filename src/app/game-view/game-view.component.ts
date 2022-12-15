@@ -76,7 +76,7 @@ export class GameViewComponent implements OnInit{
     // 判斷是否可覆蓋
     const canCover = this.gameService.canCover(nowSign,this.oData,this.xData,this.viewData[index].weight)
     if(!canClick || !canCover) return
-
+    // 給予畫面資料
     const sizeName = this.oData[this.whichSize].styleName
     this.viewData[index].data = this.gameService.playerCilck(index,sizeName) || 0
     this.viewData[index].size = sizeName
@@ -84,11 +84,11 @@ export class GameViewComponent implements OnInit{
     
     if(nowSign === 'O') this.oData[this.whichSize].amount--
     else this.xData[this.whichSize].amount--
-    
+    // 勝負判斷
     this.gameService.judgeVictory(this.viewData,this.oData,this.xData)
     this.whoWin = this.gameService.getWin()
     this.round++
- 
+
   }
   // 重置遊戲
   renewGame(): void {
@@ -98,7 +98,7 @@ export class GameViewComponent implements OnInit{
     for(let key in this.viewData) this.viewData[key].size = ''
     for(let key in this.viewData) this.viewData[key].weight = 0
     
-    // 重置選擇效果
+    // 重置選擇畫面效果
     this.round = 0
     for(let item of this.oData){
       item.isChose = false
@@ -107,7 +107,7 @@ export class GameViewComponent implements OnInit{
     for(let item of this.xData){
       item.isChose = false
       item.amount = 3
-    } 
+    }
 
     this.gameService.setGameID()
     this.gameID = this.gameService.getGameID()
@@ -126,13 +126,13 @@ export class GameViewComponent implements OnInit{
   }
   // 更新選擇效果
   getChose(data:string[]): void {
-    // 當不是自己的回合時無法選擇自己的大小
     /*
       sign 選擇的O OR X
       choseName 樣式名稱
     */
     const sign = data[1]
     const choseName = data[0]
+    // 當不是自己的回合時無法選擇自己的大小
     if(((this.round %2 == 0) && (sign === 'X')) || ((this.round %2 == 1) && (sign === 'O'))) return
 
     switch (sign) {
@@ -151,7 +151,5 @@ export class GameViewComponent implements OnInit{
         break
       }
     }
-
   }
-
 }

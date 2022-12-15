@@ -55,15 +55,12 @@ export class GameService {
     // 已有勝負時不可點擊
     if(this.result) return
 
-    // 當點擊數大於等於9、已有勝負時不可點擊
-    // if((this.step >= 9) || this.result) return
-
     this.step++
     if(this.step % 2 == 1) {
-      this.gameStep.push({wherePlace: place,content: 1,useSize:size})
+      this.gameStep.push({wherePlace: place,content: 1,useSize:size,nowStatus:this.result})
       return 1
     } else {
-      this.gameStep.push({wherePlace: place,content: -1,useSize:size})
+      this.gameStep.push({wherePlace: place,content: -1,useSize:size,nowStatus:this.result})
       return -1
     }
   }
@@ -105,15 +102,12 @@ export class GameService {
     // 畫面上最小重
     let minViewWeight = Math.min(...viewData.map(item => item.weight))
     // 選擇欄位剩餘的最大重
-    let aliveArr = allArr.filter(item => item.amount > 0)
-    let maxChose = Math.max(...aliveArr.map(item => item.weight))
+    let maxChoseWeight = Math.max(...allArr.filter(item => item.amount > 0).map(item => item.weight))
     // 選擇欄位剩餘數量
     let count = allArr.reduce((acc, item) => acc + item.amount,0)
     // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
-    if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChose) && (this.result === 0))) this.result = 9
+    if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 9
 
-    //當玩家總步數或記錄步數等於9且都未分勝敗時是平手
-    // if (((this.step === 9) && (this.result === 0)) || ((this.recordStep === 9) && (this.result === 0))) this.result = 9
   }
   // 拿取勝利者
   getWin() {
@@ -132,7 +126,7 @@ export class GameService {
       this.gameStep = []
       return
     }
-
+    // console.log('qq')
     this.allRecords[this.gameID] = this.gameStep
     if(Object.keys(this.allRecords).length > 5) delete this.allRecords[Object.keys(this.allRecords)[0]]
 
@@ -179,6 +173,7 @@ export class GameService {
   getChose(id:string) {
     this.recordID = id
     this.gameRecords = this.allRecords[id]
+    // console.log('this.gameRecords',this.gameRecords)
   }
   // 拿取紀錄ID
   getRecordID() {
