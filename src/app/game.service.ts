@@ -6,6 +6,7 @@ import { viewType,stepType,recordType,xoType } from "./gamemodel.model";
 export class GameService {
   /*
     gameID 該局遊戲ID
+    recordID 紀錄模式時的遊戲ID
     allID 紀錄中所有遊戲ID
     mode  模式名稱
     step 遊戲步數
@@ -199,5 +200,9 @@ export class GameService {
   // 拿取本地端的紀錄
   setRecord(localData:recordType) {
     this.allRecords = localData
+  }
+  // 拿取遊戲步數
+  getStep () {
+    return this.step
   }
 }

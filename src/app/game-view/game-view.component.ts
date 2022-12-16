@@ -22,12 +22,13 @@ export class GameViewComponent implements OnInit{
     recordID 紀錄模式時的遊戲ID
     mode  模式名稱
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
-    whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
+    whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     round 判斷是屬於O或X的回合
     whichSize O或X選到的大小
+    xData and oData 選擇視窗資料
   */
   whichSize:number = 0
-  round:number = 0
+  round:number = this.gameService.getStep()
   xData:xoType[] = [
     {styleName:"bigSize",amount:3,isChose:false,weight:3},
     {styleName:"mediumSize",amount:3,isChose:false,weight:2},
@@ -69,7 +70,7 @@ export class GameViewComponent implements OnInit{
       nowSign 屬於O或X的回合
     */
     const index = this.viewData.findIndex((item) => item.styleName == name)
-    const nowSign = this.round %2 === 0 ? "O" : "X"
+    const nowSign = this.round % 2 === 0 ? "O" : "X"
     this.whichSize = nowSign === 'O' ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
     const canClick = this.gameService.ableClick(this.oData,this.xData,nowSign,this.whichSize,this.viewData[index])
@@ -87,31 +88,16 @@ export class GameViewComponent implements OnInit{
     // 勝負判斷
     this.gameService.judgeVictory(this.viewData,this.oData,this.xData)
     this.whoWin = this.gameService.getWin()
-    this.round++
+    this.round = this.gameService.getStep()
 
   }
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()
-    // 清除遊戲畫面
-    for(let key in this.viewData) this.viewData[key].data = 0
-    for(let key in this.viewData) this.viewData[key].size = ''
-    for(let key in this.viewData) this.viewData[key].weight = 0
-    
-    // 重置選擇畫面效果
-    this.round = 0
-    for(let item of this.oData){
-      item.isChose = false
-      item.amount = 3
-    }
-    for(let item of this.xData){
-      item.isChose = false
-      item.amount = 3
-    }
-
+    this.clearView()
+    this.round = this.gameService.getStep()
     this.gameService.setGameID()
     this.gameID = this.gameService.getGameID()
-
     this.whoWin = this.gameService.getWin()
   }
   //上一步
@@ -130,8 +116,7 @@ export class GameViewComponent implements OnInit{
       sign 選擇的O OR X
       choseName 樣式名稱
     */
-    const sign = data[1]
-    const choseName = data[0]
+    const sign = data[1], choseName = data[0]
     // 當不是自己的回合時無法選擇自己的大小
     if(((this.round %2 == 0) && (sign === 'X')) || ((this.round %2 == 1) && (sign === 'O'))) return
 
@@ -150,6 +135,23 @@ export class GameViewComponent implements OnInit{
         }
         break
       }
+    }
+  }
+  // 清除畫面
+  clearView() {
+    // 清除遊戲畫面
+    for(let key in this.viewData) this.viewData[key].data = 0
+    for(let key in this.viewData) this.viewData[key].size = ''
+    for(let key in this.viewData) this.viewData[key].weight = 0
+    
+    // 重置選擇畫面效果
+    for(let item of this.oData){
+      item.isChose = false
+      item.amount = 3
+    }
+    for(let item of this.xData){
+      item.isChose = false
+      item.amount = 3
     }
   }
 }
