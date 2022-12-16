@@ -9,7 +9,7 @@ export interface stepType {
     wherePlace: number;
     content: number;
     useSize:string;
-    nowStatus:number;
+    stepID:number;
 }
 
 export interface recordType {

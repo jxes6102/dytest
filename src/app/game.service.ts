@@ -57,10 +57,10 @@ export class GameService {
 
     this.step++
     if(this.step % 2 == 1) {
-      this.gameStep.push({wherePlace: place,content: 1,useSize:size,nowStatus:this.result})
+      this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.step})
       return 1
     } else {
-      this.gameStep.push({wherePlace: place,content: -1,useSize:size,nowStatus:this.result})
+      this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.step})
       return -1
     }
   }
@@ -84,7 +84,7 @@ export class GameService {
     return (nowSign === 'O' ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
-  judgeVictory(viewData:viewType[],oData:xoType[],xData:xoType[]) {
+  judgeVictory(viewData:viewType[],oData?:xoType[],xData?:xoType[]) {
     this.result = 0
     const condition1 = Math.abs(viewData[0].data + viewData[4].data + viewData[8].data)
     const condition2 = Math.abs(viewData[2].data + viewData[4].data + viewData[6].data)
@@ -96,18 +96,20 @@ export class GameService {
       this.result = (condition3 === 3) ? viewData[3*i].data : (condition4 === 3)
         ? viewData[i].data : this.result
     }
-
-    // 整合OX資料
-    let allArr = oData.concat(xData)
-    // 畫面上最小重
-    let minViewWeight = Math.min(...viewData.map(item => item.weight))
-    // 選擇欄位剩餘的最大重
-    let maxChoseWeight = Math.max(...allArr.filter(item => item.amount > 0).map(item => item.weight))
-    // 選擇欄位剩餘數量
-    let count = allArr.reduce((acc, item) => acc + item.amount,0)
-    // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
-    if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 9
-
+    // 計算對戰或紀錄模式時平手條件
+    if(oData && xData) {
+      // 整合OX資料
+      let allArr = oData.concat(xData)
+      // 畫面上最小重
+      let minViewWeight = Math.min(...viewData.map(item => item.weight))
+      // 選擇欄位剩餘的最大重
+      let maxChoseWeight = Math.max(...allArr.filter(item => item.amount > 0).map(item => item.weight))
+      // 選擇欄位剩餘數量
+      let count = allArr.reduce((acc, item) => acc + item.amount,0)
+      // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
+      if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 9
+    } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 9
+  
   }
   // 拿取勝利者
   getWin() {
@@ -126,7 +128,7 @@ export class GameService {
       this.gameStep = []
       return
     }
-    // console.log('qq')
+
     this.allRecords[this.gameID] = this.gameStep
     if(Object.keys(this.allRecords).length > 5) delete this.allRecords[Object.keys(this.allRecords)[0]]
 
@@ -139,18 +141,30 @@ export class GameService {
         if((this.recordStep === this.gameRecords.length)) return
 
         this.recordStep += stepVal
+
         viewData[this.gameRecords[this.recordStep - 1].wherePlace].data = this.gameRecords[this.recordStep - 1].content
         viewData[this.gameRecords[this.recordStep - 1].wherePlace].size = this.gameRecords[this.recordStep - 1].useSize
-        // this.judgeVictory(viewData)
+        this.judgeVictory(viewData)
         break
       }
       case -1: {
         if((this.recordStep < 1)) return
 
         this.recordStep += stepVal
-        viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
-        viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
-        // this.judgeVictory(viewData)
+        // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
+        const place = this.gameRecords.slice(0,(this.recordStep)).map((item)=> item.wherePlace)
+        // 此步驟之前所有修改位置(不包括自己)有修改此位置的紀錄時才還原成再上一次修改的同一格的OX
+        if(place.includes(this.gameRecords[this.recordStep].wherePlace)) {
+          // 取同位置上一次的修改紀錄
+          const lastRecord = this.gameRecords.filter((item) => (item.wherePlace === this.gameRecords[this.recordStep].wherePlace) && (item.stepID < this.gameRecords[this.recordStep].stepID)).pop()
+          viewData[this.gameRecords[this.recordStep].wherePlace].data = lastRecord?.content || 0
+          viewData[this.gameRecords[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
+        } else {
+          viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
+          viewData[this.gameRecords[this.recordStep].wherePlace].size = ''
+        }
+        
+        this.judgeVictory(viewData)
         break
       }
     }
@@ -173,7 +187,6 @@ export class GameService {
   getChose(id:string) {
     this.recordID = id
     this.gameRecords = this.allRecords[id]
-    // console.log('this.gameRecords',this.gameRecords)
   }
   // 拿取紀錄ID
   getRecordID() {
