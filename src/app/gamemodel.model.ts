@@ -1,5 +1,5 @@
 export interface viewType {
-    className: string;
+    styleName: string;
     data: number;
     size: string
     weight: number
@@ -19,7 +19,7 @@ export interface recordType {
 export interface buttonType {
     text:string;
     mode:string;
-    className:string;
+    styleName:string;
     isClose:boolean;
 }
 

@@ -2,19 +2,19 @@ export const buttonTData = [
     // {
     //     text:'人機模式',
     //     mode:'robot',
-    //     className:'battleStyle',
+    //     styleName:'battleStyle',
     //     isClose:true
     // },
     {
         text:'對戰模式',
         mode:'battle',
-        className:'battleStyle',
+        styleName:'battleStyle',
         isClose:false
     },
     {
         text:'紀錄模式',
         mode:'record',
-        className:'recordStyle',
+        styleName:'recordStyle',
         isClose:false
     },
   ];

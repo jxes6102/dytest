@@ -21,7 +21,7 @@ export class GameViewComponent implements OnInit{
     gameID 該局遊戲ID
     recordID 紀錄模式時的遊戲ID
     mode  模式名稱
-    viewData  畫面資料 className識別所點區域 data紀錄圈叉 sizeOX大小
+    viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
     round 判斷是屬於O或X的回合
     whichSize O或X選到的大小
@@ -39,15 +39,15 @@ export class GameViewComponent implements OnInit{
     {styleName:"smallSize",amount:3,isChose:false,weight:1},
   ]
   viewData:viewType[] = [
-    {className:"square0",data:0,size:'',weight:0},
-    {className:"square1",data:0,size:'',weight:0},
-    {className:"square2",data:0,size:'',weight:0},
-    {className:"square3",data:0,size:'',weight:0},
-    {className:"square4",data:0,size:'',weight:0},
-    {className:"square5",data:0,size:'',weight:0},
-    {className:"square6",data:0,size:'',weight:0},
-    {className:"square7",data:0,size:'',weight:0},
-    {className:"square8",data:0,size:'',weight:0}
+    {styleName:"square0",data:0,size:'',weight:0},
+    {styleName:"square1",data:0,size:'',weight:0},
+    {styleName:"square2",data:0,size:'',weight:0},
+    {styleName:"square3",data:0,size:'',weight:0},
+    {styleName:"square4",data:0,size:'',weight:0},
+    {styleName:"square5",data:0,size:'',weight:0},
+    {styleName:"square6",data:0,size:'',weight:0},
+    {styleName:"square7",data:0,size:'',weight:0},
+    {styleName:"square8",data:0,size:'',weight:0}
   ]
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
@@ -68,7 +68,7 @@ export class GameViewComponent implements OnInit{
       index 選擇的畫面位置
       nowSign 屬於O或X的回合
     */
-    const index = this.viewData.findIndex((item) => item.className == name)
+    const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.round %2 === 0 ? "O" : "X"
     this.whichSize = nowSign === 'O' ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊

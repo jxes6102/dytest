@@ -9,7 +9,7 @@ export class GameService {
     allID 紀錄中所有遊戲ID
     mode  模式名稱
     step 遊戲步數
-    result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 9:平手
+    result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     gameRecords 該局遊戲紀錄
     gameStep 紀錄該局遊戲紀錄
@@ -107,8 +107,8 @@ export class GameService {
       // 選擇欄位剩餘數量
       let count = allArr.reduce((acc, item) => acc + item.amount,0)
       // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
-      if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 9
-    } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 9
+      if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 2
+    } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 2
   
   }
   // 拿取勝利者
@@ -140,10 +140,9 @@ export class GameService {
       case 1: {
         if((this.recordStep === this.gameRecords.length)) return
 
+        viewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
+        viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
         this.recordStep += stepVal
-
-        viewData[this.gameRecords[this.recordStep - 1].wherePlace].data = this.gameRecords[this.recordStep - 1].content
-        viewData[this.gameRecords[this.recordStep - 1].wherePlace].size = this.gameRecords[this.recordStep - 1].useSize
         this.judgeVictory(viewData)
         break
       }
@@ -152,7 +151,7 @@ export class GameService {
 
         this.recordStep += stepVal
         // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
-        const place = this.gameRecords.slice(0,(this.recordStep)).map((item)=> item.wherePlace)
+        const place = this.gameRecords.slice(0,this.recordStep).map((item)=> item.wherePlace)
         // 此步驟之前所有修改位置(不包括自己)有修改此位置的紀錄時才還原成再上一次修改的同一格的OX
         if(place.includes(this.gameRecords[this.recordStep].wherePlace)) {
           // 取同位置上一次的修改紀錄
