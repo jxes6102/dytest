@@ -13,7 +13,7 @@ export class PickComponent {
   @Output() choseItem = new EventEmitter();
 
   ngOnInit(): void {
-    // console.log('pick')
+    
   }
 
   select(name:string): void {

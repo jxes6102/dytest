@@ -109,6 +109,8 @@ export class GameService {
       // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
       if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 2
     } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 2
+
+    if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
   
   }
   // 拿取勝利者
@@ -117,7 +119,6 @@ export class GameService {
   }
   //重置遊戲
   resetGame() {
-    this.noteGame()
     this.step = 0
     this.recordStep = 0
     this.result = 0
@@ -131,6 +132,8 @@ export class GameService {
 
     this.allRecords[this.gameID] = this.gameStep
     if(Object.keys(this.allRecords).length > 5) delete this.allRecords[Object.keys(this.allRecords)[0]]
+
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
   }
@@ -171,7 +174,10 @@ export class GameService {
   }
   // 設定遊戲ID
   setGameID() {
-    this.gameID++
+    // 判斷新增ID時不能和歷史紀錄的ID相同
+    do {  
+      this.gameID++
+    } while(this.getAllID().map((item) => parseInt(item)).includes(this.gameID))
   }
   // 拿取遊戲ID
   getGameID() {
@@ -190,5 +196,9 @@ export class GameService {
   // 拿取紀錄ID
   getRecordID() {
     return this.recordID
+  }
+  // 拿取本地端的紀錄
+  setRecord(localData:recordType) {
+    this.allRecords = localData
   }
 }

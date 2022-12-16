@@ -2,7 +2,7 @@ export const buttonTData = [
     // {
     //     text:'人機模式',
     //     mode:'robot',
-    //     styleName:'battleStyle',
+    //     styleName:'robot',
     //     isClose:true
     // },
     {
@@ -19,6 +19,6 @@ export const buttonTData = [
     },
   ];
 
-  export const version = '1.3'
+  export const version = '1.4'
 
 
