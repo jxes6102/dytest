@@ -16,8 +16,8 @@ export class ChoseComponent {
   }
 
   ngOnInit(): void {
-    let local = JSON.parse(localStorage.getItem('record') || '')
-    this.gameService.setRecord(local)
+    const local = JSON.parse(localStorage.getItem('record') || '{}')
+    if(local) this.gameService.setRecord(local)
   }
 
   version:string = version

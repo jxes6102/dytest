@@ -129,9 +129,11 @@ export class GameService {
       this.gameStep = []
       return
     }
-
+    
     this.allRecords[this.gameID] = this.gameStep
-    if(Object.keys(this.allRecords).length > 5) delete this.allRecords[Object.keys(this.allRecords)[0]]
+    // 超過記錄上限時刪除
+    const idArr = this.getAllID()
+    if(idArr.length > 5) delete this.allRecords[idArr[0]]
 
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
@@ -155,7 +157,7 @@ export class GameService {
         this.recordStep += stepVal
         // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
         const place = this.gameRecords.slice(0,this.recordStep).map((item)=> item.wherePlace)
-        // 此步驟之前所有修改位置(不包括自己)有修改此位置的紀錄時才還原成再上一次修改的同一格的OX
+        // 有修改此位置的紀錄時才還原成在上一次修改的同一格的OX
         if(place.includes(this.gameRecords[this.recordStep].wherePlace)) {
           // 取同位置上一次的修改紀錄
           const lastRecord = this.gameRecords.filter((item) => (item.wherePlace === this.gameRecords[this.recordStep].wherePlace) && (item.stepID < this.gameRecords[this.recordStep].stepID)).pop()
@@ -174,10 +176,7 @@ export class GameService {
   }
   // 設定遊戲ID
   setGameID() {
-    // 判斷新增ID時不能和歷史紀錄的ID相同
-    do {  
-      this.gameID++
-    } while(this.getAllID().map((item) => parseInt(item)).includes(this.gameID))
+    this.gameID = Date.now()
   }
   // 拿取遊戲ID
   getGameID() {
