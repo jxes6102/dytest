@@ -3,9 +3,9 @@ import { Pipe,PipeTransform  } from '@angular/core';
   name: 'winerPipe',
 })
 export class winerPipe implements PipeTransform{
-  transform(n: number) : string {
-    return n === 1 ? "O贏了!" : n === -1 
-      ? "X贏了!" : n === 2 
+  transform(n: number,markO:string,markX:string) : string {
+    return n === 1 ? markO + "贏了!" : n === -1
+      ? markX + "贏了!" : n === 2
         ? '平手~' : ' '
   }
 }
