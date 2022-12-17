@@ -27,6 +27,8 @@ export class GameViewComponent implements OnInit{
     whichSize O或X選到的大小
     xData and oData 選擇視窗資料
   */
+  markO:string = this.gameService.getMarkO()
+  markX:string = this.gameService.getMarkX()
   whichSize:number = 0
   round:number = this.gameService.getStep()
   xData:xoType[] = [
@@ -70,8 +72,8 @@ export class GameViewComponent implements OnInit{
       nowSign 屬於O或X的回合
     */
     const index = this.viewData.findIndex((item) => item.styleName == name)
-    const nowSign = this.round % 2 === 0 ? "O" : "X"
-    this.whichSize = nowSign === "O" ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+    const nowSign = this.round % 2 === 0 ? this.markO : this.markX
+    this.whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
     const canClick = this.gameService.ableClick(this.oData,this.xData,nowSign,this.whichSize,this.viewData[index])
     // 判斷是否可覆蓋
@@ -83,7 +85,7 @@ export class GameViewComponent implements OnInit{
     this.viewData[index].size = sizeName
     this.viewData[index].weight = this.gameService.getViewWeight(nowSign,this.oData,this.xData)
 
-    if(nowSign === "O") this.oData[this.whichSize].amount--
+    if(nowSign === this.markO) this.oData[this.whichSize].amount--
     else this.xData[this.whichSize].amount--
     // 勝負判斷
     this.gameService.judgeVictory(this.viewData,this.oData,this.xData)
@@ -118,17 +120,17 @@ export class GameViewComponent implements OnInit{
     */
     const sign = data[1], choseName = data[0]
     // 當不是自己的回合時無法選擇自己的大小
-    if(((this.round %2 == 0) && (sign === "X")) || ((this.round %2 == 1) && (sign === "O"))) return
+    if(((this.round %2 == 0) && (sign === this.markX)) || ((this.round %2 == 1) && (sign === this.markO))) return
 
     switch (sign) {
-      case "O": {
+      case this.markO: {
         for(let key in this.oData) {
           if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
           else this.oData[key].isChose = false
         }
         break
       }
-      case "X": {
+      case this.markX: {
         for(let key in this.xData) {
           if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
           else this.xData[key].isChose = false
@@ -141,7 +143,7 @@ export class GameViewComponent implements OnInit{
   clearView() {
     // 清除遊戲畫面
     for(let key in this.viewData) this.viewData[key].data = 0
-    for(let key in this.viewData) this.viewData[key].size = ''
+    for(let key in this.viewData) this.viewData[key].size = ""
     for(let key in this.viewData) this.viewData[key].weight = 0
 
     // 重置選擇畫面效果
