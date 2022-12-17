@@ -61,7 +61,6 @@ export class GameViewComponent implements OnInit{
   back(): void {
     this.router.navigate(['/'])
     this.gameService.clearMode()
-    for(let key in this.viewData) this.viewData[key].data = 0
     this.gameService.resetGame()
     this.whoWin = this.gameService.getWin()
   }

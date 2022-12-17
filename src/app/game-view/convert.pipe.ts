@@ -3,7 +3,7 @@ import { Pipe,PipeTransform  } from '@angular/core';
   name: 'displayPipe',
 })
 export class displayPipe implements PipeTransform{
-  transform(n: number) : string {
-    return n == 1 ? "O" : n == -1 ? "X" : " "
+  transform(val: number,markO:string,markX:string) : string {
+    return val == 1 ? markO : val == -1 ? markX : " "
   }
 }

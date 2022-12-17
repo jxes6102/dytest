@@ -132,6 +132,7 @@ export class GameService {
   }
   //重置遊戲
   resetGame() {
+    this.gameStep = []
     this.step = 0
     this.recordStep = 0
     this.result = 0
