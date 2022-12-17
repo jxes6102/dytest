@@ -72,7 +72,7 @@ export class GameService {
     // 檢查數量、是否點擊敵對格或空白格
     const canClickO = (oData[where].amount > 0) && (sign === "O") && (viewData.data <= 0)
     const canClickX = (xData[where].amount > 0) && (sign === "X") && (viewData.data >= 0)
-    
+
     return (sign === "O") ? canClickO : canClickX
   }
   // 是否能覆蓋
@@ -82,7 +82,7 @@ export class GameService {
   }
   // 拿取畫面權重
   getViewWeight (nowSign:string,oData:xoType[],xData:xoType[]) {
-    return (nowSign === 'O' ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
+    return (nowSign === "O" ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
   judgeVictory(viewData:viewType[],oData?:xoType[],xData?:xoType[]) {
@@ -112,7 +112,7 @@ export class GameService {
     } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 2
 
     if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
-  
+
   }
   // 拿取勝利者
   getWin() {
@@ -130,7 +130,7 @@ export class GameService {
       this.gameStep = []
       return
     }
-    
+
     this.allRecords[this.gameID] = this.gameStep
     // 超過記錄上限時刪除
     const idArr = this.getAllID()
@@ -168,7 +168,7 @@ export class GameService {
           viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
           viewData[this.gameRecords[this.recordStep].wherePlace].size = ''
         }
-        
+
         this.judgeVictory(viewData)
         break
       }
