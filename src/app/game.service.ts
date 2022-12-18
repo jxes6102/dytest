@@ -109,18 +109,22 @@ export class GameService {
       this.result = (condition3 === 3) ? viewData[3*i].data : (condition4 === 3)
         ? viewData[i].data : this.result
     }
+
     // 計算對戰或紀錄模式時平手條件
     if(oData && xData) {
-      // 整合OX資料
-      let allArr = oData.concat(xData)
-      // 畫面上最小重
-      let minViewWeight = Math.min(...viewData.map(item => item.weight))
-      // 選擇欄位剩餘的最大重
-      let maxChoseWeight = Math.max(...allArr.filter(item => item.amount > 0).map(item => item.weight))
+
+      let minViewWeight,maxChoseWeight
+      // 畫面敵對和空白最小重
+      minViewWeight = (this.step % 2 === 1) ? Math.min(...viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
+      Math.min(...viewData.filter((item) => item.data !== -1).map(item => item.weight))
+      // 當前選擇欄位剩餘最大重
+      maxChoseWeight = (this.step % 2 === 1) ? Math.max(...oData.filter(item => item.amount > 0).map(item => item.weight)) :
+      Math.max(...xData.filter(item => item.amount > 0).map(item => item.weight))
       // 選擇欄位剩餘數量
-      let count = allArr.reduce((acc, item) => acc + item.amount,0)
-      // 選擇欄位剩餘數量等於零和勝負未分 選擇欄位剩餘的最大重等於畫面上最小重和勝負未分 是平手
+      let count = oData.concat(xData).reduce((acc, item) => acc + item.amount,0)
+      // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重等於畫面上敵對和空白格最小重和勝負未分 是平手
       if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 2
+
     } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 2
 
     if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
