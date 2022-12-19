@@ -9,7 +9,6 @@ export class Test1Component {
 
   cat:any[] = [] 
   imgUrl:string = ''
-  test:any
 
   constructor(private http: HttpClient) {
     // console.log('1 constructor')
