@@ -71,18 +71,18 @@ export class GameViewComponent implements OnInit{
       nowSign 屬於O或X的回合
     */
     const index = this.viewData.findIndex((item) => item.styleName == name)
-    const nowSign = this.round % 2 === 0 ? this.markO : this.markX
+    const nowSign = this.gameService.getNowSign()
     this.whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
-    const canClick = this.gameService.ableClick(this.oData,this.xData,nowSign,this.whichSize,this.viewData[index])
+    const canClick = this.gameService.ableClick(this.oData,this.xData,this.whichSize,this.viewData[index])
     // 判斷是否可覆蓋
-    const canCover = this.gameService.canCover(nowSign,this.oData,this.xData,this.viewData[index].weight)
+    const canCover = this.gameService.canCover(this.oData,this.xData,this.viewData[index].weight)
     if(!canClick || !canCover) return
     // 給予畫面資料
     const sizeName = this.oData[this.whichSize].styleName
+    this.viewData[index].weight = this.gameService.getViewWeight(this.oData,this.xData)
     this.viewData[index].data = this.gameService.playerCilck(index,sizeName) || 0
     this.viewData[index].size = sizeName
-    this.viewData[index].weight = this.gameService.getViewWeight(nowSign,this.oData,this.xData)
 
     if(nowSign === this.markO) this.oData[this.whichSize].amount--
     else this.xData[this.whichSize].amount--
@@ -119,7 +119,7 @@ export class GameViewComponent implements OnInit{
     */
     const sign = data[1], choseName = data[0]
     // 當不是自己的回合時無法選擇自己的大小
-    if(((this.round %2 == 0) && (sign === this.markX)) || ((this.round %2 == 1) && (sign === this.markO))) return
+    if(((this.round % 2 == 0) && (sign === this.markX)) || ((this.round % 2 == 1) && (sign === this.markO))) return
 
     switch (sign) {
       case this.markO: {
