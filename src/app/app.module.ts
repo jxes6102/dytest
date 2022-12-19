@@ -10,6 +10,7 @@ import { GameViewComponent } from './game-view/game-view.component';
 import { HistoryComponent } from './history/history.component';
 import { Test1Component } from './test1/test1.component';
 import { PickComponent } from './pick/pick.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PickComponent } from './pick/pick.component';
   imports: [
     CommonModule ,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

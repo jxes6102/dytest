@@ -29,3 +29,19 @@ export interface xoType {
     isChose:boolean;
     weight:number;
 }
+
+
+export class testData {
+    public obj1: string;
+    constructor(){
+        this.obj1 = 'obj1'
+    }
+
+    creatViewData() {
+
+    }
+    
+    test1() {
+        return this.obj1
+    } 
+ }
