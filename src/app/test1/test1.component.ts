@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { viewType,stepType,recordType,xoType,testData } from "../gamemodel.model";
 @Component({
   selector: 'app-test1',
   templateUrl: './test1.component.html',
@@ -14,8 +13,6 @@ export class Test1Component {
 
   constructor(private http: HttpClient) {
     // console.log('1 constructor')
-    this.test = new testData()
-    console.log('test',this.test)
   }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GameService } from '../game.service';
-import { viewType,xoType } from "../gamemodel.model";
+import { viewType,xoType,viewData,selectData } from "../gamemodel.model";
 @Component({
   selector: 'app-game-view',
   templateUrl: './game-view.component.html',
@@ -31,27 +31,9 @@ export class GameViewComponent implements OnInit{
   markX:string = this.gameService.getMarkX()
   whichSize:number = 0
   round:number = this.gameService.getStep()
-  xData:xoType[] = [
-    {styleName:"bigSize",amount:3,isChose:false,weight:3},
-    {styleName:"mediumSize",amount:3,isChose:false,weight:2},
-    {styleName:"smallSize",amount:3,isChose:false,weight:1},
-  ]
-  oData:xoType[] = [
-    {styleName:"bigSize",amount:3,isChose:false,weight:3},
-    {styleName:"mediumSize",amount:3,isChose:false,weight:2},
-    {styleName:"smallSize",amount:3,isChose:false,weight:1},
-  ]
-  viewData:viewType[] = [
-    {styleName:"square0",data:0,size:'',weight:0},
-    {styleName:"square1",data:0,size:'',weight:0},
-    {styleName:"square2",data:0,size:'',weight:0},
-    {styleName:"square3",data:0,size:'',weight:0},
-    {styleName:"square4",data:0,size:'',weight:0},
-    {styleName:"square5",data:0,size:'',weight:0},
-    {styleName:"square6",data:0,size:'',weight:0},
-    {styleName:"square7",data:0,size:'',weight:0},
-    {styleName:"square8",data:0,size:'',weight:0}
-  ]
+  xData:xoType[] = new selectData().getData()
+  oData:xoType[] = new selectData().getData()
+  viewData:viewType[] = new viewData().getData()
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
   gameID:number = this.gameService.getGameID()

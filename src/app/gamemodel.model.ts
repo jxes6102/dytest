@@ -30,18 +30,49 @@ export interface xoType {
     weight:number;
 }
 
+export class viewData {
+    private data:viewType[] = []
 
-export class testData {
-    public obj1: string;
     constructor(){
-        this.obj1 = 'obj1'
+        this.creatData()
     }
 
-    creatViewData() {
-
+    creatData() {
+        for(let i = 0;i<9;i++) {
+            this.data.push({
+                styleName:"square"+ i.toString(),
+                data:0,
+                size:'',
+                weight:0
+            })
+        }
     }
     
-    test1() {
-        return this.obj1
+    getData() {
+        return this.data
+    }
+ }
+
+ export class selectData {
+    private data:xoType[] = []
+    private styleData:string[] = ["bigSize","mediumSize","smallSize"]
+
+    constructor(){
+        this.creatData()
+    }
+
+    creatData() {
+        for(let i = 0;i<3;i++) {
+            this.data.push({
+                styleName:this.styleData[i],
+                amount:3,
+                isChose:false,
+                weight:3-i,
+            })
+        }
+    }
+    
+    getData() {
+        return this.data
     } 
  }
