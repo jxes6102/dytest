@@ -24,12 +24,10 @@ export class GameViewComponent implements OnInit{
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     round 判斷是屬於O或X的回合
-    whichSize O或X選到的大小
     xData and oData 選擇視窗資料
   */
   markO:string = this.gameService.getMarkO()
   markX:string = this.gameService.getMarkX()
-  whichSize:number = 0
   round:number = this.gameService.getStep()
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
@@ -51,23 +49,24 @@ export class GameViewComponent implements OnInit{
     /*
       index 選擇的畫面位置
       nowSign 屬於O或X的回合
+      whichSize O或X選到的大小
     */
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.gameService.getNowSign()
-    this.whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
-    const canClick = this.gameService.ableClick(this.oData,this.xData,this.whichSize,this.viewData[index])
+    const canClick = this.gameService.ableClick(this.oData,this.xData,whichSize,this.viewData[index])
     // 判斷是否可覆蓋
     const canCover = this.gameService.canCover(this.oData,this.xData,this.viewData[index].weight)
     if(!canClick || !canCover) return
     // 給予畫面資料
-    const sizeName = this.oData[this.whichSize].styleName
+    const sizeName = this.oData[whichSize].styleName
     this.viewData[index].weight = this.gameService.getViewWeight(this.oData,this.xData)
     this.viewData[index].data = this.gameService.playerCilck(index,sizeName) || 0
     this.viewData[index].size = sizeName
 
-    if(nowSign === this.markO) this.oData[this.whichSize].amount--
-    else this.xData[this.whichSize].amount--
+    if(nowSign === this.markO) this.oData[whichSize].amount--
+    else this.xData[whichSize].amount--
     // 勝負判斷
     this.gameService.judgeVictory(this.viewData,this.oData,this.xData)
     this.whoWin = this.gameService.getWin()
