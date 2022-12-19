@@ -1,4 +1,4 @@
-<div class="wrap">
+<div class="wrap flexCenter">
     <app-test1></app-test1>
     <ng-container *ngFor="let item of buttonTData">
         <button [ngClass]="item.styleName" [disabled]="item.isClose" (click)="action(item.mode)">{{item.text + (item.isClose ? '(尚未完成)' : '')}}</button>

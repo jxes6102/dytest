@@ -1,33 +1,23 @@
-.wrap {
-    width: 150px;
-    height: 450px;
-    background: linear-gradient(to bottom right,#ffc3a0,#ffafbd);
+.flexCenter {
     display: flex;
     justify-items: center;
     justify-content: center;
     align-items: center;
     align-content: center;
+}
+
+.wrap {
+    width: 150px;
+    height: 450px;
+    background: linear-gradient(to bottom right,#ffc3a0,#ffafbd);
     flex-direction: column;
     border-radius: 10px;
     gap: 30px;
 }
 
-.countStyle {
-    display: flex;
-    justify-items: center;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-}
-
 .block{
     width: 120px;
     height: 120px;
-    display: flex;
-    justify-items: center;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
     flex-direction: column;
 }
 
