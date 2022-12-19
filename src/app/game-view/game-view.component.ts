@@ -31,9 +31,9 @@ export class GameViewComponent implements OnInit{
   markX:string = this.gameService.getMarkX()
   whichSize:number = 0
   round:number = this.gameService.getStep()
-  xData:xoType[] = new selectData().getData()
-  oData:xoType[] = new selectData().getData()
-  viewData:viewType[] = new viewData().getData()
+  xData:xoType[] = new selectData().getData
+  oData:xoType[] = new selectData().getData
+  viewData:viewType[] = new viewData().getData
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
   gameID:number = this.gameService.getGameID()

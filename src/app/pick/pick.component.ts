@@ -8,9 +8,9 @@ import { xoType } from "../gamemodel.model";
 })
 export class PickComponent {
   constructor() { }
-  @Input() pickData?: xoType[];
-  @Input() sign?: string;
-  @Output() choseItem = new EventEmitter();
+  @Input() pickData?: xoType[]
+  @Input() sign?: string
+  @Output() choseItem = new EventEmitter()
 
   ngOnInit(): void {
     

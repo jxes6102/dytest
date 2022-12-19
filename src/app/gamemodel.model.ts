@@ -48,7 +48,7 @@ export class viewData {
         }
     }
     
-    getData() {
+    get getData() {
         return this.data
     }
  }
@@ -72,7 +72,7 @@ export class viewData {
         }
     }
     
-    getData() {
+    get getData() {
         return this.data
     } 
  }

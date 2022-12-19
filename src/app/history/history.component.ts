@@ -9,8 +9,8 @@ import { GameService } from '../game.service';
 export class HistoryComponent {
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) {}
 
-  @Input() nowMode?: string;
-  @Output() changeMode = new EventEmitter();
+  @Input() nowMode?: string
+  @Output() changeMode = new EventEmitter()
 
   ngOnInit(): void {
   }
@@ -19,7 +19,7 @@ export class HistoryComponent {
   // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')
-    this.changeMode.emit('');
+    this.changeMode.emit('')
   }
   // 進入紀錄模式
   action(val:string): void{
