@@ -11,11 +11,8 @@ export class GameViewComponent implements OnInit{
   constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    if(this.mode === '') this.router.navigate(['/'])
-    else if(this.mode === 'battle') {
-      this.gameService.setGameID()
-      this.gameID = this.gameService.getGameID()
-    }
+    this.gameService.initGameView()
+    this.gameID = this.gameService.getGameID()
   }
   /*
     gameID 該局遊戲ID

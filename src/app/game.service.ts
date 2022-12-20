@@ -250,4 +250,9 @@ export class GameService {
   getAlertMessage () {
     return  this.alertMessage
   }
+  // 初始化gameView
+  initGameView () {
+    if(this.mode === '') this.router.navigate(['/'])
+    else if(this.mode === 'battle') this.setGameID()
+  }
 }
