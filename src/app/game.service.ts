@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType,recordType,xoType } from "./gamemodel.model";
+import { viewType,stepType,recordType,xoType,viewData,selectData } from "./gamemodel.model";
 import { Router,ActivatedRoute } from '@angular/router';
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,9 @@ export class GameService {
   markO:string
   markX:string
   alertMessage:string
+  testxData:xoType[] = new selectData().getData
+  testoData:xoType[] = new selectData().getData
+  testviewData:viewType[] = new viewData().getData
 
   constructor(private router: Router,private route: ActivatedRoute) {
     this.recordID = ''
@@ -50,6 +53,10 @@ export class GameService {
     this.markO = "O"
     this.markX = "X"
     this.alertMessage = ''
+
+    // console.log('testxData',this.testxData)
+    // console.log('testoData',this.testoData)
+    // console.log('testviewData',this.testviewData)
   }
   // 拿取符號
   getMarkO () {
@@ -254,5 +261,75 @@ export class GameService {
   initGameView () {
     if(this.mode === '') this.router.navigate(['/'])
     else if(this.mode === 'battle') this.setGameID()
+  }
+  //拿取oxdata
+  testgetOData () {
+    return this.testoData
+  }
+  testgetXData () {
+    return this.testxData
+  }
+  //拿取viewdata
+  testgetViewData () {
+    return this.testviewData
+  }
+  //清除畫面
+  clearView() {
+    // 清除遊戲畫面
+    for(let key in this.testviewData) this.testviewData[key].data = 0
+    for(let key in this.testviewData) this.testviewData[key].size = ""
+    for(let key in this.testviewData) this.testviewData[key].weight = 0
+
+    // 重置選擇畫面效果
+    for(let item of this.testoData){
+      item.isChose = false
+      item.amount = 3
+    }
+    for(let item of this.testxData){
+      item.isChose = false
+      item.amount = 3
+    }
+  }
+  // 更新選擇效果
+  updateChose (sign:string,choseName:string) {
+    // 當不是自己的回合時無法選擇自己的大小
+    if(((this.step % 2 == 0) && (sign === this.markX)) || ((this.step % 2 == 1) && (sign === this.markO))) return
+    switch (sign) {
+      case this.markO: {
+        for(let key in this.testoData) {
+          if(this.testoData[key].styleName === choseName) this.testoData[key].isChose = true
+          else this.testoData[key].isChose = false
+        }
+        break
+      }
+      case this.markX: {
+        for(let key in this.testxData) {
+          if(this.testxData[key].styleName === choseName) this.testxData[key].isChose = true
+          else this.testxData[key].isChose = false
+        }
+        break
+      }
+    }
+  }
+  //  點擊格子
+  clickAction(name:string) {
+    const index = this.testviewData.findIndex((item) => item.styleName == name)
+    const nowSign = this.getNowSign()
+    const whichSize = nowSign === this.markO ? this.testoData.findIndex((item) => item.isChose) : this.testxData.findIndex((item) => item.isChose)
+    // 判斷是否可點擊
+    const canClick = this.ableClick(this.testoData,this.testxData,whichSize,this.testviewData[index])
+    // 判斷是否可覆蓋
+    const canCover = this.canCover(this.testoData,this.testxData,this.testviewData[index].weight)
+    if(!canClick || !canCover) return
+    // 給予畫面資料
+    const sizeName = this.testoData[whichSize].styleName
+    this.testviewData[index].weight = this.getViewWeight(this.testoData,this.testxData)
+    this.testviewData[index].data = this.playerCilck(index,sizeName) || 0
+    this.testviewData[index].size = sizeName
+
+    if(nowSign === this.markO) this.testoData[whichSize].amount--
+    else this.testxData[whichSize].amount--
+    // 勝負判斷
+    this.judgeVictory(this.testviewData,this.testoData,this.testxData)
   }
 }

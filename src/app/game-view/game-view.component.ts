@@ -33,6 +33,9 @@ export class GameViewComponent implements OnInit{
   mode:string = this.gameService.getMode()
   gameID:number = this.gameService.getGameID()
   recordID:string = this.gameService.getRecordID()
+  testxData:xoType[] = this.gameService.testgetXData()
+  testoData:xoType[] = this.gameService.testgetOData()
+  testviewData:viewType[] = this.gameService.testgetViewData()
 
   // 回上頁
   back(): void {
@@ -40,35 +43,16 @@ export class GameViewComponent implements OnInit{
     this.gameService.clearMode()
     this.gameService.resetGame()
     this.whoWin = this.gameService.getWin()
+    this.clearView()
   }
   // 點擊格子
   action(name:string): void{
-    /*
-      index 選擇的畫面位置
-      nowSign 屬於O或X的回合
-      whichSize O或X選到的大小
-    */
-    const index = this.viewData.findIndex((item) => item.styleName == name)
-    const nowSign = this.gameService.getNowSign()
-    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
-    // 判斷是否可點擊
-    const canClick = this.gameService.ableClick(this.oData,this.xData,whichSize,this.viewData[index])
-    // 判斷是否可覆蓋
-    const canCover = this.gameService.canCover(this.oData,this.xData,this.viewData[index].weight)
-    if(!canClick || !canCover) return
-    // 給予畫面資料
-    const sizeName = this.oData[whichSize].styleName
-    this.viewData[index].weight = this.gameService.getViewWeight(this.oData,this.xData)
-    this.viewData[index].data = this.gameService.playerCilck(index,sizeName) || 0
-    this.viewData[index].size = sizeName
-
-    if(nowSign === this.markO) this.oData[whichSize].amount--
-    else this.xData[whichSize].amount--
-    // 勝負判斷
-    this.gameService.judgeVictory(this.viewData,this.oData,this.xData)
+    this.gameService.clickAction(name)
+    this.testxData= this.gameService.testgetXData()
+    this.testoData = this.gameService.testgetOData()
+    this.testviewData = this.gameService.testgetViewData()
     this.whoWin = this.gameService.getWin()
     this.round = this.gameService.getStep()
-
   }
   // 重置遊戲
   renewGame(): void {
@@ -81,12 +65,12 @@ export class GameViewComponent implements OnInit{
   }
   //上一步
   last(): void {
-    this.viewData = this.gameService.actionRecord(-1,this.viewData) || this.viewData
+    this.testviewData = this.gameService.actionRecord(-1,this.testviewData) || this.testviewData
     this.whoWin = this.gameService.getWin()
   }
   //下一步
   next(): void {
-    this.viewData = this.gameService.actionRecord(1,this.viewData) || this.viewData
+    this.testviewData = this.gameService.actionRecord(1,this.testviewData) || this.testviewData
     this.whoWin = this.gameService.getWin()
   }
   // 更新選擇效果
@@ -96,41 +80,15 @@ export class GameViewComponent implements OnInit{
       choseName 樣式名稱
     */
     const sign = data[1], choseName = data[0]
-    // 當不是自己的回合時無法選擇自己的大小
-    if(((this.round % 2 == 0) && (sign === this.markX)) || ((this.round % 2 == 1) && (sign === this.markO))) return
-
-    switch (sign) {
-      case this.markO: {
-        for(let key in this.oData) {
-          if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
-          else this.oData[key].isChose = false
-        }
-        break
-      }
-      case this.markX: {
-        for(let key in this.xData) {
-          if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
-          else this.xData[key].isChose = false
-        }
-        break
-      }
-    }
+    this.gameService.updateChose(sign,choseName)
+    this.testxData= this.gameService.testgetXData()
+    this.testoData = this.gameService.testgetOData()
   }
   // 清除畫面
   clearView() {
-    // 清除遊戲畫面
-    for(let key in this.viewData) this.viewData[key].data = 0
-    for(let key in this.viewData) this.viewData[key].size = ""
-    for(let key in this.viewData) this.viewData[key].weight = 0
-
-    // 重置選擇畫面效果
-    for(let item of this.oData){
-      item.isChose = false
-      item.amount = 3
-    }
-    for(let item of this.xData){
-      item.isChose = false
-      item.amount = 3
-    }
+    this.gameService.clearView()
+    this.testxData= this.gameService.testgetXData()
+    this.testoData = this.gameService.testgetOData()
+    this.testviewData = this.gameService.testgetViewData()
   }
 }

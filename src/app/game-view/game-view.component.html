@@ -1,13 +1,24 @@
 <div class="wrap flexCenter">
   <div class="idStyle flexCenter">GAMEID: {{mode === 'battle' ? gameID : recordID}}</div>
   <div class="board flexCenter">
-    <app-pick *ngIf="mode === 'battle'" [pickData]="oData" [sign]="markO" (choseItem)="getChose($event)" [style.opacity]='(round % 2 == 0) ? 1 : .5'></app-pick>
+    <app-pick *ngIf="mode === 'battle'" [pickData]="testoData" [sign]="markO" (choseItem)="getChose($event)" [style.opacity]='(round % 2 == 0) ? 1 : .5'></app-pick>
+    <div class="playView">
+      <ng-container *ngFor="let item of testviewData;let i = index">
+        <div class="flexCenter " [ngClass]="item.styleName + ' ' +  item.size" (click)="action(item.styleName)">{{item.data | displayPipe:markO:markX }}</div>
+      </ng-container>
+    </div>
+    <app-pick *ngIf="mode === 'battle'" [pickData]="testxData" [sign]="markX" (choseItem)="getChose($event)" [style.opacity]='(round % 2 == 1) ? 1 : .5'></app-pick>
+
+    
+    <!-- <app-pick *ngIf="mode === 'battle'" [pickData]="oData" [sign]="markO" (choseItem)="getChose($event)" [style.opacity]='(round % 2 == 0) ? 1 : .5'></app-pick>
     <div class="playView">
       <ng-container *ngFor="let item of viewData;let i = index">
         <div class="flexCenter " [ngClass]="item.styleName + ' ' +  item.size" (click)="action(item.styleName)">{{item.data | displayPipe:markO:markX }}</div>
       </ng-container>
     </div>
-    <app-pick *ngIf="mode === 'battle'" [pickData]="xData" [sign]="markX" (choseItem)="getChose($event)" [style.opacity]='(round % 2 == 1) ? 1 : .5'></app-pick>
+    <app-pick *ngIf="mode === 'battle'" [pickData]="xData" [sign]="markX" (choseItem)="getChose($event)" [style.opacity]='(round % 2 == 1) ? 1 : .5'></app-pick> -->
+
+
   </div>
   <div class="menu flexCenter" *ngIf="mode === 'record'">
     <button class="backStyle" (click)="last()">上一步</button>
