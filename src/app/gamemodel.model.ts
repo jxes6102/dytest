@@ -1,15 +1,12 @@
-export interface viewType {
-    styleName: string;
-    data: number;
-    size: string
-    weight: number
-}
-
 export interface stepType {
     wherePlace: number;
     content: number;
     useSize:string;
     stepID:number;
+}
+
+export interface recordS {
+    [propName: string]: stepType[];
 }
 
 export interface recordType {
@@ -22,7 +19,14 @@ export interface buttonType {
     styleName:string;
     isClose:boolean;
 }
-
+//每一個格子
+export interface viewType {
+    styleName: string;
+    data: number;
+    size: string
+    weight: number
+}
+//每一個選擇框
 export interface xoType {
     styleName:string;
     amount:number;

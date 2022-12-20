@@ -18,13 +18,16 @@ export class GameService {
     recordStep 紀錄狀態時的遊戲步數
     markO markX 定義符號
     alertMessage 提示訊息
+
+    同樣意義的資料 不要存放在多個地方
   */
+  // Records : Map<String,stepType[]> = new Map();
   gameID:number
   recordID:string
-  allID:string[]
   mode:string
   step:number
   result:number
+  allID:string[]
   allRecords:recordType
   gameRecords:stepType[]
   gameStep:stepType[]
