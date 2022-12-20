@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { viewType,stepType,recordType,xoType } from "./gamemodel.model";
+import { Router,ActivatedRoute } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +17,7 @@ export class GameService {
     gameStep 紀錄該局遊戲紀錄
     recordStep 紀錄狀態時的遊戲步數
     markO markX 定義符號
+    alertMessage 提示訊息
   */
   gameID:number
   recordID:string
@@ -29,8 +31,9 @@ export class GameService {
   recordStep:number
   markO:string
   markX:string
+  alertMessage:string
 
-  constructor() {
+  constructor(private router: Router,private route: ActivatedRoute) {
     this.recordID = ''
     this.gameID = 0
     this.allID = []
@@ -43,6 +46,7 @@ export class GameService {
     this.gameStep = []
     this.markO = "O"
     this.markX = "X"
+    this.alertMessage = ''
   }
   // 拿取符號
   getMarkO () {
@@ -220,11 +224,27 @@ export class GameService {
     return this.recordID
   }
   // 拿取本地端的紀錄
-  setRecord(localData:recordType) {
-    this.allRecords = localData
+  setRecord() {
+    const local = JSON.parse(localStorage.getItem('record') || '{}')
+    if(local) this.allRecords = local
   }
   // 拿取遊戲步數
   getStep () {
     return this.step
+  }
+  //選擇模式畫面動作
+  choseMode (modeName:string) {
+    if((!this.getAllID().length) && (modeName === 'record')){
+      this.alertMessage = 'Record is null !!'
+      return
+    }
+
+    this.mode = modeName
+    this.alertMessage = ''
+    if(this.mode === 'battle') this.router.navigate(['/game'])
+  }
+  // 拿取提示訊息
+  getAlertMessage () {
+    return  this.alertMessage
   }
 }

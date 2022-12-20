@@ -16,8 +16,7 @@ export class ChoseComponent {
   }
 
   ngOnInit(): void {
-    const local = JSON.parse(localStorage.getItem('record') || '{}')
-    if(local) this.gameService.setRecord(local)
+    this.gameService.setRecord()
   }
 
   version:string = version
@@ -27,18 +26,9 @@ export class ChoseComponent {
 
   // 選擇模式
   action(name:string): void {
-    
-    if((!this.gameService.getAllID().length) && (name === 'record')){
-      this.alertMessage = 'Record is null !!'
-      return
-    }
-
-    this.mode = name
-    this.alertMessage = ''
-    this.gameService.setMode(this.mode)
-    
-    if(this.mode === 'battle') this.router.navigate(['/game'])
-
+    this.gameService.choseMode(name)
+    this.mode = this.gameService.getMode()
+    this.alertMessage = this.gameService.getAlertMessage()
   }
 
 }
