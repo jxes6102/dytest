@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { viewType,stepType,recordType,xoType,viewData,selectData } from "./gamemodel.model";
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router,ActivatedRoute, TitleStrategy } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +30,7 @@ export class GameService {
   step:number
   result:number
   allID:string[]
+  testallRecords:object[]
   allRecords:recordType
   gameRecords:stepType[]
   gameStep:stepType[]
@@ -55,6 +56,7 @@ export class GameService {
     this.markO = "O"
     this.markX = "X"
     this.alertMessage = ''
+    this.testallRecords = []
 
   }
   // 拿取符號
@@ -165,12 +167,17 @@ export class GameService {
       this.gameStep = []
       return
     }
-
+    this.testallRecords.push(this.gameStep)
     this.allRecords[this.gameID] = this.gameStep
     // 超過記錄上限時刪除
     const idArr = this.getAllID()
-    if(idArr.length > 5) delete this.allRecords[idArr[0]]
-
+    if(idArr.length > 5 || this.testallRecords.length > 5) {
+      this.testallRecords.shift()
+      delete this.allRecords[idArr[0]]
+    }
+    console.log('this.testallRecords', this.testallRecords)
+    console.log('JSON',JSON.stringify(this.testallRecords))
+    localStorage.setItem('test', JSON.stringify(this.testallRecords))
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
@@ -235,6 +242,11 @@ export class GameService {
   setRecord() {
     const local = JSON.parse(localStorage.getItem('record') || '{}')
     if(local) this.allRecords = local
+    // console.log('this.allRecords ',this.allRecords)
+    const test = JSON.parse(localStorage.getItem('test') || '{}')
+    if(test) this.testallRecords = test
+    console.log('testallRecords',this.testallRecords)
+    
   }
   // 拿取遊戲步數
   getStep () {
