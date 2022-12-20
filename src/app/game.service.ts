@@ -18,6 +18,8 @@ export class GameService {
     recordStep 紀錄狀態時的遊戲步數
     markO markX 定義符號
     alertMessage 提示訊息
+    xData and oData 選擇視窗資料
+    viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
 
     同樣意義的資料 不要存放在多個地方
   */
@@ -35,9 +37,9 @@ export class GameService {
   markO:string
   markX:string
   alertMessage:string
-  testxData:xoType[] = new selectData().getData
-  testoData:xoType[] = new selectData().getData
-  testviewData:viewType[] = new viewData().getData
+  xData:xoType[] = new selectData().getData
+  oData:xoType[] = new selectData().getData
+  viewData:viewType[] = new viewData().getData
 
   constructor(private router: Router,private route: ActivatedRoute) {
     this.recordID = ''
@@ -54,9 +56,6 @@ export class GameService {
     this.markX = "X"
     this.alertMessage = ''
 
-    // console.log('testxData',this.testxData)
-    // console.log('testoData',this.testoData)
-    // console.log('testviewData',this.testviewData)
   }
   // 拿取符號
   getMarkO () {
@@ -182,10 +181,10 @@ export class GameService {
       case 1: {
         if((this.recordStep === this.gameRecords.length)) return
 
-        this.testviewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
-        this.testviewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
+        this.viewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
+        this.viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
         this.recordStep += stepVal
-        this.judgeVictory(this.testviewData)
+        this.judgeVictory(this.viewData)
         break
       }
       case -1: {
@@ -198,14 +197,14 @@ export class GameService {
         if(place.includes(this.gameRecords[this.recordStep].wherePlace)) {
           // 取同位置上一次的修改紀錄
           const lastRecord = this.gameRecords.filter((item) => (item.wherePlace === this.gameRecords[this.recordStep].wherePlace) && (item.stepID < this.gameRecords[this.recordStep].stepID)).pop()
-          this.testviewData[this.gameRecords[this.recordStep].wherePlace].data = lastRecord?.content || 0
-          this.testviewData[this.gameRecords[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
+          this.viewData[this.gameRecords[this.recordStep].wherePlace].data = lastRecord?.content || 0
+          this.viewData[this.gameRecords[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
         } else {
-          this.testviewData[this.gameRecords[this.recordStep].wherePlace].data = 0
-          this.testviewData[this.gameRecords[this.recordStep].wherePlace].size = ''
+          this.viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
+          this.viewData[this.gameRecords[this.recordStep].wherePlace].size = ''
         }
 
-        this.judgeVictory(this.testviewData)
+        this.judgeVictory(this.viewData)
         break
       }
     }
@@ -262,29 +261,29 @@ export class GameService {
     else if(this.mode === 'battle') this.setGameID()
   }
   //拿取oxdata
-  testgetOData () {
-    return this.testoData
+  getOData () {
+    return this.oData
   }
-  testgetXData () {
-    return this.testxData
+  getXData () {
+    return this.xData
   }
   //拿取viewdata
-  testgetViewData () {
-    return this.testviewData
+  getViewData () {
+    return this.viewData
   }
   //清除畫面
   clearView() {
     // 清除遊戲畫面
-    for(let key in this.testviewData) this.testviewData[key].data = 0
-    for(let key in this.testviewData) this.testviewData[key].size = ""
-    for(let key in this.testviewData) this.testviewData[key].weight = 0
+    for(let key in this.viewData) this.viewData[key].data = 0
+    for(let key in this.viewData) this.viewData[key].size = ""
+    for(let key in this.viewData) this.viewData[key].weight = 0
 
     // 重置選擇畫面效果
-    for(let item of this.testoData){
+    for(let item of this.oData){
       item.isChose = false
       item.amount = 3
     }
-    for(let item of this.testxData){
+    for(let item of this.xData){
       item.isChose = false
       item.amount = 3
     }
@@ -295,16 +294,16 @@ export class GameService {
     if(((this.step % 2 == 0) && (sign === this.markX)) || ((this.step % 2 == 1) && (sign === this.markO))) return
     switch (sign) {
       case this.markO: {
-        for(let key in this.testoData) {
-          if(this.testoData[key].styleName === choseName) this.testoData[key].isChose = true
-          else this.testoData[key].isChose = false
+        for(let key in this.oData) {
+          if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
+          else this.oData[key].isChose = false
         }
         break
       }
       case this.markX: {
-        for(let key in this.testxData) {
-          if(this.testxData[key].styleName === choseName) this.testxData[key].isChose = true
-          else this.testxData[key].isChose = false
+        for(let key in this.xData) {
+          if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
+          else this.xData[key].isChose = false
         }
         break
       }
@@ -312,23 +311,23 @@ export class GameService {
   }
   //  點擊格子
   clickAction(name:string) {
-    const index = this.testviewData.findIndex((item) => item.styleName == name)
+    const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.getNowSign()
-    const whichSize = nowSign === this.markO ? this.testoData.findIndex((item) => item.isChose) : this.testxData.findIndex((item) => item.isChose)
+    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
-    const canClick = this.ableClick(this.testoData,this.testxData,whichSize,this.testviewData[index])
+    const canClick = this.ableClick(this.oData,this.xData,whichSize,this.viewData[index])
     // 判斷是否可覆蓋
-    const canCover = this.canCover(this.testoData,this.testxData,this.testviewData[index].weight)
+    const canCover = this.canCover(this.oData,this.xData,this.viewData[index].weight)
     if(!canClick || !canCover) return
     // 給予畫面資料
-    const sizeName = this.testoData[whichSize].styleName
-    this.testviewData[index].weight = this.getViewWeight(this.testoData,this.testxData)
-    this.testviewData[index].data = this.playerCilck(index,sizeName) || 0
-    this.testviewData[index].size = sizeName
+    const sizeName = this.oData[whichSize].styleName
+    this.viewData[index].weight = this.getViewWeight(this.oData,this.xData)
+    this.viewData[index].data = this.playerCilck(index,sizeName) || 0
+    this.viewData[index].size = sizeName
 
-    if(nowSign === this.markO) this.testoData[whichSize].amount--
-    else this.testxData[whichSize].amount--
+    if(nowSign === this.markO) this.oData[whichSize].amount--
+    else this.xData[whichSize].amount--
     // 勝負判斷
-    this.judgeVictory(this.testviewData,this.testoData,this.testxData)
+    this.judgeVictory(this.viewData,this.oData,this.xData)
   }
 }

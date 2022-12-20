@@ -25,16 +25,13 @@ export class GameViewComponent implements OnInit{
   */
   markO:string = this.gameService.getMarkO()
   markX:string = this.gameService.getMarkX()
-  xData:xoType[] = new selectData().getData
-  oData:xoType[] = new selectData().getData
-  viewData:viewType[] = new viewData().getData
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
   gameID:number = this.gameService.getGameID()
   recordID:string = this.gameService.getRecordID()
-  testxData:xoType[] = this.gameService.testgetXData()
-  testoData:xoType[] = this.gameService.testgetOData()
-  testviewData:viewType[] = this.gameService.testgetViewData()
+  xData:xoType[] = this.gameService.getXData()
+  oData:xoType[] = this.gameService.getOData()
+  viewData:viewType[] = this.gameService.getViewData()
   nowSign:string = this.gameService.getNowSign()
 
   // 回上頁
@@ -48,9 +45,9 @@ export class GameViewComponent implements OnInit{
   // 點擊格子
   action(name:string): void{
     this.gameService.clickAction(name)
-    this.testxData= this.gameService.testgetXData()
-    this.testoData = this.gameService.testgetOData()
-    this.testviewData = this.gameService.testgetViewData()
+    this.xData= this.gameService.getXData()
+    this.oData = this.gameService.getOData()
+    this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
     this.nowSign = this.gameService.getNowSign()
   }
@@ -66,13 +63,13 @@ export class GameViewComponent implements OnInit{
   //上一步
   last(): void {
     this.gameService.actionRecord(-1)
-    this.testviewData = this.gameService.testgetViewData()
+    this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
   }
   //下一步
   next(): void {
     this.gameService.actionRecord(1)
-    this.testviewData = this.gameService.testgetViewData()
+    this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
   }
   // 更新選擇效果
@@ -83,14 +80,14 @@ export class GameViewComponent implements OnInit{
     */
     const sign = data[1], choseName = data[0]
     this.gameService.updateChose(sign,choseName)
-    this.testxData= this.gameService.testgetXData()
-    this.testoData = this.gameService.testgetOData()
+    this.xData= this.gameService.getXData()
+    this.oData = this.gameService.getOData()
   }
   // 清除畫面
   clearView() {
     this.gameService.clearView()
-    this.testxData= this.gameService.testgetXData()
-    this.testoData = this.gameService.testgetOData()
-    this.testviewData = this.gameService.testgetViewData()
+    this.xData= this.gameService.getXData()
+    this.oData = this.gameService.getOData()
+    this.viewData = this.gameService.getViewData()
   }
 }
