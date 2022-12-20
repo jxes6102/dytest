@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ComponentFactoryResolver, Injectable } from '@angular/core';
 import { viewType,stepType,recordType,xoType,viewData,selectData } from "./gamemodel.model";
 import { Router,ActivatedRoute } from '@angular/router';
 @Injectable({
@@ -133,15 +133,15 @@ export class GameService {
     // 計算對戰或紀錄模式時平手條件
     if(this.mode === 'battle') {
       // 畫面敵對和空白最小重
-      const minViewWeight = (this.step % 2 === 1) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
+      const minViewWeight = (this.step % 2 === 0) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
       Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
       // 當前選擇欄位剩餘最大重
-      const maxChoseWeight = (this.step % 2 === 1) ? Math.max(...this.oData.filter(item => item.amount > 0).map(item => item.weight)) :
-      Math.max(...this.xData.filter(item => item.amount > 0).map(item => item.weight))
+      const target = (this.step % 2 === 0) ? this.oData.filter(item => item.amount > 0).map(item => item.weight) : this.xData.filter(item => item.amount > 0).map(item => item.weight)
+      const maxChoseWeight = Math.max(...(target.length ? target : [0]))
       // 選擇欄位剩餘數量
       const count = this.oData.concat(this.xData).reduce((acc, item) => acc + item.amount,0)
-      // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重等於畫面上敵對和空白格最小重和勝負未分 是平手
-      if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 2
+      // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重大於等於畫面上敵對和空白格最小重和勝負未分 是平手
+      if(((count === 0) && (this.result === 0)) || ((minViewWeight >= maxChoseWeight) && (this.result === 0))) this.result = 2
 
     } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 2
 
