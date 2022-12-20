@@ -95,26 +95,26 @@ export class GameService {
     }
   }
   // 判斷是否可放入當前格子
-  ableClick(oData:xoType[],xData:xoType[],where:number,viewData:viewType) {
+  ableClick(where:number,viewData:viewType) {
     const nowSign = this.getNowSign()
     // 檢查模式、結果、是否選擇尺寸
     if(this.mode === 'record' || this.result !== 0 || (where === -1)) return false
     // 檢查數量、是否點擊敵對格或空白格
-    const canClickO = (oData[where].amount > 0) && (nowSign === this.markO) && (viewData.data <= 0)
-    const canClickX = (xData[where].amount > 0) && (nowSign === this.markX) && (viewData.data >= 0)
+    const canClickO = (this.oData[where].amount > 0) && (nowSign === this.markO) && (viewData.data <= 0)
+    const canClickX = (this.xData[where].amount > 0) && (nowSign === this.markX) && (viewData.data >= 0)
 
     return (nowSign === this.markO) ? canClickO : canClickX
   }
   // 是否能覆蓋
-  canCover (oData:xoType[],xData:xoType[],viewWeight:number) {
+  canCover (viewWeight:number) {
     const nowSign = this.getNowSign()
-    const choseWeight = (nowSign === this.markO ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
+    const choseWeight = (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
     return choseWeight > viewWeight
   }
   // 拿取畫面權重
-  getViewWeight (oData:xoType[],xData:xoType[]) {
+  getViewWeight () {
     const nowSign = this.getNowSign()
-    return (nowSign === this.markO ? oData.find((item) => item.isChose)?.weight : xData.find((item) => item.isChose)?.weight) || 0
+    return (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
   judgeVictory(viewData:viewType[],oData?:xoType[],xData?:xoType[]) {
@@ -315,13 +315,13 @@ export class GameService {
     const nowSign = this.getNowSign()
     const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
-    const canClick = this.ableClick(this.oData,this.xData,whichSize,this.viewData[index])
+    const canClick = this.ableClick(whichSize,this.viewData[index])
     // 判斷是否可覆蓋
-    const canCover = this.canCover(this.oData,this.xData,this.viewData[index].weight)
+    const canCover = this.canCover(this.viewData[index].weight)
     if(!canClick || !canCover) return
     // 給予畫面資料
     const sizeName = this.oData[whichSize].styleName
-    this.viewData[index].weight = this.getViewWeight(this.oData,this.xData)
+    this.viewData[index].weight = this.getViewWeight()
     this.viewData[index].data = this.playerCilck(index,sizeName) || 0
     this.viewData[index].size = sizeName
 
