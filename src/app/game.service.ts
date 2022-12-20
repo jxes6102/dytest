@@ -117,29 +117,29 @@ export class GameService {
     return (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
-  judgeVictory(viewData:viewType[],oData?:xoType[],xData?:xoType[]) {
+  judgeVictory() {
     this.result = 0
-    const condition1 = Math.abs(viewData[0].data + viewData[4].data + viewData[8].data)
-    const condition2 = Math.abs(viewData[2].data + viewData[4].data + viewData[6].data)
-    this.result = ((condition1 === 3) || (condition2 === 3)) ? viewData[4].data : this.result
+    const condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
+    const condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
+    this.result = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.result
 
     for(let i = 0 ;i<3; i++) {
-      const condition3 = Math.abs(viewData[3*i].data + viewData[3*i+1].data + viewData[3*i+2].data)
-      const condition4 = Math.abs(viewData[i].data + viewData[i+3].data + viewData[i+6].data)
-      this.result = (condition3 === 3) ? viewData[3*i].data : (condition4 === 3)
-        ? viewData[i].data : this.result
+      const condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
+      const condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
+      this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
+        ? this.viewData[i].data : this.result
     }
 
     // 計算對戰或紀錄模式時平手條件
-    if(oData && xData) {
+    if(this.mode === 'battle') {
       // 畫面敵對和空白最小重
-      const minViewWeight = (this.step % 2 === 1) ? Math.min(...viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
-      Math.min(...viewData.filter((item) => item.data !== -1).map(item => item.weight))
+      const minViewWeight = (this.step % 2 === 1) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
+      Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
       // 當前選擇欄位剩餘最大重
-      const maxChoseWeight = (this.step % 2 === 1) ? Math.max(...oData.filter(item => item.amount > 0).map(item => item.weight)) :
-      Math.max(...xData.filter(item => item.amount > 0).map(item => item.weight))
+      const maxChoseWeight = (this.step % 2 === 1) ? Math.max(...this.oData.filter(item => item.amount > 0).map(item => item.weight)) :
+      Math.max(...this.xData.filter(item => item.amount > 0).map(item => item.weight))
       // 選擇欄位剩餘數量
-      const count = oData.concat(xData).reduce((acc, item) => acc + item.amount,0)
+      const count = this.oData.concat(this.xData).reduce((acc, item) => acc + item.amount,0)
       // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重等於畫面上敵對和空白格最小重和勝負未分 是平手
       if(((count === 0) && (this.result === 0)) || ((minViewWeight === maxChoseWeight) && (this.result === 0))) this.result = 2
 
@@ -184,7 +184,7 @@ export class GameService {
         this.viewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
         this.viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
         this.recordStep += stepVal
-        this.judgeVictory(this.viewData)
+        this.judgeVictory()
         break
       }
       case -1: {
@@ -204,7 +204,7 @@ export class GameService {
           this.viewData[this.gameRecords[this.recordStep].wherePlace].size = ''
         }
 
-        this.judgeVictory(this.viewData)
+        this.judgeVictory()
         break
       }
     }
@@ -328,6 +328,6 @@ export class GameService {
     if(nowSign === this.markO) this.oData[whichSize].amount--
     else this.xData[whichSize].amount--
     // 勝負判斷
-    this.judgeVictory(this.viewData,this.oData,this.xData)
+    this.judgeVictory()
   }
 }
