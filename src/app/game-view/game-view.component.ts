@@ -20,12 +20,11 @@ export class GameViewComponent implements OnInit{
     mode  模式名稱
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
-    round 判斷是屬於O或X的回合
     xData and oData 選擇視窗資料
+    nowSign 判斷是屬於O或X的回合
   */
   markO:string = this.gameService.getMarkO()
   markX:string = this.gameService.getMarkX()
-  round:number = this.gameService.getStep()
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
@@ -36,6 +35,7 @@ export class GameViewComponent implements OnInit{
   testxData:xoType[] = this.gameService.testgetXData()
   testoData:xoType[] = this.gameService.testgetOData()
   testviewData:viewType[] = this.gameService.testgetViewData()
+  nowSign:string = this.gameService.getNowSign()
 
   // 回上頁
   back(): void {
@@ -52,25 +52,27 @@ export class GameViewComponent implements OnInit{
     this.testoData = this.gameService.testgetOData()
     this.testviewData = this.gameService.testgetViewData()
     this.whoWin = this.gameService.getWin()
-    this.round = this.gameService.getStep()
+    this.nowSign = this.gameService.getNowSign()
   }
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()
     this.clearView()
-    this.round = this.gameService.getStep()
+    this.nowSign = this.gameService.getNowSign()
     this.gameService.setGameID()
     this.gameID = this.gameService.getGameID()
     this.whoWin = this.gameService.getWin()
   }
   //上一步
   last(): void {
-    this.testviewData = this.gameService.actionRecord(-1,this.testviewData) || this.testviewData
+    this.gameService.actionRecord(-1)
+    this.testviewData = this.gameService.testgetViewData()
     this.whoWin = this.gameService.getWin()
   }
   //下一步
   next(): void {
-    this.testviewData = this.gameService.actionRecord(1,this.testviewData) || this.testviewData
+    this.gameService.actionRecord(1)
+    this.testviewData = this.gameService.testgetViewData()
     this.whoWin = this.gameService.getWin()
   }
   // 更新選擇效果

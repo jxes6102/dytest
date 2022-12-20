@@ -177,15 +177,15 @@ export class GameService {
     this.gameStep = []
   }
   // 執行紀錄
-  actionRecord(stepVal:number,viewData:viewType[]) {
+  actionRecord (stepVal:number) {
     switch (stepVal) {
       case 1: {
         if((this.recordStep === this.gameRecords.length)) return
 
-        viewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
-        viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
+        this.testviewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
+        this.testviewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
         this.recordStep += stepVal
-        this.judgeVictory(viewData)
+        this.judgeVictory(this.testviewData)
         break
       }
       case -1: {
@@ -198,18 +198,17 @@ export class GameService {
         if(place.includes(this.gameRecords[this.recordStep].wherePlace)) {
           // 取同位置上一次的修改紀錄
           const lastRecord = this.gameRecords.filter((item) => (item.wherePlace === this.gameRecords[this.recordStep].wherePlace) && (item.stepID < this.gameRecords[this.recordStep].stepID)).pop()
-          viewData[this.gameRecords[this.recordStep].wherePlace].data = lastRecord?.content || 0
-          viewData[this.gameRecords[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
+          this.testviewData[this.gameRecords[this.recordStep].wherePlace].data = lastRecord?.content || 0
+          this.testviewData[this.gameRecords[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
         } else {
-          viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
-          viewData[this.gameRecords[this.recordStep].wherePlace].size = ''
+          this.testviewData[this.gameRecords[this.recordStep].wherePlace].data = 0
+          this.testviewData[this.gameRecords[this.recordStep].wherePlace].size = ''
         }
 
-        this.judgeVictory(viewData)
+        this.judgeVictory(this.testviewData)
         break
       }
     }
-    return viewData
   }
   // 設定遊戲ID
   setGameID() {
