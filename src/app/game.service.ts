@@ -92,7 +92,7 @@ export class GameService {
   }
   //選擇模式畫面動作
   choseMode (modeName:string) {
-    if((!Object.keys(this.allRecords).length) && (modeName === 'record')){
+    if((!this.allRecords.length) && (modeName === 'record')){
       this.alertMessage = 'Record is null !!'
       return
     }
@@ -300,7 +300,7 @@ export class GameService {
   }
   // 拿取本地端的紀錄
   setRecord() {
-    const local = JSON.parse(localStorage.getItem('record') || '{}')
+    const local = JSON.parse(localStorage.getItem('record') || '[]')
     if(local) this.allRecords = local
   }
 }

@@ -4,11 +4,6 @@ export interface stepType {
     useSize:string;
     stepID:number;
 }
-
-export interface recordS {
-    [propName: string]: stepType[];
-}
-
 export interface buttonType {
     text:string;
     mode:string;
