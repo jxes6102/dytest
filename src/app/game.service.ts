@@ -240,11 +240,7 @@ export class GameService {
     return this.testallRecords
   }
   // 拿取選擇的紀錄
-  getChose(id:string) {
-    this.recordID = id
-    this.gameRecords = this.allRecords[id]
-  }
-  testgetChose(val:number) {
+  getChose(val:number) {
     this.recordID = val.toString()
     this.gameRecords = this.testallRecords[val]
   }

@@ -16,20 +16,15 @@ export class HistoryComponent {
 
   }
 
-  listData:string[] = this.gameService.getAllID()
-  testlistData:object[] = this.gameService.testgetAllRecords()
+  listData:object[] = this.gameService.testgetAllRecords()
   // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')
     this.changeMode.emit('')
   }
   // 進入紀錄模式
-  action(val:string): void{
+  action(val:number): void{
     this.gameService.getChose(val)
-    this.router.navigate(['/game'])
-  }
-  testaction(val:number): void{
-    this.gameService.testgetChose(val)
     this.router.navigate(['/game'])
   }
 }
