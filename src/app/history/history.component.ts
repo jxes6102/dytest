@@ -1,6 +1,7 @@
 import { Component,Input,Output,EventEmitter } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GameService } from '../game.service';
+import { stepType } from "../gamemodel.model";
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -16,7 +17,7 @@ export class HistoryComponent {
 
   }
 
-  listData:object[] = this.gameService.testgetAllRecords()
+  listData:stepType[][] = this.gameService.getAllRecords()
   // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')
@@ -24,7 +25,7 @@ export class HistoryComponent {
   }
   // 進入紀錄模式
   action(val:number): void{
-    this.gameService.getChose(val)
+    this.gameService.getChose(this.listData[val])
     this.router.navigate(['/game'])
   }
 }

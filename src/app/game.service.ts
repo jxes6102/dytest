@@ -31,7 +31,7 @@ export class GameService {
   result:number
   allID:string[]
   testallRecords:stepType[][]
-  allRecords:recordType
+  allRecords:stepType[][]
   gameRecords:stepType[]
   testgameStep:stepType[]
   gameStep:stepType[]
@@ -50,7 +50,7 @@ export class GameService {
     this.result = 0
     this.recordStep = 0
     this.gameRecords = []
-    this.allRecords = {}
+    this.allRecords = []
     this.mode = ''
     this.step = 0
     this.gameStep = []
@@ -173,17 +173,12 @@ export class GameService {
       return
     }
 
-    if(!this.testallRecords.length) this.testallRecords = []
-    this.testallRecords.push(this.testgameStep)
+    if(!this.allRecords.length) this.allRecords = []
+    this.allRecords.push(this.testgameStep)
 
-    this.allRecords[this.gameID] = this.gameStep
     // 超過記錄上限時刪除
-    const idArr = this.getAllID()
-    if(idArr.length > 5 || this.testallRecords.length > 5) {
-      this.testallRecords.shift()
-      delete this.allRecords[idArr[0]]
-    }
-    localStorage.setItem('test', JSON.stringify(this.testallRecords))
+    if(this.allRecords.length > 5) this.allRecords.shift()
+
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
@@ -236,13 +231,13 @@ export class GameService {
     this.allID = Object.keys(this.allRecords)
     return this.allID
   }
-  testgetAllRecords() {
-    return this.testallRecords
+  // 拿取遊戲紀錄
+  getAllRecords() {
+    return this.allRecords
   }
   // 拿取選擇的紀錄
-  getChose(val:number) {
-    this.recordID = val.toString()
-    this.gameRecords = this.testallRecords[val]
+  getChose(data:stepType[]) {
+    this.gameRecords = data
   }
   // 拿取紀錄ID
   getRecordID() {
@@ -252,10 +247,6 @@ export class GameService {
   setRecord() {
     const local = JSON.parse(localStorage.getItem('record') || '{}')
     if(local) this.allRecords = local
-
-    const test = JSON.parse(localStorage.getItem('test') || '{}')
-    if(test) this.testallRecords = test
-    
   }
   // 拿取遊戲步數
   getStep () {
