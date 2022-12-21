@@ -1,0 +1,5 @@
+<div class="listStyle flexCenter">
+    <div class="gameList flexCenter">
+        <div class="choseStyle flexCenter" *ngFor="let item of listData;let i = index;let len = count" (click)="action(i)">{{'上' + (len - i) + '場'}}</div>
+    </div>
+</div>

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
-import { displayPipe } from './game-view/convert.pipe';
-import { winerPipe } from './game-view/winer.pipe';
+import { displayPipe } from './convert.pipe';
+import { winerPipe } from './winer.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChoseComponent } from './chose/chose.component';
@@ -13,6 +13,7 @@ import { PickComponent } from './pick/pick.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PictureComponent } from './picture/picture.component';
 import { AllViewComponent } from './all-view/all-view.component';
+import { NoteComponent } from './note/note.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AllViewComponent } from './all-view/all-view.component';
     Test1Component,
     PickComponent,
     PictureComponent,
-    AllViewComponent
+    AllViewComponent,
+    NoteComponent
   ],
   imports: [
     CommonModule ,
