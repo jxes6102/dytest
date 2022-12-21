@@ -8,12 +8,6 @@ import { viewType,xoType } from "../gamemodel.model";
   styleUrls: ['./game-view.component.css']
 })
 export class GameViewComponent implements OnInit{
-  constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.gameService.initGameView()
-    this.gameID = this.gameService.getGameID()
-  }
   /*
     gameID 該局遊戲ID
     recordID 紀錄模式時的遊戲ID
@@ -33,6 +27,13 @@ export class GameViewComponent implements OnInit{
   oData:xoType[] = this.gameService.getOData()
   viewData:viewType[] = this.gameService.getViewData()
   nowSign:string = this.gameService.getNowSign()
+
+  constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.gameService.initGameView()
+    this.gameID = this.gameService.getGameID()
+  }
 
   // 回上頁
   back(): void {

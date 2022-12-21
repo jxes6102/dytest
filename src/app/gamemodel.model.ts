@@ -9,10 +9,6 @@ export interface recordS {
     [propName: string]: stepType[];
 }
 
-export interface recordType {
-    [propName: string]: stepType[];
-}
-
 export interface buttonType {
     text:string;
     mode:string;

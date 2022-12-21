@@ -7,11 +7,12 @@ import { xoType } from "../gamemodel.model";
   styleUrls: ['./pick.component.css']
 })
 export class PickComponent {
-  constructor() { }
   @Input() pickData?: xoType[]
   @Input() sign?: string
   @Output() choseItem = new EventEmitter()
 
+  constructor() { }
+  
   ngOnInit(): void {
     
   }

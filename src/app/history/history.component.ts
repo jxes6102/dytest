@@ -8,16 +8,16 @@ import { stepType } from "../gamemodel.model";
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent {
-  constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) {}
-
   @Input() nowMode?: string
   @Output() changeMode = new EventEmitter()
+  listData:stepType[][] = this.gameService.getAllRecords()
+
+  constructor(private gameService: GameService,private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
 
   }
-
-  listData:stepType[][] = this.gameService.getAllRecords()
+  
   // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')
