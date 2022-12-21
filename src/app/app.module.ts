@@ -11,6 +11,8 @@ import { HistoryComponent } from './history/history.component';
 import { Test1Component } from './test1/test1.component';
 import { PickComponent } from './pick/pick.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PictureComponent } from './picture/picture.component';
+import { AllViewComponent } from './all-view/all-view.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { HttpClientModule } from '@angular/common/http';
     winerPipe,
     HistoryComponent,
     Test1Component,
-    PickComponent
+    PickComponent,
+    PictureComponent,
+    AllViewComponent
   ],
   imports: [
     CommonModule ,
