@@ -67,9 +67,102 @@ export class GameService {
   clearMode() {
     this.mode = ''
   }
+  // 拿取勝利者
+  getWin() {
+    return this.result
+  }
+  // 拿取提示訊息
+  getAlertMessage () {
+    return  this.alertMessage
+  }
+  // 初始化gameView
+  initGameView () {
+    if(this.mode === '') this.router.navigate(['/'])
+  }
+  //拿取oxdata
+  getOData () {
+    return this.oData
+  }
+  getXData () {
+    return this.xData
+  }
+  //拿取viewdata
+  getViewData () {
+    return this.viewData
+  }
+  //選擇模式畫面動作
+  choseMode (modeName:string) {
+    if((!Object.keys(this.allRecords).length) && (modeName === 'record')){
+      this.alertMessage = 'Record is null !!'
+      return
+    }
+
+    this.mode = modeName
+    this.alertMessage = ''
+    if(this.mode === 'battle') this.router.navigate(['/game'])
+  }
+  //清除畫面
+  clearView() {
+    // 清除遊戲畫面
+    for(let key in this.viewData) this.viewData[key].data = 0
+    for(let key in this.viewData) this.viewData[key].size = ""
+    for(let key in this.viewData) this.viewData[key].weight = 0
+
+    // 重置選擇畫面效果
+    for(let item of this.oData){
+      item.isChose = false
+      item.amount = 3
+    }
+    for(let item of this.xData){
+      item.isChose = false
+      item.amount = 3
+    }
+  }
+  // 更新選擇效果
+  updateChose (sign:string,choseName:string) {
+    // 當不是自己的回合時無法選擇自己的大小
+    if(((this.step % 2 == 0) && (sign === this.markX)) || ((this.step % 2 == 1) && (sign === this.markO))) return
+    switch (sign) {
+      case this.markO: {
+        for(let key in this.oData) {
+          if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
+          else this.oData[key].isChose = false
+        }
+        break
+      }
+      case this.markX: {
+        for(let key in this.xData) {
+          if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
+          else this.xData[key].isChose = false
+        }
+        break
+      }
+    }
+  }
   // 確認此回合的標誌 
   getNowSign() {
     return (this.step % 2 === 0) ? this.markO : this.markX
+  }
+  //  點擊格子
+  clickAction(name:string) {
+    const index = this.viewData.findIndex((item) => item.styleName == name)
+    const nowSign = this.getNowSign()
+    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+    // 判斷是否可點擊
+    const canClick = this.ableClick(whichSize,this.viewData[index])
+    // 判斷是否可覆蓋
+    const canCover = this.canCover(this.viewData[index].weight)
+    if(!canClick || !canCover) return
+    // 給予畫面資料
+    const sizeName = this.oData[whichSize].styleName
+    this.viewData[index].weight = this.getViewWeight()
+    this.viewData[index].data = this.playerCilck(index,sizeName) || 0
+    this.viewData[index].size = sizeName
+
+    if(nowSign === this.markO) this.oData[whichSize].amount--
+    else this.xData[whichSize].amount--
+    // 勝負判斷
+    this.judgeVictory()
   }
   // 玩家點擊時紀錄
   playerCilck(place:number,size:string) {
@@ -138,10 +231,6 @@ export class GameService {
 
     if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
 
-  }
-  // 拿取勝利者
-  getWin() {
-    return this.result
   }
   //重置遊戲
   resetGame() {
@@ -213,98 +302,5 @@ export class GameService {
   setRecord() {
     const local = JSON.parse(localStorage.getItem('record') || '{}')
     if(local) this.allRecords = local
-  }
-  // 拿取遊戲步數
-  getStep () {
-    return this.step
-  }
-  //選擇模式畫面動作
-  choseMode (modeName:string) {
-    if((!Object.keys(this.allRecords).length) && (modeName === 'record')){
-      this.alertMessage = 'Record is null !!'
-      return
-    }
-
-    this.mode = modeName
-    this.alertMessage = ''
-    if(this.mode === 'battle') this.router.navigate(['/game'])
-  }
-  // 拿取提示訊息
-  getAlertMessage () {
-    return  this.alertMessage
-  }
-  // 初始化gameView
-  initGameView () {
-    if(this.mode === '') this.router.navigate(['/'])
-  }
-  //拿取oxdata
-  getOData () {
-    return this.oData
-  }
-  getXData () {
-    return this.xData
-  }
-  //拿取viewdata
-  getViewData () {
-    return this.viewData
-  }
-  //清除畫面
-  clearView() {
-    // 清除遊戲畫面
-    for(let key in this.viewData) this.viewData[key].data = 0
-    for(let key in this.viewData) this.viewData[key].size = ""
-    for(let key in this.viewData) this.viewData[key].weight = 0
-
-    // 重置選擇畫面效果
-    for(let item of this.oData){
-      item.isChose = false
-      item.amount = 3
-    }
-    for(let item of this.xData){
-      item.isChose = false
-      item.amount = 3
-    }
-  }
-  // 更新選擇效果
-  updateChose (sign:string,choseName:string) {
-    // 當不是自己的回合時無法選擇自己的大小
-    if(((this.step % 2 == 0) && (sign === this.markX)) || ((this.step % 2 == 1) && (sign === this.markO))) return
-    switch (sign) {
-      case this.markO: {
-        for(let key in this.oData) {
-          if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
-          else this.oData[key].isChose = false
-        }
-        break
-      }
-      case this.markX: {
-        for(let key in this.xData) {
-          if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
-          else this.xData[key].isChose = false
-        }
-        break
-      }
-    }
-  }
-  //  點擊格子
-  clickAction(name:string) {
-    const index = this.viewData.findIndex((item) => item.styleName == name)
-    const nowSign = this.getNowSign()
-    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
-    // 判斷是否可點擊
-    const canClick = this.ableClick(whichSize,this.viewData[index])
-    // 判斷是否可覆蓋
-    const canCover = this.canCover(this.viewData[index].weight)
-    if(!canClick || !canCover) return
-    // 給予畫面資料
-    const sizeName = this.oData[whichSize].styleName
-    this.viewData[index].weight = this.getViewWeight()
-    this.viewData[index].data = this.playerCilck(index,sizeName) || 0
-    this.viewData[index].size = sizeName
-
-    if(nowSign === this.markO) this.oData[whichSize].amount--
-    else this.xData[whichSize].amount--
-    // 勝負判斷
-    this.judgeVictory()
   }
 }
