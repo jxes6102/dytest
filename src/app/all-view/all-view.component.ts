@@ -14,6 +14,7 @@ export class AllViewComponent {
     xData and oData 選擇視窗資料
     nowSign 判斷是屬於O或X的回合
     markO and markX 兩方的符號
+    stepMessage 步驟訊息
   */
   markO:string = this.gameService.getMarkO()
   markX:string = this.gameService.getMarkX()
@@ -23,6 +24,7 @@ export class AllViewComponent {
   oData:xoType[] = this.gameService.getOData()
   viewData:viewType[] = this.gameService.getViewData()
   nowSign:string = this.gameService.getNowSign()
+  stepMessage:string = '開始'
 
   constructor(private gameService: GameService) { }
 
@@ -38,12 +40,14 @@ export class AllViewComponent {
     this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
     this.nowSign = this.gameService.getNowSign()
+    this.stepMessage = this.gameService.getStepMessage()
   }
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()
     this.clearView()
     this.nowSign = this.gameService.getNowSign()
+    this.stepMessage = '開始'
     this.whoWin = this.gameService.getWin()
   }
   //上一步
@@ -51,12 +55,14 @@ export class AllViewComponent {
     this.gameService.actionRecord(-1)
     this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
+    this.stepMessage = this.gameService.getStepMessage()
   }
   //下一步
   next(): void {
     this.gameService.actionRecord(1)
     this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
+    this.stepMessage = this.gameService.getStepMessage()
   }
   // 更新選擇效果
   getChose(data:string[]): void {
@@ -89,5 +95,9 @@ export class AllViewComponent {
     this.gameService.setMode('battle')
     this.renewGame()
     this.mode = this.gameService.getMode()
+  }
+  //切換狀態
+  changeStatus() {
+    console.log('changeStatus')
   }
 }

@@ -6,13 +6,15 @@
     </div>
     <div class="menu flexCenter" *ngIf="mode === 'record'">
         <button class="backStyle" (click)="last()">上一步</button>
-        <button class="backStyle" (click)="toBattle()">切為對戰模式</button>
+        <button class="backStyle" (click)="toBattle()">回到對戰模式</button>
         <button class="backStyle" (click)="next()">下一步</button>
     </div>
     <div class="menu flexCenter" *ngIf="mode === 'battle'">
+        <button class="backStyle" (click)="changeStatus()">切換狀點擊/拿取</button>
         <button class="backStyle" (click)="renewGame()">重置遊戲</button>
     </div>
-    <div class="winStyle flexCenter" >{{whoWin | winerPipe:markO:markX}}</div>
+    <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:markO:markX}}</div>
+    <div class="winStyle flexCenter" *ngIf="whoWin === 0">{{stepMessage}}</div>
     <app-note (noteAction)="toRecord($event)"></app-note>
 </div>
   

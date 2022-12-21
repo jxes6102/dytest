@@ -91,6 +91,15 @@ export class GameService {
   getViewData () {
     return this.viewData
   }
+  //拿取步驟訊息
+  getStepMessage() {
+    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameRecords[this.recordStep - 1]
+    if (!target) return '開始'
+    const sign = target?.content === 1 ? this.markO : this.markX
+    const where = (target?.wherePlace || 0) + 1 
+    
+    return sign + '用了' + target?.useSize + '下在第' + where + '格'
+  }
   //選擇模式畫面動作
   choseMode (modeName:string) {
     if((!this.allRecords.length) && (modeName === 'record')){
