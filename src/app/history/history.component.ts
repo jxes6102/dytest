@@ -13,9 +13,11 @@ export class HistoryComponent {
   @Output() changeMode = new EventEmitter()
 
   ngOnInit(): void {
+
   }
 
   listData:string[] = this.gameService.getAllID()
+  testlistData:object[] = this.gameService.testgetAllRecords()
   // 取消選擇紀錄頁面
   cancel(): void{
     this.gameService.setMode('')
@@ -24,6 +26,10 @@ export class HistoryComponent {
   // 進入紀錄模式
   action(val:string): void{
     this.gameService.getChose(val)
+    this.router.navigate(['/game'])
+  }
+  testaction(val:number): void{
+    this.gameService.testgetChose(val)
     this.router.navigate(['/game'])
   }
 }

@@ -1,7 +1,7 @@
 <div class="historyStyle flexCenter" (click)="cancel()"></div>
 <div class="listStyle flexCenter">
     <div class="gameList flexCenter">
-        <div class="choseStyle flexCenter" *ngFor="let item of listData" (click)="action(item)">{{item | date:'short'}}</div>
+        <!-- <div class="choseStyle flexCenter" *ngFor="let item of listData" (click)="action(item)">{{item | date:'short'}}</div> -->
+        <div class="choseStyle flexCenter" *ngFor="let item of testlistData;let i = index;let len = count" (click)="testaction(i)">{{'上' + (len - i) + '場'}}</div>
     </div>
 </div>
-

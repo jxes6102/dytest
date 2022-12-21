@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { viewType,stepType,recordType,xoType,viewData,selectData } from "./gamemodel.model";
-import { Router,ActivatedRoute, TitleStrategy } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,9 +30,10 @@ export class GameService {
   step:number
   result:number
   allID:string[]
-  testallRecords:object[]
+  testallRecords:stepType[][]
   allRecords:recordType
   gameRecords:stepType[]
+  testgameStep:stepType[]
   gameStep:stepType[]
   recordStep:number
   markO:string
@@ -57,6 +58,7 @@ export class GameService {
     this.markX = "X"
     this.alertMessage = ''
     this.testallRecords = []
+    this.testgameStep = []
 
   }
   // 拿取符號
@@ -90,9 +92,11 @@ export class GameService {
     this.step++
     if(this.step % 2 == 1) {
       this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.step})
+      this.testgameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.step})
       return 1
     } else {
       this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.step})
+      this.testgameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.step})
       return -1
     }
   }
@@ -165,9 +169,13 @@ export class GameService {
   noteGame() {
     if((this.gameStep.length === 0) || (this.result === 0)){
       this.gameStep = []
+      this.testgameStep = []
       return
     }
-    this.testallRecords.push(this.gameStep)
+
+    if(!this.testallRecords.length) this.testallRecords = []
+    this.testallRecords.push(this.testgameStep)
+
     this.allRecords[this.gameID] = this.gameStep
     // 超過記錄上限時刪除
     const idArr = this.getAllID()
@@ -175,12 +183,11 @@ export class GameService {
       this.testallRecords.shift()
       delete this.allRecords[idArr[0]]
     }
-    console.log('this.testallRecords', this.testallRecords)
-    console.log('JSON',JSON.stringify(this.testallRecords))
     localStorage.setItem('test', JSON.stringify(this.testallRecords))
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
+    this.testgameStep = []
   }
   // 執行紀錄
   actionRecord (stepVal:number) {
@@ -229,10 +236,17 @@ export class GameService {
     this.allID = Object.keys(this.allRecords)
     return this.allID
   }
+  testgetAllRecords() {
+    return this.testallRecords
+  }
   // 拿取選擇的紀錄
   getChose(id:string) {
     this.recordID = id
     this.gameRecords = this.allRecords[id]
+  }
+  testgetChose(val:number) {
+    this.recordID = val.toString()
+    this.gameRecords = this.testallRecords[val]
   }
   // 拿取紀錄ID
   getRecordID() {
@@ -242,10 +256,9 @@ export class GameService {
   setRecord() {
     const local = JSON.parse(localStorage.getItem('record') || '{}')
     if(local) this.allRecords = local
-    // console.log('this.allRecords ',this.allRecords)
+
     const test = JSON.parse(localStorage.getItem('test') || '{}')
     if(test) this.testallRecords = test
-    console.log('testallRecords',this.testallRecords)
     
   }
   // 拿取遊戲步數
