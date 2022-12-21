@@ -1,5 +1,4 @@
 <div class="wrap flexCenter">
-  <!-- <div class="idStyle flexCenter">GAMEID: {{mode === 'battle' ? gameID : recordID}}</div> -->
   <div class="board flexCenter">
     <app-pick *ngIf="mode === 'battle'" [pickData]="oData" [sign]="markO" (choseItem)="getChose($event)" [style.opacity]='(nowSign === markO) ? 1 : .5'></app-pick>
     <div class="playView">

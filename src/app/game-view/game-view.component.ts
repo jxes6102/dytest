@@ -9,20 +9,17 @@ import { viewType,xoType } from "../gamemodel.model";
 })
 export class GameViewComponent implements OnInit{
   /*
-    gameID 該局遊戲ID
-    recordID 紀錄模式時的遊戲ID
     mode  模式名稱
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     xData and oData 選擇視窗資料
     nowSign 判斷是屬於O或X的回合
+    markO and markX 兩方的符號
   */
   markO:string = this.gameService.getMarkO()
   markX:string = this.gameService.getMarkX()
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
-  gameID:number = this.gameService.getGameID()
-  recordID:string = this.gameService.getRecordID()
   xData:xoType[] = this.gameService.getXData()
   oData:xoType[] = this.gameService.getOData()
   viewData:viewType[] = this.gameService.getViewData()
@@ -32,7 +29,6 @@ export class GameViewComponent implements OnInit{
 
   ngOnInit(): void {
     this.gameService.initGameView()
-    this.gameID = this.gameService.getGameID()
   }
 
   // 回上頁
@@ -57,8 +53,6 @@ export class GameViewComponent implements OnInit{
     this.gameService.resetGame()
     this.clearView()
     this.nowSign = this.gameService.getNowSign()
-    this.gameService.setGameID()
-    this.gameID = this.gameService.getGameID()
     this.whoWin = this.gameService.getWin()
   }
   //上一步

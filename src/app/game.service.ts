@@ -6,9 +6,6 @@ import { Router,ActivatedRoute } from '@angular/router';
 })
 export class GameService {
   /*
-    gameID 該局遊戲ID
-    recordID 紀錄模式時的遊戲ID
-    allID 紀錄中所有遊戲ID
     mode  模式名稱
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
@@ -24,16 +21,11 @@ export class GameService {
     同樣意義的資料 不要存放在多個地方
   */
   // Records : Map<String,stepType[]> = new Map();
-  gameID:number
-  recordID:string
   mode:string
   step:number
   result:number
-  allID:string[]
-  testallRecords:stepType[][]
   allRecords:stepType[][]
   gameRecords:stepType[]
-  testgameStep:stepType[]
   gameStep:stepType[]
   recordStep:number
   markO:string
@@ -44,9 +36,6 @@ export class GameService {
   viewData:viewType[] = new viewData().getData
 
   constructor(private router: Router,private route: ActivatedRoute) {
-    this.recordID = ''
-    this.gameID = 0
-    this.allID = []
     this.result = 0
     this.recordStep = 0
     this.gameRecords = []
@@ -57,8 +46,6 @@ export class GameService {
     this.markO = "O"
     this.markX = "X"
     this.alertMessage = ''
-    this.testallRecords = []
-    this.testgameStep = []
 
   }
   // 拿取符號
@@ -92,11 +79,9 @@ export class GameService {
     this.step++
     if(this.step % 2 == 1) {
       this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.step})
-      this.testgameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.step})
       return 1
     } else {
       this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.step})
-      this.testgameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.step})
       return -1
     }
   }
@@ -169,12 +154,11 @@ export class GameService {
   noteGame() {
     if((this.gameStep.length === 0) || (this.result === 0)){
       this.gameStep = []
-      this.testgameStep = []
       return
     }
 
     if(!this.allRecords.length) this.allRecords = []
-    this.allRecords.push(this.testgameStep)
+    this.allRecords.push(this.gameStep)
 
     // 超過記錄上限時刪除
     if(this.allRecords.length > 5) this.allRecords.shift()
@@ -182,7 +166,6 @@ export class GameService {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
-    this.testgameStep = []
   }
   // 執行紀錄
   actionRecord (stepVal:number) {
@@ -218,19 +201,6 @@ export class GameService {
       }
     }
   }
-  // 設定遊戲ID
-  setGameID() {
-    this.gameID = Date.now()
-  }
-  // 拿取遊戲ID
-  getGameID() {
-    return this.gameID
-  }
-  // 拿取所有遊戲ID
-  getAllID() {
-    this.allID = Object.keys(this.allRecords)
-    return this.allID
-  }
   // 拿取遊戲紀錄
   getAllRecords() {
     return this.allRecords
@@ -238,10 +208,6 @@ export class GameService {
   // 拿取選擇的紀錄
   getChose(data:stepType[]) {
     this.gameRecords = data
-  }
-  // 拿取紀錄ID
-  getRecordID() {
-    return this.recordID
   }
   // 拿取本地端的紀錄
   setRecord() {
@@ -254,7 +220,7 @@ export class GameService {
   }
   //選擇模式畫面動作
   choseMode (modeName:string) {
-    if((!this.getAllID().length) && (modeName === 'record')){
+    if((!Object.keys(this.allRecords).length) && (modeName === 'record')){
       this.alertMessage = 'Record is null !!'
       return
     }
@@ -270,7 +236,6 @@ export class GameService {
   // 初始化gameView
   initGameView () {
     if(this.mode === '') this.router.navigate(['/'])
-    else if(this.mode === 'battle') this.setGameID()
   }
   //拿取oxdata
   getOData () {
