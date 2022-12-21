@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { viewType,stepType,xoType,viewData,selectData } from "./gamemodel.model";
 import { Router,ActivatedRoute } from '@angular/router';
+import {TicTacToe} from "./TicTacToe";
 @Injectable({
   providedIn: 'root'
 })
@@ -48,6 +49,10 @@ export class GameService {
     this.alertMessage = ''
 
   }
+  // 判斷是否進入gameView
+  initGameView () {
+    if(this.mode === '') this.router.navigate(['/'])
+  }
   // 拿取符號
   getMarkO () {
     return this.markO
@@ -74,10 +79,6 @@ export class GameService {
   // 拿取提示訊息
   getAlertMessage () {
     return  this.alertMessage
-  }
-  // 初始化gameView
-  initGameView () {
-    if(this.mode === '') this.router.navigate(['/'])
   }
   //拿取oxdata
   getOData () {
@@ -246,9 +247,7 @@ export class GameService {
       return
     }
 
-    if(!this.allRecords.length) this.allRecords = []
     this.allRecords.push(this.gameStep)
-
     // 超過記錄上限時刪除
     if(this.allRecords.length > 5) this.allRecords.shift()
 
