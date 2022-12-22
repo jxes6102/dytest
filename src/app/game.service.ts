@@ -148,6 +148,7 @@ export class GameService {
     const canClick = this.ableClick(whichSize,this.viewData[index])
     // 判斷是否可覆蓋
     const canCover = this.canCover(this.viewData[index].weight)
+
     if(!canClick || !canCover) return
     // 給予畫面資料
     const sizeName = this.oData[whichSize].styleName
@@ -164,18 +165,17 @@ export class GameService {
   grabProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const target = this.viewData[index]
-    let where
     
     switch (this.getNowSign()) {
       case this.markO: {
         if(target?.data !== 1) return
-        where = this.oData.findIndex((item)=> item.styleName === target.size)
+        const where = this.oData.findIndex((item)=> item.styleName === target.size)
         this.oData[where].amount++
         break
       }
       case this.markX: {
         if(target?.data !== -1) return
-        where = this.xData.findIndex((item)=> item.styleName === target.size)
+        const where = this.xData.findIndex((item)=> item.styleName === target.size)
         this.xData[where].amount++
         break
       }
@@ -187,15 +187,13 @@ export class GameService {
       const lastTarget = lastRecord[lastRecord.length - 2]
       this.viewData[index].data = lastTarget?.content || 0
       this.viewData[index].size = lastTarget?.useSize || ''
-      this.viewData[index].weight = this.oData.length - (where || 0)
-      this.step++
-      this.gameStep.push({wherePlace: index,content: lastTarget?.content,useSize:lastTarget?.useSize,stepID:this.step})
+      this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
+      this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1})
     } else {
       this.viewData[index].data = 0
       this.viewData[index].size = ''
       this.viewData[index].weight = 0
-      this.step++
-      this.gameStep.push({wherePlace: index,content: 0,useSize:'',stepID:this.step})
+      this.gameStep.push({wherePlace: index,content: 0,useSize:'',stepID:this.gameStep.length + 1})
     }
     this.judgeVictory()
     this.setStatus()
@@ -208,10 +206,10 @@ export class GameService {
 
     this.step++
     if(this.step % 2 == 1) {
-      this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.step})
+      this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.gameStep.length + 1})
       return 1
     } else {
-      this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.step})
+      this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.gameStep.length + 1})
       return -1
     }
   }
