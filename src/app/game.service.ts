@@ -15,10 +15,7 @@ export class GameService {
     markO markX 定義符號
     xData and oData 選擇視窗資料
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
-
-    同樣意義的資料 不要存放在多個地方
   */
-  // Records : Map<String,stepType[]> = new Map();
   mode:string
   step:number
   result:number
@@ -29,6 +26,7 @@ export class GameService {
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
+  status:string = 'click'
 
   constructor() {
     this.result = 0
@@ -69,6 +67,15 @@ export class GameService {
   //拿取viewdata
   getViewData () {
     return this.viewData
+  }
+  // 設定遊戲遊玩狀態
+  setStatus () {
+    if(this.status === 'click') this.status = 'grab'
+    else this.status = 'click'
+  }
+  // 拿取遊戲遊玩狀態
+  getStatus () {
+    return this.status
   }
   //拿取步驟訊息
   getStepMessage() {
@@ -124,6 +131,11 @@ export class GameService {
   }
   //  點擊格子
   clickAction(name:string) {
+    if(this.status === 'click') this.clickProcess(name)
+    else this.grabProcess(name)
+  }
+  // 點擊狀態
+  clickProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.getNowSign()
     const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
@@ -142,6 +154,49 @@ export class GameService {
     else this.xData[whichSize].amount--
     // 勝負判斷
     this.judgeVictory()
+  }
+  // 拿取狀態
+  grabProcess(name:string) {
+    // console.log('grabProcess',name)
+    // console.log('nowsign',this.getNowSign())
+    let index = this.viewData.findIndex((item) => item.styleName == name)
+    let target = this.viewData[index]
+    let where
+    
+    switch (this.getNowSign()) {
+      case this.markO: {
+        if(target?.data !== 1) return
+        where = this.oData.findIndex((item)=> item.styleName === target.size)
+        this.oData[where].amount++
+        break
+      }
+      case this.markX: {
+        if(target?.data !== -1) return
+        where = this.xData.findIndex((item)=> item.styleName === target.size)
+        this.xData[where].amount++
+        break
+      }
+    }
+    
+    const place = this.gameStep.slice(0,this.step).map((item)=> item.wherePlace)
+    if (place.includes(this.gameStep[this.step - 1].wherePlace)) {
+      const lastRecord = this.gameStep.filter((item) => (item.wherePlace === index))
+      const lastTarget = lastRecord[lastRecord.length - 2]
+      this.viewData[index].data = lastTarget?.content || 0
+      this.viewData[index].size = lastTarget?.useSize || ''
+      this.viewData[index].weight = this.oData.length - (where || 0)
+      this.step++
+      this.gameStep.push({wherePlace: index,content: lastTarget?.content,useSize:lastTarget?.useSize,stepID:this.step})
+    } else {
+      this.viewData[index].data = 0
+      this.viewData[index].size = ''
+      this.viewData[index].weight = 0
+      this.step++
+      this.gameStep.push({wherePlace: index,content: 0,useSize:'',stepID:this.step})
+    }
+    this.judgeVictory()
+    this.setStatus()
+
   }
   // 玩家點擊時紀錄
   playerCilck(place:number,size:string) {
@@ -216,6 +271,7 @@ export class GameService {
     this.gameStep = []
     this.step = 0
     this.result = 0
+    this.status = 'click'
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {

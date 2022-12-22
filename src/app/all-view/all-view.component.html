@@ -10,7 +10,8 @@
         <button class="backStyle" (click)="next()">下一步</button>
     </div>
     <div class="menu flexCenter" *ngIf="mode === 'battle'">
-        <button class="backStyle" (click)="changeStatus()">切換狀點擊/拿取</button>
+        <div>{{status}}</div>
+        <button class="backStyle" (click)="changeStatus()">切換點擊/拿取</button>
         <button class="backStyle" (click)="renewGame()">重置遊戲</button>
     </div>
     <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:markO:markX}}</div>

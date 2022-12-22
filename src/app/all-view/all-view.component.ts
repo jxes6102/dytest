@@ -25,6 +25,7 @@ export class AllViewComponent {
   viewData:viewType[] = this.gameService.getViewData()
   nowSign:string = this.gameService.getNowSign()
   stepMessage:string = this.gameService.getStepMessage()
+  status:string = this.gameService.getStatus()
 
   constructor(private gameService: GameService) { }
 
@@ -41,6 +42,7 @@ export class AllViewComponent {
     this.whoWin = this.gameService.getWin()
     this.nowSign = this.gameService.getNowSign()
     this.stepMessage = this.gameService.getStepMessage()
+    this.status = this.gameService.getStatus()
   }
   // 重置遊戲
   renewGame(): void {
@@ -49,6 +51,7 @@ export class AllViewComponent {
     this.nowSign = this.gameService.getNowSign()
     this.whoWin = this.gameService.getWin()
     this.stepMessage = this.gameService.getStepMessage()
+    this.status = this.gameService.getStatus()
   }
   //上一步
   last(): void {
@@ -100,6 +103,7 @@ export class AllViewComponent {
   }
   //切換狀態
   changeStatus() {
-    console.log('changeStatus')
+    this.gameService.setStatus()
+    this.status = this.gameService.getStatus()
   }
 }
