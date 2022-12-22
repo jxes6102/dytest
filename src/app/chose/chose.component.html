@@ -1,9 +1,0 @@
-<div class="wrap flexCenter">
-    <app-test1></app-test1>
-    <ng-container *ngFor="let item of buttonTData">
-        <button [ngClass]="item.styleName" [disabled]="item.isClose" (click)="action(item.mode)">{{item.text + (item.isClose ? '(尚未完成)' : '')}}</button>
-    </ng-container>
-    <div class="warnStyle" *ngIf="alertMessage.length !== 0">{{alertMessage}}</div>
-    <div class="versionStyle">version: {{version}}</div>
-</div>
-<app-history class="historyStyle" [nowMode]="mode" (changeMode)="getChange()" *ngIf="mode === 'record'"></app-history>
