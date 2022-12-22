@@ -24,7 +24,7 @@ export class AllViewComponent {
   oData:xoType[] = this.gameService.getOData()
   viewData:viewType[] = this.gameService.getViewData()
   nowSign:string = this.gameService.getNowSign()
-  stepMessage:string = '開始'
+  stepMessage:string = this.gameService.getStepMessage()
 
   constructor(private gameService: GameService) { }
 
@@ -48,6 +48,7 @@ export class AllViewComponent {
     this.clearView()
     this.nowSign = this.gameService.getNowSign()
     this.whoWin = this.gameService.getWin()
+    this.stepMessage = this.gameService.getStepMessage()
   }
   //上一步
   last(): void {

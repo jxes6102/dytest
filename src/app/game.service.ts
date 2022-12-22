@@ -8,8 +8,7 @@ import {TicTacToe} from "./TicTacToe";
 export class GameService {
   /*
     mode  模式名稱
-    step 對戰模式時的遊戲步數
-    recordStep 紀錄模式時的遊戲步數
+    step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     gameStep 該局遊戲紀錄
@@ -22,7 +21,6 @@ export class GameService {
   // Records : Map<String,stepType[]> = new Map();
   mode:string
   step:number
-  recordStep:number
   result:number
   allRecords:stepType[][]
   gameStep:stepType[]
@@ -35,7 +33,6 @@ export class GameService {
   constructor() {
     this.result = 0
     this.step = 0
-    this.recordStep = 0
     this.allRecords = []
     this.gameStep = []
     this.mode = ''
@@ -75,7 +72,7 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.recordStep - 1]
+    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
     if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const sign = target?.content === 1 ? this.markO : this.markX
@@ -209,7 +206,7 @@ export class GameService {
       // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重大於等於畫面上敵對和空白格最小重和勝負未分 是平手
       if(((count === 0) && (this.result === 0)) || ((minViewWeight >= maxChoseWeight) && (this.result === 0))) this.result = 2
 
-    } else if(!this.gameStep[this.recordStep] && this.result === 0) this.result = 2
+    } else if(!this.gameStep[this.step] && this.result === 0) this.result = 2
 
     if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
 
@@ -218,7 +215,6 @@ export class GameService {
   resetGame() {
     this.gameStep = []
     this.step = 0
-    this.recordStep = 0
     this.result = 0
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
@@ -240,29 +236,29 @@ export class GameService {
   actionRecord (stepVal:number) {
     switch (stepVal) {
       case 1: {
-        if((this.recordStep === this.gameStep.length)) return
+        if((this.step === this.gameStep.length)) return
 
-        this.viewData[this.gameStep[this.recordStep].wherePlace].data = this.gameStep[this.recordStep].content
-        this.viewData[this.gameStep[this.recordStep].wherePlace].size = this.gameStep[this.recordStep].useSize
-        this.recordStep += stepVal
+        this.viewData[this.gameStep[this.step].wherePlace].data = this.gameStep[this.step].content
+        this.viewData[this.gameStep[this.step].wherePlace].size = this.gameStep[this.step].useSize
+        this.step += stepVal
         this.judgeVictory()
         break
       }
       case -1: {
-        if((this.recordStep < 1)) return
+        if((this.step < 1)) return
 
-        this.recordStep += stepVal
+        this.step += stepVal
         // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
-        const place = this.gameStep.slice(0,this.recordStep).map((item)=> item.wherePlace)
+        const place = this.gameStep.slice(0,this.step).map((item)=> item.wherePlace)
         // 有修改此位置的紀錄時才還原成在上一次修改的同一格的OX
-        if(place.includes(this.gameStep[this.recordStep].wherePlace)) {
+        if(place.includes(this.gameStep[this.step].wherePlace)) {
           // 取同位置上一次的修改紀錄
-          const lastRecord = this.gameStep.filter((item) => (item.wherePlace === this.gameStep[this.recordStep].wherePlace) && (item.stepID < this.gameStep[this.recordStep].stepID)).pop()
-          this.viewData[this.gameStep[this.recordStep].wherePlace].data = lastRecord?.content || 0
-          this.viewData[this.gameStep[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
+          const lastRecord = this.gameStep.filter((item) => (item.wherePlace === this.gameStep[this.step].wherePlace) && (item.stepID < this.gameStep[this.step].stepID)).pop()
+          this.viewData[this.gameStep[this.step].wherePlace].data = lastRecord?.content || 0
+          this.viewData[this.gameStep[this.step].wherePlace].size = lastRecord?.useSize || ''
         } else {
-          this.viewData[this.gameStep[this.recordStep].wherePlace].data = 0
-          this.viewData[this.gameStep[this.recordStep].wherePlace].size = ''
+          this.viewData[this.gameStep[this.step].wherePlace].data = 0
+          this.viewData[this.gameStep[this.step].wherePlace].size = ''
         }
 
         this.judgeVictory()
