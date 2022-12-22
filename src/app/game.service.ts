@@ -79,13 +79,13 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = this.gameStep[this.step - 1]
+    const target = this.gameStep[this.gameStep.length - 1]
     // const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
     if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
-    let lastTarget = this.gameStep[this.step - 2]
-    // console.log('QQQQQQQQQQQQ')
-    // console.log('lastTarget',lastTarget)
-    // console.log('target',target)
+    let lastTarget = this.gameStep[this.gameStep.length - 2]
+    console.log('QQQQQQQQQQQQ')
+    console.log('lastTarget',lastTarget)
+    console.log('target',target)
     const sign = target?.content === 1 ? this.markO : this.markX
     const where = (target?.wherePlace || 0) + 1
     
@@ -188,12 +188,12 @@ export class GameService {
       this.viewData[index].data = lastTarget?.content || 0
       this.viewData[index].size = lastTarget?.useSize || ''
       this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
-      this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1})
+      this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
     } else {
       this.viewData[index].data = 0
       this.viewData[index].size = ''
       this.viewData[index].weight = 0
-      this.gameStep.push({wherePlace: index,content: 0,useSize:'',stepID:this.gameStep.length + 1})
+      this.gameStep.push({wherePlace: index,content: 0,useSize:'',stepID:this.gameStep.length + 1,status:'grab'})
     }
     this.judgeVictory()
     this.setStatus()
@@ -206,10 +206,10 @@ export class GameService {
 
     this.step++
     if(this.step % 2 == 1) {
-      this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.gameStep.length + 1})
+      this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.gameStep.length + 1,status:'click'})
       return 1
     } else {
-      this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.gameStep.length + 1})
+      this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.gameStep.length + 1,status:'click'})
       return -1
     }
   }

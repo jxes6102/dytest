@@ -3,6 +3,7 @@ export interface stepType {
     content: number;
     useSize:string;
     stepID:number;
+    status:string
 }
 export interface buttonType {
     text:string;
