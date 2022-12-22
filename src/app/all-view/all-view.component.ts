@@ -47,7 +47,7 @@ export class AllViewComponent {
     this.gameService.resetGame()
     this.clearView()
     this.nowSign = this.gameService.getNowSign()
-    this.stepMessage = '開始'
+    this.stepMessage = this.gameService.getStepMessage()
     this.whoWin = this.gameService.getWin()
   }
   //上一步
