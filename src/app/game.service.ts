@@ -11,11 +11,10 @@ export class GameService {
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
-    gameRecords 該局遊戲紀錄
-    gameStep 紀錄該局遊戲紀錄
+    gameRecords 紀錄模式該局遊戲紀錄
+    gameStep 對戰模式該局遊戲紀錄
     recordStep 紀錄狀態時的遊戲步數
     markO markX 定義符號
-    alertMessage 提示訊息
     xData and oData 選擇視窗資料
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
 
@@ -31,7 +30,6 @@ export class GameService {
   recordStep:number
   markO:string
   markX:string
-  alertMessage:string
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
@@ -46,12 +44,7 @@ export class GameService {
     this.gameStep = []
     this.markO = "O"
     this.markX = "X"
-    this.alertMessage = ''
 
-  }
-  // 判斷是否進入gameView
-  initGameView () {
-    if(this.mode === '') this.router.navigate(['/'])
   }
   // 拿取符號
   getMarkO () {
@@ -68,17 +61,9 @@ export class GameService {
   setMode(name: string) {
     this.mode = name
   }
-  // 重置模式
-  clearMode() {
-    this.mode = ''
-  }
   // 拿取勝利者
   getWin() {
     return this.result
-  }
-  // 拿取提示訊息
-  getAlertMessage () {
-    return  this.alertMessage
   }
   //拿取oxdata
   getOData () {
@@ -99,17 +84,6 @@ export class GameService {
     const where = (target?.wherePlace || 0) + 1 
     
     return sign + '用了' + target?.useSize + '下在第' + where + '格'
-  }
-  //選擇模式畫面動作
-  choseMode (modeName:string) {
-    if((!this.allRecords.length) && (modeName === 'record')){
-      this.alertMessage = 'Record is null !!'
-      return
-    }
-
-    this.mode = modeName
-    this.alertMessage = ''
-    if(this.mode === 'battle') this.router.navigate(['/game'])
   }
   //清除畫面
   clearView() {
