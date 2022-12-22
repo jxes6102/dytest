@@ -79,11 +79,16 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
+    const target = this.gameStep[this.step - 1]
+    // const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
     if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
-
+    let lastTarget = this.gameStep[this.step - 2]
+    // console.log('QQQQQQQQQQQQ')
+    // console.log('lastTarget',lastTarget)
+    // console.log('target',target)
     const sign = target?.content === 1 ? this.markO : this.markX
-    const where = (target?.wherePlace || 0) + 1 
+    const where = (target?.wherePlace || 0) + 1
+    
     
     return sign + '用了' + target?.useSize + '下在第' + where + '格'
   }
@@ -157,10 +162,8 @@ export class GameService {
   }
   // 拿取狀態
   grabProcess(name:string) {
-    // console.log('grabProcess',name)
-    // console.log('nowsign',this.getNowSign())
-    let index = this.viewData.findIndex((item) => item.styleName == name)
-    let target = this.viewData[index]
+    const index = this.viewData.findIndex((item) => item.styleName == name)
+    const target = this.viewData[index]
     let where
     
     switch (this.getNowSign()) {
@@ -297,7 +300,6 @@ export class GameService {
         this.viewData[this.gameStep[this.step].wherePlace].data = this.gameStep[this.step].content
         this.viewData[this.gameStep[this.step].wherePlace].size = this.gameStep[this.step].useSize
         this.step += stepVal
-        this.judgeVictory()
         break
       }
       case -1: {
@@ -316,11 +318,10 @@ export class GameService {
           this.viewData[this.gameStep[this.step].wherePlace].data = 0
           this.viewData[this.gameStep[this.step].wherePlace].size = ''
         }
-
-        this.judgeVictory()
         break
       }
     }
+    this.judgeVictory()
   }
   // 拿取遊戲紀錄
   getAllRecords() {

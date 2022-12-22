@@ -10,7 +10,7 @@
         <button class="backStyle" (click)="next()">下一步</button>
     </div>
     <div class="menu flexCenter" *ngIf="mode === 'battle'">
-        <div>{{status}}</div>
+        <div class="statusStyle">{{status}}</div>
         <button class="backStyle" (click)="changeStatus()">切換點擊/拿取</button>
         <button class="backStyle" (click)="renewGame()">重置遊戲</button>
     </div>
