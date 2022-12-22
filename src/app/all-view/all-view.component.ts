@@ -47,7 +47,6 @@ export class AllViewComponent {
     this.gameService.resetGame()
     this.clearView()
     this.nowSign = this.gameService.getNowSign()
-    this.stepMessage = this.gameService.getStepMessage()
     this.whoWin = this.gameService.getWin()
   }
   //上一步
@@ -84,17 +83,19 @@ export class AllViewComponent {
   }
   //  切換到紀錄模式
   toRecord (val:number) {
+    this.gameService.setMode('record')
+    this.mode = this.gameService.getMode()
+    this.renewGame()
     const target = this.gameService.getAllRecords()
     this.gameService.getChose(target[val])
-    this.gameService.setMode('record')
-    this.renewGame()
-    this.mode = this.gameService.getMode()
+    this.stepMessage = this.gameService.getStepMessage()
   }
   //  切換到對戰模式
   toBattle() {
     this.gameService.setMode('battle')
-    this.renewGame()
     this.mode = this.gameService.getMode()
+    this.renewGame()
+    this.stepMessage = this.gameService.getStepMessage()
   }
   //切換狀態
   changeStatus() {

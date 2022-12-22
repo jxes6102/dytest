@@ -8,12 +8,11 @@ import {TicTacToe} from "./TicTacToe";
 export class GameService {
   /*
     mode  模式名稱
-    step 遊戲步數
+    step 對戰模式時的遊戲步數
+    recordStep 紀錄模式時的遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
-    gameRecords 紀錄模式該局遊戲紀錄
-    gameStep 對戰模式該局遊戲紀錄
-    recordStep 紀錄狀態時的遊戲步數
+    gameStep 該局遊戲紀錄
     markO markX 定義符號
     xData and oData 選擇視窗資料
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
@@ -23,25 +22,23 @@ export class GameService {
   // Records : Map<String,stepType[]> = new Map();
   mode:string
   step:number
+  recordStep:number
   result:number
   allRecords:stepType[][]
-  gameRecords:stepType[]
   gameStep:stepType[]
-  recordStep:number
   markO:string
   markX:string
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
 
-  constructor(private router: Router,private route: ActivatedRoute) {
+  constructor() {
     this.result = 0
-    this.recordStep = 0
-    this.gameRecords = []
-    this.allRecords = []
-    this.mode = ''
     this.step = 0
+    this.recordStep = 0
+    this.allRecords = []
     this.gameStep = []
+    this.mode = ''
     this.markO = "O"
     this.markX = "X"
 
@@ -78,8 +75,8 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameRecords[this.recordStep - 1]
-    if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameRecords)) + '場' : '開始'
+    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.recordStep - 1]
+    if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const sign = target?.content === 1 ? this.markO : this.markX
     const where = (target?.wherePlace || 0) + 1 
@@ -212,7 +209,7 @@ export class GameService {
       // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重大於等於畫面上敵對和空白格最小重和勝負未分 是平手
       if(((count === 0) && (this.result === 0)) || ((minViewWeight >= maxChoseWeight) && (this.result === 0))) this.result = 2
 
-    } else if(!this.gameRecords[this.recordStep] && this.result === 0) this.result = 2
+    } else if(!this.gameStep[this.recordStep] && this.result === 0) this.result = 2
 
     if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
 
@@ -243,10 +240,10 @@ export class GameService {
   actionRecord (stepVal:number) {
     switch (stepVal) {
       case 1: {
-        if((this.recordStep === this.gameRecords.length)) return
+        if((this.recordStep === this.gameStep.length)) return
 
-        this.viewData[this.gameRecords[this.recordStep].wherePlace].data = this.gameRecords[this.recordStep].content
-        this.viewData[this.gameRecords[this.recordStep].wherePlace].size = this.gameRecords[this.recordStep].useSize
+        this.viewData[this.gameStep[this.recordStep].wherePlace].data = this.gameStep[this.recordStep].content
+        this.viewData[this.gameStep[this.recordStep].wherePlace].size = this.gameStep[this.recordStep].useSize
         this.recordStep += stepVal
         this.judgeVictory()
         break
@@ -256,16 +253,16 @@ export class GameService {
 
         this.recordStep += stepVal
         // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
-        const place = this.gameRecords.slice(0,this.recordStep).map((item)=> item.wherePlace)
+        const place = this.gameStep.slice(0,this.recordStep).map((item)=> item.wherePlace)
         // 有修改此位置的紀錄時才還原成在上一次修改的同一格的OX
-        if(place.includes(this.gameRecords[this.recordStep].wherePlace)) {
+        if(place.includes(this.gameStep[this.recordStep].wherePlace)) {
           // 取同位置上一次的修改紀錄
-          const lastRecord = this.gameRecords.filter((item) => (item.wherePlace === this.gameRecords[this.recordStep].wherePlace) && (item.stepID < this.gameRecords[this.recordStep].stepID)).pop()
-          this.viewData[this.gameRecords[this.recordStep].wherePlace].data = lastRecord?.content || 0
-          this.viewData[this.gameRecords[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
+          const lastRecord = this.gameStep.filter((item) => (item.wherePlace === this.gameStep[this.recordStep].wherePlace) && (item.stepID < this.gameStep[this.recordStep].stepID)).pop()
+          this.viewData[this.gameStep[this.recordStep].wherePlace].data = lastRecord?.content || 0
+          this.viewData[this.gameStep[this.recordStep].wherePlace].size = lastRecord?.useSize || ''
         } else {
-          this.viewData[this.gameRecords[this.recordStep].wherePlace].data = 0
-          this.viewData[this.gameRecords[this.recordStep].wherePlace].size = ''
+          this.viewData[this.gameStep[this.recordStep].wherePlace].data = 0
+          this.viewData[this.gameStep[this.recordStep].wherePlace].size = ''
         }
 
         this.judgeVictory()
@@ -279,7 +276,7 @@ export class GameService {
   }
   // 拿取選擇的紀錄
   getChose(data:stepType[]) {
-    this.gameRecords = data
+    this.gameStep = data
   }
   // 拿取本地端的紀錄
   setRecord() {
