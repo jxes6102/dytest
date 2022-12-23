@@ -1,10 +1,19 @@
-.testStyle {
+.leftStyle {
     position: fixed;
     width: auto;
     height: auto;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    bottom: 0px;
+    left: 0px;
+    /* transform: translate(-50%,-50%); */
+}
+
+.rightStyle {
+    position: fixed;
+    width: auto;
+    height: auto;
+    bottom: 0px;
+    right: 0px;
+    /* transform: translate(-50%,-50%); */
 }
 
 .imgStyle {

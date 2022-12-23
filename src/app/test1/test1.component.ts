@@ -8,16 +8,18 @@ import { HttpClient } from '@angular/common/http';
 export class Test1Component {
 
   cat:any[] = [] 
-  imgUrl:string = ''
+  imgUrlLeft:string = ''
+  imgUrlRight:string = ''
 
   constructor(private http: HttpClient) {
     // console.log('1 constructor')
   }
 
   ngOnInit(): void {
-    this.http.get('https://api.thecatapi.com/v1/images/search').subscribe((res: any) => {
+    this.http.get('https://api.thecatapi.com/v1/images/search?limit=10').subscribe((res: any) => {
       this.cat = res;
-      this.imgUrl = this.cat[0].url
+      this.imgUrlLeft = this.cat[0].url
+      this.imgUrlRight = this.cat[7].url
     })
     // console.log('2 ngOnInit')
   }
