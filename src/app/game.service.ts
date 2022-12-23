@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { viewType,stepType,xoType,viewData,selectData,checkData } from "./gamemodel.model";
-import { Router,ActivatedRoute } from '@angular/router';
-import {TicTacToe} from "./TicTacToe";
+
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   /*
     mode  模式名稱
+    status 點擊動作類別 
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
@@ -18,6 +18,7 @@ export class GameService {
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
   */
   mode:string
+  status:string
   step:number
   result:number
   allRecords:stepType[][]
@@ -28,7 +29,6 @@ export class GameService {
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
-  status:string = 'click'
 
   constructor() {
     this.result = 0
@@ -36,6 +36,7 @@ export class GameService {
     this.allRecords = []
     this.gameStep = []
     this.mode = ''
+    this.status = 'click'
     this.markO = "O"
     this.markX = "X"
 

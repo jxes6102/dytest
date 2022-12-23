@@ -9,6 +9,7 @@ import { viewType,xoType } from "../gamemodel.model";
 export class AllViewComponent {
   /*
     mode  模式名稱
+    status 點擊動作類別 
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     xData and oData 選擇視窗資料
@@ -27,7 +28,7 @@ export class AllViewComponent {
   stepMessage:string = this.gameService.getStepMessage()
   status:string = this.gameService.getStatus()
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.gameService.setMode('battle')
