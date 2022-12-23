@@ -190,16 +190,21 @@ export class GameService {
         break
       }
     }
-    
+    console.log('===============================================')
+    console.log('viewdata',this.viewData)
     const place = this.gameStep.slice(0,this.step).map((item)=> item.wherePlace)
     if (place.includes(this.gameStep[this.step - 1].wherePlace)) {
       const lastRecord = this.gameStep.filter((item) => (item.wherePlace === index))
       const lastTarget = lastRecord[lastRecord.length - 2]
+      console.log('a')
+      console.log('lastRecord',lastRecord)
+      console.log('lastTarget',lastTarget)
       this.viewData[index].data = lastTarget?.content || 0
       this.viewData[index].size = lastTarget?.useSize || ''
       this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
       this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
     } else {
+      console.log('b')
       this.viewData[index].data = 0
       this.viewData[index].size = ''
       this.viewData[index].weight = 0
@@ -228,7 +233,7 @@ export class GameService {
   }
   // 拿取畫面權重
   getViewWeight () {
-    const nowSign = this.getNowSign()
+    const nowSign = (this.step % 2 === 1) ? this.markO : this.markX
     return (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
