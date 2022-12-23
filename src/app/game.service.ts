@@ -90,12 +90,7 @@ export class GameService {
       return sign + '用了' + target?.useSize + '下在第' + where + '格'
     } else {
       if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.getNowSign()
-      else {
-        console.log('getNowSign',this.getNowSign())
-        console.log('target',target)
-        // console.log()
-        return '拿了在第' + where +'格的' + ((this.step % 2 === 1) ? this.markO : this.markX)
-      }
+      else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.markO : this.markX)
     }
     
   }
