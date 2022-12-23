@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType,xoType,viewData,selectData } from "./gamemodel.model";
+import { viewType,stepType,xoType,viewData,selectData,checkData } from "./gamemodel.model";
 import { Router,ActivatedRoute } from '@angular/router';
 import {TicTacToe} from "./TicTacToe";
 @Injectable({
@@ -21,7 +21,7 @@ export class GameService {
   step:number
   result:number
   allRecords:stepType[][]
-  checkRecord:stepType[][]
+  checkRecord:stepType[][] = new checkData().getData
   gameStep:stepType[]
   markO:string
   markX:string
@@ -38,8 +38,6 @@ export class GameService {
     this.mode = ''
     this.markO = "O"
     this.markX = "X"
-    this.checkRecord = []
-    for(let i = 0;i<9;i++) this.checkRecord.push([])
 
   }
   // 拿取符號
@@ -267,6 +265,7 @@ export class GameService {
     this.step = 0
     this.result = 0
     this.status = 'click'
+    this.checkRecord = new checkData().getData
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
