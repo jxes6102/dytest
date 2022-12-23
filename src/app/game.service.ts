@@ -79,18 +79,18 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = this.gameStep[this.gameStep.length - 1]
-    // const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
+    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
     if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
-    let lastTarget = this.gameStep[this.gameStep.length - 2]
-    console.log('QQQQQQQQQQQQ')
-    console.log('lastTarget',lastTarget)
-    console.log('target',target)
-    const sign = target?.content === 1 ? this.markO : this.markX
+    
     const where = (target?.wherePlace || 0) + 1
+    if(target.status === 'click') {
+      const sign = target?.content === 1 ? this.markO : this.markX
+      return sign + '用了' + target?.useSize + '下在第' + where + '格'
+    } else {
+      if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.getNowSign()
+      else return '拿了在第' + where +'格的' + ((this.step % 2 === 1) ? this.markO : this.markX)
+    }
     
-    
-    return sign + '用了' + target?.useSize + '下在第' + where + '格'
   }
   //清除畫面
   clearView() {
@@ -165,7 +165,10 @@ export class GameService {
   grabProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const target = this.viewData[index]
-    
+    // 同一回合只能拿一次
+    const lastStep = this.gameStep[this.gameStep.length - 1]
+    if(lastStep.status === 'grab') return
+
     switch (this.getNowSign()) {
       case this.markO: {
         if(target?.data !== 1) return
