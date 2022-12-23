@@ -190,19 +190,41 @@ export class GameService {
         break
       }
     }
-    console.log('===============================================')
-    console.log('viewdata',this.viewData)
+    // console.log('===============================================')
+    // console.log('viewdata',this.viewData)
     const place = this.gameStep.slice(0,this.step).map((item)=> item.wherePlace)
     if (place.includes(this.gameStep[this.step - 1].wherePlace)) {
       const lastRecord = this.gameStep.filter((item) => (item.wherePlace === index))
       const lastTarget = lastRecord[lastRecord.length - 2]
-      console.log('a')
+      // this.viewData[index].data = lastTarget?.content || 0
+      // this.viewData[index].size = lastTarget?.useSize || ''
+      // this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
+      // this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
+
+
+
+      //test
+      
+      console.log('a====================================================================')
+      console.log('sign',this.getNowSign())
+      console.log('gameStep',this.gameStep)
       console.log('lastRecord',lastRecord)
-      console.log('lastTarget',lastTarget)
-      this.viewData[index].data = lastTarget?.content || 0
-      this.viewData[index].size = lastTarget?.useSize || ''
-      this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
-      this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
+      let testdata = this.getNowSign() === 'O' ? 1 : -1
+      let testfilterpopID = this.gameStep.filter((item) => (item.wherePlace === index) && (item.status === 'click') && (item.content === testdata)).pop()?.stepID
+      console.log('testfilterpopID',testfilterpopID)
+      let findID = this.gameStep.find((item) => (item.wherePlace === index) && (item.status === 'click') && (item.content === testdata) && (item.useSize === this.viewData[index].size))?.stepID
+      console.log('findID',findID)
+      let testlastTarget = this.gameStep.filter((item) => (item.stepID < (findID || -1))).pop()
+      // console.log('QQ',this.gameStep.filter((item) => (item.stepID < (findID || -1))))
+      // console.log('testlastTarget',testlastTarget)
+      this.viewData[index].data = testlastTarget?.content || 0
+      this.viewData[index].size = testlastTarget?.useSize || ''
+      this.viewData[index].weight = testlastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === testlastTarget?.useSize)) : 0
+      this.gameStep.push({wherePlace: index,content: (testlastTarget?.content || 0),useSize:(testlastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
+
+
+
+      
     } else {
       console.log('b')
       this.viewData[index].data = 0
