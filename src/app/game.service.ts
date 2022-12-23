@@ -11,6 +11,7 @@ export class GameService {
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
+    checkRecord 紀錄每個格子的修改紀錄
     gameStep 該局遊戲紀錄
     markO markX 定義符號
     xData and oData 選擇視窗資料
@@ -20,6 +21,7 @@ export class GameService {
   step:number
   result:number
   allRecords:stepType[][]
+  checkRecord:stepType[][]
   gameStep:stepType[]
   markO:string
   markX:string
@@ -36,6 +38,8 @@ export class GameService {
     this.mode = ''
     this.markO = "O"
     this.markX = "X"
+    this.checkRecord = []
+    for(let i = 0;i<9;i++) this.checkRecord.push([])
 
   }
   // 拿取符號
@@ -161,6 +165,7 @@ export class GameService {
     if(nowSign === this.markO) this.oData[whichSize].amount--
     else this.xData[whichSize].amount--
     //紀錄
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     // 勝負判斷
     this.judgeVictory()
@@ -175,7 +180,7 @@ export class GameService {
       this.setStatus()
       return
     }
-
+    // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
     switch (this.getNowSign()) {
       case this.markO: {
         if(target?.data !== 1) return
@@ -190,48 +195,14 @@ export class GameService {
         break
       }
     }
-    // console.log('===============================================')
-    // console.log('viewdata',this.viewData)
-    const place = this.gameStep.slice(0,this.step).map((item)=> item.wherePlace)
-    if (place.includes(this.gameStep[this.step - 1].wherePlace)) {
-      const lastRecord = this.gameStep.filter((item) => (item.wherePlace === index))
-      const lastTarget = lastRecord[lastRecord.length - 2]
-      // this.viewData[index].data = lastTarget?.content || 0
-      // this.viewData[index].size = lastTarget?.useSize || ''
-      // this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
-      // this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
+    //還原上一次修改的資料
+    this.checkRecord[index].pop()
+    const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
+    this.viewData[index].data = lastTarget?.content || 0
+    this.viewData[index].size = lastTarget?.useSize || ''
+    this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
+    this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
 
-
-
-      //test
-      
-      console.log('a====================================================================')
-      console.log('sign',this.getNowSign())
-      console.log('gameStep',this.gameStep)
-      console.log('lastRecord',lastRecord)
-      let testdata = this.getNowSign() === 'O' ? 1 : -1
-      let testfilterpopID = this.gameStep.filter((item) => (item.wherePlace === index) && (item.status === 'click') && (item.content === testdata)).pop()?.stepID
-      console.log('testfilterpopID',testfilterpopID)
-      let findID = this.gameStep.find((item) => (item.wherePlace === index) && (item.status === 'click') && (item.content === testdata) && (item.useSize === this.viewData[index].size))?.stepID
-      console.log('findID',findID)
-      let testlastTarget = this.gameStep.filter((item) => (item.stepID < (findID || -1))).pop()
-      // console.log('QQ',this.gameStep.filter((item) => (item.stepID < (findID || -1))))
-      // console.log('testlastTarget',testlastTarget)
-      this.viewData[index].data = testlastTarget?.content || 0
-      this.viewData[index].size = testlastTarget?.useSize || ''
-      this.viewData[index].weight = testlastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === testlastTarget?.useSize)) : 0
-      this.gameStep.push({wherePlace: index,content: (testlastTarget?.content || 0),useSize:(testlastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
-
-
-
-      
-    } else {
-      console.log('b')
-      this.viewData[index].data = 0
-      this.viewData[index].size = ''
-      this.viewData[index].weight = 0
-      this.gameStep.push({wherePlace: index,content: 0,useSize:'',stepID:this.gameStep.length + 1,status:'grab'})
-    }
     this.judgeVictory()
     this.setStatus()
 
