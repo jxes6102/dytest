@@ -139,7 +139,7 @@ export class GameService {
     if(this.status === 'click') this.clickProcess(name)
     else this.grabProcess(name)
   }
-  // 點擊狀態
+  // 點擊動作
   clickProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.getNowSign()
@@ -151,23 +151,30 @@ export class GameService {
 
     if(!canClick || !canCover) return
     // 給予畫面資料
+    this.step++
     const sizeName = this.oData[whichSize].styleName
+    const data = (this.step % 2 == 1) ? 1 : -1
     this.viewData[index].weight = this.getViewWeight()
-    this.viewData[index].data = this.playerCilck(index,sizeName) || 0
+    this.viewData[index].data = data
     this.viewData[index].size = sizeName
 
     if(nowSign === this.markO) this.oData[whichSize].amount--
     else this.xData[whichSize].amount--
+    //紀錄
+    this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     // 勝負判斷
     this.judgeVictory()
   }
-  // 拿取狀態
+  // 拿取動作
   grabProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const target = this.viewData[index]
     // 同一回合只能拿一次
     const lastStep = this.gameStep[this.gameStep.length - 1]
-    if(lastStep.status === 'grab') return
+    if(lastStep.status === 'grab') {
+      this.setStatus()
+      return
+    }
 
     switch (this.getNowSign()) {
       case this.markO: {
@@ -201,20 +208,6 @@ export class GameService {
     this.judgeVictory()
     this.setStatus()
 
-  }
-  // 玩家點擊時紀錄
-  playerCilck(place:number,size:string) {
-    // 已有勝負時不可點擊
-    if(this.result) return
-
-    this.step++
-    if(this.step % 2 == 1) {
-      this.gameStep.push({wherePlace: place,content: 1,useSize:size,stepID:this.gameStep.length + 1,status:'click'})
-      return 1
-    } else {
-      this.gameStep.push({wherePlace: place,content: -1,useSize:size,stepID:this.gameStep.length + 1,status:'click'})
-      return -1
-    }
   }
   // 判斷是否可放入當前格子
   ableClick(where:number,viewData:viewType) {
