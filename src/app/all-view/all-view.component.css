@@ -11,6 +11,27 @@
     gap: 20px;
 }
 
+.generalStyle{
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(101 163 13);
+    box-shadow: 0 0 4px #999;
+    outline: none;
+
+    background-position: center;
+    transition: background 0.8s;
+
+}
+
+.generalStyle:hover {
+    background: rgb(138, 196, 58) radial-gradient(circle, transparent 1%, rgb(138, 196, 58) 1%) center/15000%;
+}
+
 .backStyle{
     border: none;
     border-radius: 10px;
