@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl,FormGroup,FormBuilder,Validators,FormArray } from '@angular/forms';  
+import { FormControl,FormGroup,FormBuilder,Validators } from '@angular/forms';  
 
 @Component({
   selector: 'app-formtest',
@@ -27,9 +27,9 @@ export class FormtestComponent {
   constructor(private bd: FormBuilder) { }
 
   ngOnInit(): void {
-    // this.formData.valueChanges.subscribe(val => console.log(val));
-    // this.formContent.valueChanges.subscribe(val => console.log(val));
-    // this.profileForm.valueChanges.subscribe(val => console.log(val));
+    this.formData.valueChanges.subscribe(val => console.log(val));
+    this.formContent.valueChanges.subscribe(val => console.log(val));
+    this.profileForm.valueChanges.subscribe(val => console.log(val));
   }
 
   setVal(): void {
