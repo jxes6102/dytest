@@ -202,7 +202,6 @@ export class GameService {
     this.viewData[index].weight = lastTarget?.useSize ? (this.oData.length - this.oData.findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
 
-    this.judgeVictory()
     this.setStatus()
 
   }
@@ -313,7 +312,8 @@ export class GameService {
         break
       }
     }
-    this.judgeVictory()
+
+    if (this.gameStep[this.step - 1]?.status === 'click')  this.judgeVictory()
   }
   // 拿取遊戲紀錄
   getAllRecords() {

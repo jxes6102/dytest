@@ -1,0 +1,52 @@
+<div class="row">
+    <span>
+        <input class="basic-slide" id="data" type="text" placeholder="Your best name" [formControl]="formData" /><label for="data">Data</label>
+    </span>
+    <span>
+        <input class="basic-slide" id="content" type="text" placeholder="Your best name" [formControl]="formContent" /><label for="content">Content</label>
+    </span>
+</div>
+<div class="row" [formGroup]="profileForm">
+    <span>
+        <input class="basic-slide" id="firstName" type="text" placeholder="Your best name" formControlName="firstName" /><label for="firstName">firstName</label>
+    </span>
+    <span>
+        <input class="basic-slide" id="lastName" type="text" placeholder="Your best name" formControlName="lastName" /><label for="lastName">lastName</label>
+    </span>
+    <span>
+        <input class="basic-slide" id="phone" type="text" placeholder="Your best name" formControlName="phone" /><label for="phone">phone</label>
+    </span>
+</div>
+
+<div class="flexCenter">{{formData.value}}</div>
+<div class="flexCenter">{{formContent.value}}</div>
+<div class="flexCenter">{{profileForm.value | json}}</div>
+<div class="flexCenter">{{'canUSE:  ' + profileForm.invalid}}</div>
+<div class="flexCenter">
+    <button (click)="setVal()">setVal</button>
+</div>
+<div class="flexCenter">
+    <button (click)="setProfileVal()">setProfileVal</button>
+</div>
+
+<div class="flexCenter">
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="form-control"
+      required
+      minlength="4"
+      appForbiddenName="nonono"
+      [(ngModel)]="testName"
+      #name="ngModel"
+    />
+  
+    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert">
+      <div *ngIf="name.errors?.['required']" class="alert alert-danger">Name is required.</div>
+      <div *ngIf="name.errors?.['minlength']" class="alert alert-danger">
+        Name must be at least 4 characters long.
+      </div>
+      <div *ngIf="name.errors?.['forbiddenName']" class="alert alert-danger">Name cannot be nonono.</div>
+    </div>
+</div>

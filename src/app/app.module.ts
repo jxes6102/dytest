@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { PictureComponent } from './picture/picture.component';
 import { AllViewComponent } from './all-view/all-view.component';
 import { NoteComponent } from './note/note.component';
+import { FormtestComponent } from './formtest/formtest.component';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,13 +23,16 @@ import { NoteComponent } from './note/note.component';
     PickComponent,
     PictureComponent,
     AllViewComponent,
-    NoteComponent
+    NoteComponent,
+    FormtestComponent
   ],
   imports: [
     CommonModule ,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
