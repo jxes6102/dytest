@@ -13,6 +13,7 @@
         <div class="statusStyle">{{status}}</div>
         <button class="generalStyle" (click)="changeStatus()">切換點擊/拿取</button>
         <button class="backStyle" (click)="renewGame()">重置遊戲</button>
+        <button class="backStyle" (click)="robotPlay()">和電腦對戰</button>
     </div>
     <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:markO:markX}}</div>
     <div class="winStyle flexCenter" *ngIf="whoWin === 0">{{stepMessage}}</div>

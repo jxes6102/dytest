@@ -44,6 +44,11 @@ export class AllViewComponent {
     this.nowSign = this.gameService.getNowSign()
     this.stepMessage = this.gameService.getStepMessage()
     this.status = this.gameService.getStatus()
+    this.gameService.checkNext()
+  }
+  //
+  robotPlay () {
+    this.renewGame()
   }
   // 重置遊戲
   renewGame(): void {

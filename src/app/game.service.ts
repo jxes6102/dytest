@@ -175,7 +175,7 @@ export class GameService {
     const target = this.viewData[index]
     // 同一回合只能拿一次
     const lastStep = this.gameStep[this.gameStep.length - 1]
-    if(lastStep.status === 'grab') {
+    if(lastStep?.status === 'grab') {
       this.setStatus()
       return
     }
@@ -330,6 +330,16 @@ export class GameService {
   }
   // 觀察下一步可以下的地方
   checkNext() {
+    console.log('=====================')
     console.log('checkNext')
+    // console.log('viewdata',this.viewData)
+    // console.log('sign',this.getNowSign())
+    let selectData = this.getNowSign() === this.markO ? this.oData : this.xData
+    // console.log('selectData',selectData)
+    let selectTarget = selectData.find((item) => item.amount > 0)
+    console.log('selectTarget',selectTarget)
+    let canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== (this.getNowSign() === this.markO ? 1 : -1))).map((item) => item.styleName)
+    console.log('canPlace',canPlace)
+    
   }
 }
