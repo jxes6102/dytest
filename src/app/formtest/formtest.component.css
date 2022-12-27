@@ -93,35 +93,6 @@ html, body {
 .basic-slide:focus + label, .basic-slide:active + label {
   transform: translateX(-100%);
 }
-.clean-slide {
-  position: relative;
-  display: inline-block;
-  width: 215px;
-  padding: 10px 0 10px 15px;
-  font-family: "Open Sans", sans;
-  font-weight: 400;
-  color: #377D6A;
-  background: #efefef;
-  border: 0;
-  border-radius: 3px;
-  outline: 0;
-  text-indent: 60px;
-  transition: all 0.3s ease-in-out;
-}
-.slide-up {
-  display: inline-block;
-  width: 215px;
-  padding: 10px 0 10px 15px;
-  font-family: "Open Sans", sans;
-  font-weight: 400;
-  color: #377D6A;
-  background: #efefef;
-  border: 0;
-  border-radius: 3px;
-  outline: 0;
-  text-indent: 80px;
-  transition: all 0.3s ease-in-out;
-}
 
 /* Ripple effect */
 .ripple {
@@ -150,4 +121,12 @@ button {
     box-shadow: 0 0 4px #999;
     outline: none;
 }
-  
+ 
+.flexCOL {
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+}

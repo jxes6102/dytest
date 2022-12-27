@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl,FormGroup,FormBuilder,Validators } from '@angular/forms';  
+import { FormControl,FormGroup,FormBuilder,Validators,FormArray } from '@angular/forms';  
 
 @Component({
   selector: 'app-formtest',
@@ -24,12 +24,20 @@ export class FormtestComponent {
 
   testName:string = ''
 
+  form = this.bd.group({
+    published: true,
+    credentials: this.bd.array([]),
+  });
+
+  skills = new FormArray<any>([]);
+
   constructor(private bd: FormBuilder) { }
 
   ngOnInit(): void {
     this.formData.valueChanges.subscribe(val => console.log(val));
     this.formContent.valueChanges.subscribe(val => console.log(val));
     this.profileForm.valueChanges.subscribe(val => console.log(val));
+    this.skills.valueChanges.subscribe(val => console.log(val));
   }
 
   setVal(): void {
@@ -43,6 +51,19 @@ export class FormtestComponent {
       lastName:'is lastName',
       phone:'is phone',
     });
+  }
+
+  addCreds() {
+    const creds = this.form.controls.credentials as FormArray;
+    creds.push(this.bd.group({
+      username: '',
+      password: '',
+    }));
+    console.log(creds)
+  }
+
+  addSkill() {
+    this.skills.push(new FormControl<any>(''));
   }
 
 }

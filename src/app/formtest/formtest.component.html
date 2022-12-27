@@ -50,3 +50,26 @@
       <div *ngIf="name.errors?.['forbiddenName']" class="alert alert-danger">Name cannot be nonono.</div>
     </div>
 </div>
+<div class="flexCenter">
+    <div [formGroup]="form">
+        <input type="checkbox" formControlName="published"> Published
+        <div *ngIf="form.controls.published.value">
+            <!-- <h2>Credentials</h2> -->
+            <button (click)="addCreds()">Add</button>
+            <div formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index">
+                <ng-container [formGroupName]="i">
+                    <input class="basic-slide" id="" type="text" placeholder="username" formControlName="username" />
+                    <input class="basic-slide" id="" type="text" placeholder="password" formControlName="password" />
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flexCOL">
+    <button (click)="addSkill()"> add skills</button>
+    <div *ngFor="let control of skills.controls; let i = index">
+        <input [formControl]="$any(skills.controls[i])" />
+    </div>
+</div>
+
+
