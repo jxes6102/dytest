@@ -10,7 +10,6 @@ export class AllViewComponent {
   /*
     mode  模式名稱
     status 點擊動作類別 
-    viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     nowSign 判斷是屬於O或X的回合
     markO and markX 兩方的符號
@@ -20,7 +19,6 @@ export class AllViewComponent {
   markX:string = this.gameService.getMarkX()
   whoWin:number = this.gameService.getWin()
   mode:string = this.gameService.getMode()
-  viewData:viewType[] = this.gameService.getViewData()
   nowSign:string = this.gameService.getNowSign()
   stepMessage:string = this.gameService.getStepMessage()
   status:string = this.gameService.getStatus()
@@ -32,9 +30,7 @@ export class AllViewComponent {
     this.mode = this.gameService.getMode()
   }
   // 點擊格子
-  action(name:string): void{
-    this.gameService.clickAction(name)
-    this.viewData = this.gameService.getViewData()
+  action(): void{
     this.whoWin = this.gameService.getWin()
     this.nowSign = this.gameService.getNowSign()
     this.stepMessage = this.gameService.getStepMessage()
@@ -52,14 +48,12 @@ export class AllViewComponent {
   //上一步
   last(): void {
     this.gameService.actionRecord(-1)
-    this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
     this.stepMessage = this.gameService.getStepMessage()
   }
   //下一步
   next(): void {
     this.gameService.actionRecord(1)
-    this.viewData = this.gameService.getViewData()
     this.whoWin = this.gameService.getWin()
     this.stepMessage = this.gameService.getStepMessage()
   }
