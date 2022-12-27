@@ -328,4 +328,8 @@ export class GameService {
     const local = JSON.parse(localStorage.getItem('record') || '[]')
     if(local) this.allRecords = local
   }
+  // 觀察下一步可以下的地方
+  checkNext() {
+    console.log('checkNext')
+  }
 }

@@ -39,6 +39,7 @@ export class Test1Component {
     try {
         const result$ = this.http.get(apiUrl).pipe(
             tap((resp: object) => {
+                // console.log('resp',resp)
                 return resp;
             })
         )
