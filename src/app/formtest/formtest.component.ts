@@ -29,7 +29,7 @@ export class FormtestComponent {
     credentials: this.bd.array([]),
   });
 
-  skills = new FormArray<any>([]);
+  skills = new FormArray<any>([])
 
   constructor(private bd: FormBuilder) { }
 
@@ -59,11 +59,27 @@ export class FormtestComponent {
       username: '',
       password: '',
     }));
-    console.log(creds)
+    // console.log(creds)
   }
 
   addSkill() {
     this.skills.push(new FormControl<any>(''));
   }
 
+  removeSkill(index:number) {
+    this.skills.removeAt(index)
+  }
+
+  clear() {
+    this.skills.clear()
+  }
+
+  addSkillGroup () {
+    const group = new FormGroup({
+      level: new FormControl(''),
+      name: new FormControl('')
+    })
+
+    this.skills.push(group)
+  }
 }
