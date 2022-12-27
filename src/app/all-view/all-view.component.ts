@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GameService } from '../game.service';
-import { viewType,xoType } from "../gamemodel.model";
+import { viewType,stepType } from "../gamemodel.model";
 @Component({
   selector: 'app-all-view',
   templateUrl: './all-view.component.html',
@@ -64,12 +64,10 @@ export class AllViewComponent {
     this.stepMessage = this.gameService.getStepMessage()
   }
   //  切換到紀錄模式
-  toRecord (val:number) {
-    this.gameService.setMode('record')
-    this.mode = this.gameService.getMode()
+  toRecord (data:stepType[]) {
     this.renewGame()
-    const target = this.gameService.getAllRecords()
-    this.gameService.getChose(target[val])
+    this.gameService.getChose(data)
+    this.mode = this.gameService.getMode()
     this.stepMessage = this.gameService.getStepMessage()
   }
   //  切換到對戰模式

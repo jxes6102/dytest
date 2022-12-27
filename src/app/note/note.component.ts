@@ -18,6 +18,7 @@ export class NoteComponent {
   }
 
   action(val:number) {
-    this.noteAction.emit(val)
+    this.gameService.setMode('record')
+    this.noteAction.emit(this.listData[val])
   }
 }
