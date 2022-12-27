@@ -1,4 +1,4 @@
-import { Component,Input,Output,EventEmitter } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { xoType } from "../gamemodel.model";
 import { GameService } from '../game.service';
 @Component({
