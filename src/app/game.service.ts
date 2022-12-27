@@ -168,6 +168,9 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     // 勝負判斷
     this.judgeVictory()
+    // 模擬和電腦對戰
+    // if(!canClick || !canCover || (this.result !== 0)) return 
+    // else this.checkNext()
   }
   // 拿取動作
   grabProcess(name:string) {
@@ -331,15 +334,38 @@ export class GameService {
   // 觀察下一步可以下的地方
   checkNext() {
     console.log('=====================')
-    console.log('checkNext')
+    // console.log('checkNext')
     // console.log('viewdata',this.viewData)
     // console.log('sign',this.getNowSign())
-    let selectData = this.getNowSign() === this.markO ? this.oData : this.xData
+    const nowSign = this.getNowSign()
+    let selectData = nowSign=== this.markO ? this.oData : this.xData
     // console.log('selectData',selectData)
     let selectTarget = selectData.find((item) => item.amount > 0)
-    console.log('selectTarget',selectTarget)
+    // console.log('selectTarget',selectTarget)
     let canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== (this.getNowSign() === this.markO ? 1 : -1))).map((item) => item.styleName)
-    console.log('canPlace',canPlace)
-    
+    // console.log('canPlace',canPlace,canPlace.length)
+    if(!canPlace.length) return
+    // console.log('nowSign',nowSign)
+    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.weight === selectTarget?.weight) : this.xData.findIndex((item) => item.weight === selectTarget?.weight)
+    let chose = Math.floor(Math.random() * canPlace.length)
+    // console.log('chose Place',canPlace[set])
+    const index = this.viewData.findIndex((item) => item.styleName == canPlace[chose])
+
+    // 給予畫面資料
+    this.step++
+    const sizeName = this.oData[whichSize].styleName
+    const data = (nowSign === this.markO) ? 1 : -1
+    // console.log('data',data)
+    this.viewData[index].weight = selectTarget?.weight || 0
+    this.viewData[index].data = data
+    this.viewData[index].size = sizeName
+    // console.log('nowSign',nowSign)
+    if(nowSign === this.markO) this.oData[whichSize].amount--
+    else this.xData[whichSize].amount--
+    //紀錄
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
+    this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
+
+    this.judgeVictory()
   }
 }

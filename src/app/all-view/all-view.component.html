@@ -1,8 +1,8 @@
 <div class="wrap flexCenter">
     <div class="board flexCenter">
-        <app-pick *ngIf="mode === 'battle'" [pickData]="oData" [sign]="markO" (choseItem)="getChose($event)" [style.opacity]='(nowSign === markO) ? 1 : .5'></app-pick>
+        <app-pick *ngIf="mode === 'battle'" [sign]="markO" [style.opacity]='(nowSign === markO) ? 1 : .5'></app-pick>
         <app-picture [viewData]="viewData" [signO]="markO" [signX]="markX" (pictureAction)="action($event)"></app-picture>
-        <app-pick *ngIf="mode === 'battle'" [pickData]="xData" [sign]="markX" (choseItem)="getChose($event)" [style.opacity]='(nowSign === markX) ? 1 : .5'></app-pick>
+        <app-pick *ngIf="mode === 'battle'" [sign]="markX" [style.opacity]='(nowSign === markX) ? 1 : .5'></app-pick>
     </div>
     <div class="menu flexCenter" *ngIf="mode === 'record'">
         <button class="generalStyle" (click)="last()">上一步</button>
@@ -13,7 +13,7 @@
         <div class="statusStyle">{{status}}</div>
         <button class="generalStyle" (click)="changeStatus()">切換點擊/拿取</button>
         <button class="backStyle" (click)="renewGame()">重置遊戲</button>
-        <button class="backStyle" (click)="robotPlay()">和電腦對戰</button>
+        <!-- <button class="backStyle" (click)="toRobot()">和電腦對戰</button> -->
     </div>
     <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:markO:markX}}</div>
     <div class="winStyle flexCenter" *ngIf="whoWin === 0">{{stepMessage}}</div>
