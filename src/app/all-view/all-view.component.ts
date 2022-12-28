@@ -31,6 +31,7 @@ export class AllViewComponent {
   }
   // 點擊格子
   action(): void{
+    // console.log('c')
     this.whoWin = this.gameService.getWin()
     this.nowSign = this.gameService.getNowSign()
     this.stepMessage = this.gameService.getStepMessage()
