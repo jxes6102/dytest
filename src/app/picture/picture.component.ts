@@ -23,5 +23,7 @@ export class PictureComponent {
   action(name:string): void{
     this.gameService.clickAction(name)
     this.pictureAction.emit()
+    // why viewdata isnt need get again
+    // this.viewData = this.gameService.getViewData()
   }
 }
