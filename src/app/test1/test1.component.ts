@@ -14,27 +14,9 @@ export class Test1Component {
   cat:any[] = []
   imgUrlLeft:string = ''
   imgUrlRight:string = ''
-  // test:string = 'a'
-  test:string = this.gameService.getTest()
 
   constructor(private http: HttpClient,private gameService: GameService) {
     // console.log('1 constructor')
-  }
-
-  testChange() {
-    // console.log('test')
-    // console.log(Math.floor(Math.random() * 2))
-    // this.test = 'b'
-    // this.otherChange()
-
-    // why is need get again
-    this.gameService.serviceChange()
-    this.test = this.gameService.getTest()
-  }
-
-
-  otherChange() {
-    this.test = 'c'
   }
 
   async ngOnInit(): Promise<void> {

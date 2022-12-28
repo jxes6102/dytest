@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GameService } from '../game.service';
-import { viewType,stepType } from "../gamemodel.model";
+import { stepType } from "../gamemodel.model";
 @Component({
   selector: 'app-all-view',
   templateUrl: './all-view.component.html',

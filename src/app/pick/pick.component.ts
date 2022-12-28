@@ -12,23 +12,17 @@ export class PickComponent {
     oxData 選擇視窗資料
   */
   @Input() sign?: string
-
   // playerNo:number = 0;
-
-  // oxData:xoType[] = this.sign === this.gameService.getMarkO() ? this.gameService.getOData() : this.gameService.getXData()
-
-  constructor(private gameService: GameService) { }
-  
   get oxData(){
-    // return this.gameService.getData(this.playerNo)
     return this.sign === this.gameService.getMarkO() ? this.gameService.getOData() : this.gameService.getXData()
   }
+
+  constructor(private gameService: GameService) { }
 
   ngOnInit(): void {}
 
   // 更新選擇效果
   select(name:string) {
       this.gameService.updateChose(this.sign || '',name)
-      // this.oxData = this.sign === this.gameService.getMarkO() ? this.gameService.getOData() : this.gameService.getXData()
   }
 }

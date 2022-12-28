@@ -23,7 +23,7 @@ export class GameService {
   status:string
   step:number
   result:number
-  allRecords:stepType[][]
+  allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
   gameStep:stepType[]
   xData:xoType[] = new selectData().getData
@@ -31,7 +31,6 @@ export class GameService {
   viewData:viewType[] = new viewData().getData
   AIStatus:boolean = false
   AIfirst:number = Math.floor(Math.random() * 2)
-  test:string = 'd'
 
   markO:string
   markX:string
@@ -39,20 +38,13 @@ export class GameService {
   constructor() {
     this.result = 0
     this.step = 0
-    this.allRecords = []
     this.gameStep = []
     this.mode = ''
     this.status = 'click'
     this.markO = "O"
     this.markX = "X"
+    this.setRecord()
 
-  }
-  // test
-  getTest() {
-    return this.test
-  }
-  serviceChange() {
-    this.test = 'e'
   }
   // 拿取符號
   getMarkO () {

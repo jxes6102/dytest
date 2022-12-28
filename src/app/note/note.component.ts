@@ -8,15 +8,15 @@ import { stepType } from "../gamemodel.model";
 })
 export class NoteComponent {
   @Output() noteAction = new EventEmitter()
-  listData:stepType[][] = this.gameService.getAllRecords()
+  
+  get listData () {
+    return this.gameService.getAllRecords()
+  }
 
   constructor(private gameService: GameService) {}
 
-  ngOnInit(): void {
-    this.gameService.setRecord()
-    this.listData = this.gameService.getAllRecords()
-  }
-
+  ngOnInit(): void {}
+  // 切換到紀錄模式
   action(val:number) {
     this.gameService.setMode('record')
     this.noteAction.emit(this.listData[val])
