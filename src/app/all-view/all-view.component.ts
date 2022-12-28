@@ -22,6 +22,7 @@ export class AllViewComponent {
   nowSign:string = this.gameService.getNowSign()
   stepMessage:string = this.gameService.getStepMessage()
   status:string = this.gameService.getStatus()
+  AIStatus:boolean = this.gameService.getAIStatus()
 
   constructor(private gameService: GameService) {}
 
@@ -72,10 +73,12 @@ export class AllViewComponent {
     this.renewGame()
     this.stepMessage = this.gameService.getStepMessage()
   }
-  // // 和電腦對戰
-  // toRobot () {
-  //   this.renewGame()
-  // }
+  // 和電腦對戰
+  toRobot () {
+    this.renewGame()
+    this.gameService.setAIStatus()
+    this.AIStatus = this.gameService.getAIStatus()
+  }
   //切換狀態
   changeStatus() {
     this.gameService.setStatus()

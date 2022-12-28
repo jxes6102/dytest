@@ -16,6 +16,7 @@ export class GameService {
     markO markX 定義符號
     xData and oData 選擇視窗資料
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
+    AIStatus 電腦是否遊玩
   */
   mode:string
   status:string
@@ -29,6 +30,7 @@ export class GameService {
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
+  AIStatus:boolean = false
   test:string = 'd'
 
   constructor() {
@@ -78,6 +80,14 @@ export class GameService {
   //拿取viewdata
   getViewData () {
     return this.viewData
+  }
+  // 拿取電腦遊玩狀態
+  getAIStatus () {
+    return this.AIStatus
+  }
+  // 改變電腦遊玩狀態
+  setAIStatus () {
+    this.AIStatus = !this.AIStatus
   }
   // 設定遊戲遊玩狀態
   setStatus () {
@@ -179,7 +189,7 @@ export class GameService {
     // 勝負判斷
     this.judgeVictory()
     // 模擬和電腦對戰
-    if(!canClick || !canCover || (this.result !== 0)) return 
+    if(!canClick || !canCover || (this.result !== 0) || !this.AIStatus) return 
     else this.checkNext()
   }
   // 拿取動作
