@@ -13,9 +13,15 @@ export class PictureComponent {
   */
   @Output() pictureAction = new EventEmitter()
 
-  viewData:viewType[] = this.gameService.getViewData()
-  signX:string = this.gameService.getMarkX()
-  signO:string = this.gameService.getMarkO()
+  get viewData(){
+    return this.gameService.getViewData()
+  }
+  get signX(){
+    return this.gameService.getMarkX()
+  }
+  get signO(){
+    return this.gameService.getMarkO()
+  }
 
   constructor(private gameService: GameService) {}
 
@@ -23,7 +29,5 @@ export class PictureComponent {
   action(name:string) {
     this.gameService.clickAction(name)
     this.pictureAction.emit()
-    // why viewdata isnt need get again
-    // this.viewData = this.gameService.getViewData()
   }
 }
