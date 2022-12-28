@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-test1',
@@ -13,9 +14,26 @@ export class Test1Component {
   cat:any[] = []
   imgUrlLeft:string = ''
   imgUrlRight:string = ''
+  // test:string = 'a'
+  test:string = this.gameService.getTest()
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private gameService: GameService) {
     // console.log('1 constructor')
+  }
+
+  testChange() {
+    // console.log('test')
+    // this.test = 'b'
+    // this.otherChange()
+
+    // why is need get again
+    this.gameService.serviceChange()
+    this.test = this.gameService.getTest()
+  }
+
+
+  otherChange() {
+    this.test = 'c'
   }
 
   async ngOnInit(): Promise<void> {

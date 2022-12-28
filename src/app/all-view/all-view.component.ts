@@ -77,7 +77,6 @@ export class AllViewComponent {
   // }
   //切換狀態
   changeStatus() {
-    // why is need get again
     this.gameService.setStatus()
     this.status = this.gameService.getStatus()
   }

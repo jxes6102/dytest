@@ -29,6 +29,7 @@ export class GameService {
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
+  test:string = 'd'
 
   constructor() {
     this.result = 0
@@ -40,6 +41,13 @@ export class GameService {
     this.markO = "O"
     this.markX = "X"
 
+  }
+  // test
+  getTest() {
+    return this.test
+  }
+  serviceChange() {
+    this.test = 'e'
   }
   // 拿取符號
   getMarkO () {
