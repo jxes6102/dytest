@@ -161,13 +161,11 @@ export class GameService {
   }
   //  點擊格子
   clickAction(name:string) {
-    // console.log('d')
     if(this.status === 'click') this.clickProcess(name)
     else this.grabProcess(name)
   }
   // 點擊動作
   clickProcess(name:string) {
-    // console.log('e')
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.getNowSign()
     const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)

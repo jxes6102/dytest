@@ -21,12 +21,9 @@ export class PictureComponent {
 
   // 點擊格子
   action(name:string) {
-    // console.log('a',this.viewData[0])
     this.gameService.clickAction(name)
     this.pictureAction.emit()
     // why viewdata isnt need get again
-    // console.log('b',this.viewData[0])
     // this.viewData = this.gameService.getViewData()
-    // console.log('i',this.viewData[0])
   }
 }
