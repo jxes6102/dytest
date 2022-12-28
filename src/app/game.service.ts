@@ -26,8 +26,6 @@ export class GameService {
   allRecords:stepType[][]
   checkRecord:stepType[][] = new checkData().getData
   gameStep:stepType[]
-  markO:string
-  markX:string
   xData:xoType[] = new selectData().getData
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
@@ -35,6 +33,9 @@ export class GameService {
   AIfirst:number = Math.floor(Math.random() * 2)
   test:string = 'd'
 
+  markO:string
+  markX:string
+  // marks:string[] = ["O","X"]
   constructor() {
     this.result = 0
     this.step = 0
@@ -156,6 +157,9 @@ export class GameService {
     }
   }
   // 確認此回合的標誌 
+  // getNowSignx() {
+  //   return this.step % 2
+  // }
   getNowSign() {
     return (this.step % 2 === 0) ? this.markO : this.markX
   }
@@ -355,7 +359,7 @@ export class GameService {
   }
   // 電腦動作
   checkNext() {
-    console.log('=====================')
+    // console.log('=====================')
     const nowSign = this.getNowSign()
     let selectData = nowSign=== this.markO ? this.oData : this.xData
     let selectTarget = selectData.find((item) => item.amount > 0)
