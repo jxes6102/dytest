@@ -19,6 +19,5 @@
     <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:markO:markX}}</div>
     <div class="winStyle flexCenter" *ngIf="whoWin === 0">{{stepMessage}}</div>
     <app-note (noteAction)="toRecord($event)"></app-note>
-    <!-- <div class="flexCenter">test</div> -->
 </div>
 <app-test1></app-test1>
