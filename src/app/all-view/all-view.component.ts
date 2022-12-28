@@ -78,6 +78,7 @@ export class AllViewComponent {
     this.renewGame()
     this.gameService.setAIStatus()
     this.AIStatus = this.gameService.getAIStatus()
+    this.nowSign = this.gameService.getNowSign()
   }
   //切換狀態
   changeStatus() {

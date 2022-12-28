@@ -23,6 +23,7 @@ export class Test1Component {
 
   testChange() {
     // console.log('test')
+    // console.log(Math.floor(Math.random() * 2))
     // this.test = 'b'
     // this.otherChange()
 

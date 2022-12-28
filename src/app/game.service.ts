@@ -17,6 +17,7 @@ export class GameService {
     xData and oData 選擇視窗資料
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     AIStatus 電腦是否遊玩
+    AIfirst 電腦是否先手 1先手 0後手
   */
   mode:string
   status:string
@@ -31,6 +32,7 @@ export class GameService {
   oData:xoType[] = new selectData().getData
   viewData:viewType[] = new viewData().getData
   AIStatus:boolean = false
+  AIfirst:number = Math.floor(Math.random() * 2)
   test:string = 'd'
 
   constructor() {
@@ -88,6 +90,8 @@ export class GameService {
   // 改變電腦遊玩狀態
   setAIStatus () {
     this.AIStatus = !this.AIStatus
+    this.AIfirst = Math.floor(Math.random() * 2)
+    if(this.AIStatus && this.AIfirst) this.checkNext()
   }
   // 設定遊戲遊玩狀態
   setStatus () {
@@ -188,8 +192,8 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     // 勝負判斷
     this.judgeVictory()
-    // 模擬和電腦對戰
-    if(!canClick || !canCover || (this.result !== 0) || !this.AIStatus) return 
+    // 判斷勝敗狀態、對戰模式 來決定電腦動作
+    if((this.result !== 0) || !this.AIStatus) return 
     else this.checkNext()
   }
   // 拿取動作
@@ -351,7 +355,7 @@ export class GameService {
     const local = JSON.parse(localStorage.getItem('record') || '[]')
     if(local) this.allRecords = local
   }
-  // 觀察下一步可以下的地方
+  // 電腦動作
   checkNext() {
     console.log('=====================')
     const nowSign = this.getNowSign()
