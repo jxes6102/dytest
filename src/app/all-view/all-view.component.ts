@@ -9,7 +9,7 @@ import { stepType } from "../gamemodel.model";
 export class AllViewComponent {
   /*
     mode  模式名稱
-    status 點擊動作類別 
+    status 點擊動作類別
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     nowSign 判斷是屬於O或X的回合
     markO and markX 兩方的符號
@@ -65,6 +65,7 @@ export class AllViewComponent {
   }
   //  切換到對戰模式
   toBattle() {
+    if(this.AIStatus) this.toRobot()
     this.gameService.setMode('battle')
     this.renewGame()
   }
