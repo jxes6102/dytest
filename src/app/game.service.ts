@@ -98,7 +98,7 @@ export class GameService {
     else {
       if (this.mode === 'battle') return '拿了在第' + where + '格的' + this.marks[this.stepCount]
       else {
-        console.log('dodo')
+        // console.log('dodo')
         return '拿了在第' + where + '格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[1] : this.marks[0])
       }
     }
@@ -126,13 +126,12 @@ export class GameService {
     }
   }
   //點擊格子
-  clickAction(name:string) {
-    if(this.status === 'click') this.clickProcess(name)
-    else this.grabProcess(name)
+  clickAction(index:number) {
+    if(this.status === 'click') this.clickProcess(index)
+    else this.grabProcess(index)
   }
   // 點擊動作
-  clickProcess(name:string) {
-    const index = this.viewData.findIndex((item) => item.styleName == name)
+  clickProcess(index:number) {
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
     // 檢查模式、結果、是否選擇尺寸
     if(this.mode === 'record' || this.result !== 0 || (whichSize === -1)) return
@@ -156,8 +155,7 @@ export class GameService {
     else this.checkNext()
   }
   // 拿取動作
-  grabProcess(name:string) {
-    const index = this.viewData.findIndex((item) => item.styleName == name)
+  grabProcess(index:number) {
     const target = this.viewData[index]
     // 同一回合只能拿一次
     const lastStep = this.gameStep[this.gameStep.length - 1]
@@ -276,14 +274,15 @@ export class GameService {
   }
   // 電腦動作
   checkNext() {
+    // selectTarget 選取要下的大小
+    // canPlace 尋找可以下的地方
     const selectTarget = this.OXData[this.stepCount].find((item) => item.amount > 0)
-    const canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== ((this.stepCount === 0) ? 1 : -1))).map((item) => item.styleName)
+    let canPlace = []
+    for(let key in this.viewData ) if(this.viewData[key].weight < (selectTarget?.weight || 0) && (this.viewData[key].data !== ((this.stepCount === 0) ? 1 : -1))) canPlace.push(parseInt(key))
     if(!canPlace.length) return
 
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.weight === selectTarget?.weight)
-    let chose = Math.floor(Math.random() * canPlace.length)
-    const index = this.viewData.findIndex((item) => item.styleName == canPlace[chose])
-
+    const index = canPlace[Math.floor(Math.random() * canPlace.length)]
     // 給予畫面資料
     this.step++
     const data = (this.stepCount === 1) ? 1 : -1

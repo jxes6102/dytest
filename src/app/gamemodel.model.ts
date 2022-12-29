@@ -1,28 +1,27 @@
 export interface stepType {
-    wherePlace: number;
-    content: number;
-    useSize:number;
-    stepID:number;
+    wherePlace: number
+    content: number
+    useSize:number
+    stepID:number
     status:string
 }
 export interface buttonType {
-    text:string;
-    mode:string;
-    styleName:string;
-    isClose:boolean;
+    text:string
+    mode:string
+    styleName:string
+    isClose:boolean
 }
 //每一個格子
 export interface viewType {
-    styleName: string;
-    data: number;
+    data: number
     size: number
     weight: number
 }
 //每一個選擇框
 export interface xoType {
-    amount:number;
-    isChose:boolean;
-    weight:number;
+    amount:number
+    isChose:boolean
+    weight:number
 }
 
 export class viewData {
@@ -35,7 +34,6 @@ export class viewData {
     creatData() {
         for(let i = 0;i<9;i++) {
             this.data.push({
-                styleName:"square"+ i.toString(),
                 data:0,
                 size:0,
                 weight:0

@@ -17,12 +17,13 @@ export class PictureComponent {
   get signs() {
     return this.gameService.getMarks
   }
+  blockStr:string = 'square'
   cssStyle:string[] = ['bigSize','mediumSize','smallSize']
 
   constructor(private gameService: GameService) {}
 
   // 點擊格子
-  action(name:string) {
-    this.gameService.clickAction(name)
+  action(val:number) {
+    this.gameService.clickAction(val)
   }
 }
