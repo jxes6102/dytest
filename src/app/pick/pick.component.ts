@@ -1,5 +1,4 @@
 import { Component,Input } from '@angular/core';
-import { xoType } from "../gamemodel.model";
 import { GameService } from '../game.service';
 @Component({
   selector: 'app-pick',
