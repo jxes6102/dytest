@@ -22,19 +22,19 @@ export class AllViewComponent {
     return this.gameService.getMarks[this.gameService.stepCount]
   }
   get whoWin () {
-    return this.gameService.getWin()
+    return this.gameService.getWin
   }
   get mode () {
-    return this.gameService.getMode()
+    return this.gameService.getMode
   }
   get stepMessage () {
     return this.gameService.getStepMessage()
   }
   get status () {
-    return this.gameService.getStatus()
+    return this.gameService.getStatus
   }
   get AIStatus () {
-    return this.gameService.getAIStatus()
+    return this.gameService.getAIStatus
   }
 
   constructor(private gameService: GameService) {}
@@ -58,7 +58,7 @@ export class AllViewComponent {
   //  切換到紀錄模式
   toRecord (data:stepType[]) {
     this.renewGame()
-    this.gameService.getChose(data)
+    this.gameService.setChose(data)
   }
   //  切換到對戰模式
   toBattle() {

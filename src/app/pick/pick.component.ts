@@ -13,8 +13,8 @@ export class PickComponent {
   */
   @Input() playerNo?:number
 
-  get oxData(){
-    return this.gameService.testgetOXData[this.playerNo || 0]
+  get oxData() {
+    return this.gameService.getOXData[this.playerNo || 0]
   }
 
   get sign() {

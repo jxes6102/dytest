@@ -50,7 +50,7 @@ export class GameService {
     return this.step % 2
   }
   // 拿取模式
-  getMode() {
+  get getMode() {
     return this.mode
   }
   // 設定模式
@@ -58,10 +58,10 @@ export class GameService {
     this.mode = name
   }
   // 拿取勝利者
-  getWin() {
+  get getWin() {
     return this.result
   }
-  get testgetOXData() {
+  get getOXData() {
     return this.OXData
   }
   //拿取viewdata
@@ -69,7 +69,7 @@ export class GameService {
     return this.viewData
   }
   // 拿取電腦遊玩狀態
-  getAIStatus () {
+  get getAIStatus () {
     return this.AIStatus
   }
   // 改變電腦遊玩狀態
@@ -84,7 +84,7 @@ export class GameService {
     else this.status = 'click'
   }
   // 拿取遊戲遊玩狀態
-  getStatus () {
+  get getStatus () {
     return this.status
   }
   //拿取步驟訊息
@@ -100,7 +100,6 @@ export class GameService {
       if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.marks[this.stepCount]
       else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[0] : this.marks[1])
     }
-    
   }
   //清除畫面
   clearView() {
@@ -133,11 +132,12 @@ export class GameService {
   clickProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
+    // 檢查模式、結果、是否選擇尺寸
+    if(this.mode === 'record' || this.result !== 0 || (whichSize === -1)) return
     // 判斷是否可點擊
-    const canClick = this.ableClick(whichSize,this.viewData[index])
+    const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     // 判斷是否可覆蓋
-    const canCover = this.canCover(this.viewData[index].weight)
-
+    const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
     if(!canClick || !canCover) return
     // 給予畫面資料
     this.step++
@@ -155,7 +155,6 @@ export class GameService {
     else this.checkNext()
   }
   // 拿取動作
-
   grabProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const target = this.viewData[index]
@@ -177,18 +176,6 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
 
     this.setStatus()
-
-  }
-  // 判斷是否可放入當前格子
-  ableClick(where:number,viewData:viewType) {
-    // 檢查模式、結果、是否選擇尺寸
-    if(this.mode === 'record' || this.result !== 0 || (where === -1)) return false
-    // 檢查數量、是否點擊敵對格或空白格
-    return (this.OXData[this.stepCount][where].amount > 0) && (this.stepCount === 0 ? viewData.data <= 0 : viewData.data >= 0)
-  }
-  // 是否能覆蓋
-  canCover (viewWeight:number) {
-    return (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > viewWeight
   }
   // 判斷勝負
   judgeVictory() {
@@ -278,7 +265,7 @@ export class GameService {
     return this.allRecords
   }
   // 拿取選擇的紀錄
-  getChose(data:stepType[]) {
+  setChose(data:stepType[]) {
     this.gameStep = data
   }
   // 拿取本地端的紀錄
