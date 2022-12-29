@@ -30,8 +30,8 @@ export class GameService {
   AIStatus:boolean = false
   AIfirst:number = Math.floor(Math.random() * 2)
   testOXData:xoType[][] = new tsetselectData().getData
-
   marks:string[] = ["O","X"]
+
   constructor() {
     this.result = 0
     this.step = 0
@@ -44,6 +44,10 @@ export class GameService {
   // 拿取符號
   get getMarks () {
     return this.marks
+  }
+  // 計算步驟
+  get stepCount () {
+    return this.step % 2
   }
   // 拿取模式
   getMode() {
@@ -93,7 +97,7 @@ export class GameService {
       const sign = (target?.content === 1) ? this.marks[0] : this.marks[1]
       return sign + '用了' + target?.useSize + '下在第' + where + '格'
     } else {
-      if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.marks[this.step % 2]
+      if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.marks[this.stepCount]
       else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[0] : this.marks[1])
     }
     
@@ -116,17 +120,13 @@ export class GameService {
   // 更新選擇效果
   updateChose (sign:string,choseName:string) {
     // 當不是自己的回合時無法選擇自己的大小
-    if(((this.step % 2 == 0) && (sign === this.marks[1])) || ((this.step % 2 == 1) && (sign === this.marks[0]))) return
-    for(let key in this.testOXData[this.step % 2]) {
-      if(this.testOXData[this.step % 2][key].styleName === choseName) this.testOXData[this.step % 2][key].isChose = true
-      else this.testOXData[this.step % 2][key].isChose = false
+    if(((this.stepCount == 0) && (sign === this.marks[1])) || ((this.stepCount == 1) && (sign === this.marks[0]))) return
+    for(let key in this.testOXData[this.stepCount]) {
+      if(this.testOXData[this.stepCount][key].styleName === choseName) this.testOXData[this.stepCount][key].isChose = true
+      else this.testOXData[this.stepCount][key].isChose = false
     }
   }
-  // 確認此回合的標誌 
-  getNowSign() {
-    return this.marks[this.step % 2]
-  }
-  //  點擊格子
+  //點擊格子
   clickAction(name:string) {
     if(this.status === 'click') this.clickProcess(name)
     else this.grabProcess(name)
@@ -134,7 +134,7 @@ export class GameService {
   // 點擊動作
   clickProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
-    const whichSize = this.testOXData[this.step % 2].findIndex((item) => item.isChose)
+    const whichSize = this.testOXData[this.stepCount].findIndex((item) => item.isChose)
     // 判斷是否可點擊
     const canClick = this.ableClick(whichSize,this.viewData[index])
     // 判斷是否可覆蓋
@@ -143,13 +143,13 @@ export class GameService {
     if(!canClick || !canCover) return
     // 給予畫面資料
     this.step++
-    const sizeName = this.testOXData[1 - this.step % 2][whichSize].styleName
-    const data = (this.step % 2 == 1) ? 1 : -1
-    this.viewData[index].weight = this.testOXData[1 - this.step % 2].find((item) => item.isChose)?.weight || 0
+    const sizeName = this.testOXData[1 - this.stepCount][whichSize].styleName
+    const data = (this.stepCount == 1) ? 1 : -1
+    this.viewData[index].weight = this.testOXData[1 - this.stepCount].find((item) => item.isChose)?.weight || 0
     this.viewData[index].data = data
     this.viewData[index].size = sizeName
 
-    this.testOXData[1 - this.step % 2][whichSize].amount--
+    this.testOXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
@@ -170,16 +170,16 @@ export class GameService {
       return
     }
     // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
-    if(((this.step % 2 === 0) && (target?.data !== 1)) || ((this.step % 2 === 1) && (target?.data !== -1))) return
-    const where = this.testOXData[this.step % 2].findIndex((item)=> item.styleName === target.size)
-    this.testOXData[this.step % 2][where].amount++
+    if(((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1))) return
+    const where = this.testOXData[this.stepCount].findIndex((item)=> item.styleName === target.size)
+    this.testOXData[this.stepCount][where].amount++
 
     //還原上一次修改的資料
     this.checkRecord[index].pop()
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.viewData[index].data = lastTarget?.content || 0
     this.viewData[index].size = lastTarget?.useSize || ''
-    this.viewData[index].weight = lastTarget?.useSize ? (this.testOXData[this.step % 2].length - this.testOXData[this.step % 2].findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
+    this.viewData[index].weight = lastTarget?.useSize ? (this.testOXData[this.stepCount].length - this.testOXData[this.stepCount].findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
 
     this.setStatus()
@@ -190,11 +190,11 @@ export class GameService {
     // 檢查模式、結果、是否選擇尺寸
     if(this.mode === 'record' || this.result !== 0 || (where === -1)) return false
     // 檢查數量、是否點擊敵對格或空白格
-    return (this.testOXData[this.step % 2][where].amount > 0) && (this.step % 2 === 0 ? viewData.data <= 0 : viewData.data >= 0)
+    return (this.testOXData[this.stepCount][where].amount > 0) && (this.stepCount === 0 ? viewData.data <= 0 : viewData.data >= 0)
   }
   // 是否能覆蓋
   canCover (viewWeight:number) {
-    return (this.testOXData[this.step % 2].find((item) => item.isChose)?.weight || 0) > viewWeight
+    return (this.testOXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > viewWeight
   }
   // 判斷勝負
   judgeVictory() {
@@ -213,10 +213,10 @@ export class GameService {
     // 計算對戰或紀錄模式時平手條件
     if(this.mode === 'battle') {
       // 當前選擇欄位剩餘最大重
-      const target = this.testOXData[this.step % 2].filter(item => item.amount > 0).map(item => item.weight)
+      const target = this.testOXData[this.stepCount].filter(item => item.amount > 0).map(item => item.weight)
       const maxChoseWeight = Math.max(...(target.length ? target : [0]))
       // 畫面敵對和空白最小重
-      const minViewWeight = (this.step % 2 === 0) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
+      const minViewWeight = (this.stepCount === 0) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
       Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
       // 選擇欄位剩餘數量
       const count = this.testOXData.flat(1).reduce((acc, item) => acc + item.amount,0)
@@ -300,23 +300,23 @@ export class GameService {
   // 電腦動作
   checkNext() {
     // console.log('=====================')
-    const selectTarget = this.testOXData[this.step % 2].find((item) => item.amount > 0)
-    const canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== ((this.step % 2 === 0) ? 1 : -1))).map((item) => item.styleName)
+    const selectTarget = this.testOXData[this.stepCount].find((item) => item.amount > 0)
+    const canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== ((this.stepCount === 0) ? 1 : -1))).map((item) => item.styleName)
     if(!canPlace.length) return
 
-    const whichSize = this.testOXData[this.step % 2].findIndex((item) => item.weight === selectTarget?.weight)
+    const whichSize = this.testOXData[this.stepCount].findIndex((item) => item.weight === selectTarget?.weight)
     let chose = Math.floor(Math.random() * canPlace.length)
     const index = this.viewData.findIndex((item) => item.styleName == canPlace[chose])
 
     // 給予畫面資料
     this.step++
     const sizeName = this.testOXData[0][whichSize].styleName
-    const data = (this.step % 2 === 1) ? 1 : -1
+    const data = (this.stepCount === 1) ? 1 : -1
     this.viewData[index].weight = selectTarget?.weight || 0
     this.viewData[index].data = data
     this.viewData[index].size = sizeName
 
-    this.testOXData[1 - this.step % 2][whichSize].amount--
+    this.testOXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})

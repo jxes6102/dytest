@@ -18,14 +18,14 @@ export class AllViewComponent {
   get marks () {
     return this.gameService.getMarks
   }
+  get nowSign () {
+    return this.gameService.getMarks[this.gameService.stepCount]
+  }
   get whoWin () {
     return this.gameService.getWin()
   }
   get mode () {
     return this.gameService.getMode()
-  }
-  get nowSign () {
-    return this.gameService.getNowSign()
   }
   get stepMessage () {
     return this.gameService.getStepMessage()
