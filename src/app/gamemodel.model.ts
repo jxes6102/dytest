@@ -49,8 +49,31 @@ export class viewData {
     }
  }
 
- export class selectData {
-    private data:xoType[] = []
+//  export class selectData {
+//     private data:xoType[] = []
+//     private styleData:string[] = ["bigSize","mediumSize","smallSize"]
+
+//     constructor(){
+//         this.creatData()
+//     }
+
+//     creatData() {
+//         for(let i = 0;i<3;i++) {
+//             this.data.push({
+//                 styleName:this.styleData[i],
+//                 amount:3,
+//                 isChose:false,
+//                 weight:3-i,
+//             })
+//         }
+//     }
+    
+//     get getData() {
+//         return this.data
+//     } 
+//  }
+export class tsetselectData {
+    private data:xoType[][] = []
     private styleData:string[] = ["bigSize","mediumSize","smallSize"]
 
     constructor(){
@@ -58,20 +81,23 @@ export class viewData {
     }
 
     creatData() {
-        for(let i = 0;i<3;i++) {
-            this.data.push({
-                styleName:this.styleData[i],
-                amount:3,
-                isChose:false,
-                weight:3-i,
-            })
+        for(let i = 0;i<2;i++) {
+            this.data[i] = []
+            for(let j = 0;j<3;j++) {
+                this.data[i].push({
+                    styleName:this.styleData[j],
+                    amount:3,
+                    isChose:false,
+                    weight:3-j,
+                })
+            }
         }
     }
-    
+
     get getData() {
         return this.data
-    } 
- }
+    }
+}
  
 export class checkData {
     private data:stepType[][] = []

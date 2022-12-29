@@ -9,12 +9,14 @@ export class PickComponent {
   /*
     sign  定義符號
     oxData 選擇視窗資料
+    playerNo 玩家編號
   */
   @Input() sign?: string
   @Input() playerNo?:number
 
   get oxData(){
-    return this.gameService.getMarks[this.playerNo || 0] === this.gameService.getMarks[0] ? this.gameService.getOData() : this.gameService.getXData()
+    // return this.gameService.getMarks[this.playerNo || 0] === this.gameService.getMarks[0] ? this.gameService.getOData() : this.gameService.getXData()
+    return this.gameService.testgetOXData[this.playerNo || 0]
   }
 
   constructor(private gameService: GameService) { }
