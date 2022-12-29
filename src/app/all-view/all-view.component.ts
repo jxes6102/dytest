@@ -68,6 +68,7 @@ export class AllViewComponent {
   }
   // 和電腦對戰
   toRobot () {
+    // console.log('dodo')
     this.renewGame()
     this.gameService.setAIStatus()
   }

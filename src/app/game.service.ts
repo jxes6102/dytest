@@ -7,7 +7,7 @@ import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemo
 export class GameService {
   /*
     mode  模式名稱
-    status 點擊動作類別 
+    status 點擊動作類別
     step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
