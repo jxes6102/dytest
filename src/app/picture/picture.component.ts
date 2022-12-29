@@ -7,19 +7,13 @@ import { GameService } from '../game.service';
 })
 export class PictureComponent {
    /*
-    signO signX  符號樣式
+    signs  符號
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
   */
 
   get viewData(){
     return this.gameService.getViewData()
   }
-  // get signX(){
-  //   return this.gameService.getMarkX()
-  // }
-  // get signO(){
-  //   return this.gameService.getMarkO()
-  // }
   get signs() {
     return this.gameService.getMarks
   }

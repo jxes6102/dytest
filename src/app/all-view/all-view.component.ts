@@ -12,15 +12,9 @@ export class AllViewComponent {
     status 點擊動作類別
     whoWin 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     nowSign 判斷是屬於O或X的回合
-    markO and markX 兩方的符號
+    marks 兩方的符號
     stepMessage 步驟訊息
   */
-  // get markO () {
-  //   return this.gameService.getMarkO()
-  // }
-  // get markX () {
-  //   return this.gameService.getMarkX()
-  // }
   get marks () {
     return this.gameService.getMarks
   }

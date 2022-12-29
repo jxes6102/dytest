@@ -1,6 +1,5 @@
 <div class="playView">
     <ng-container *ngFor="let item of viewData;let i = index">
-        <!-- <div class="flexCenter " [ngClass]="item.styleName + ' ' +  item.size" (click)="action(item.styleName)">{{item.data | displayPipe:signO:signX }}</div> -->
         <div class="flexCenter " [ngClass]="item.styleName + ' ' +  item.size" (click)="action(item.styleName)">{{item.data | displayPipe:signs}}</div>
     </ng-container>
 </div>

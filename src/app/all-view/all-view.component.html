@@ -1,8 +1,5 @@
 <div class="wrap flexCenter">
     <div class="board flexCenter">
-        <!-- <app-pick *ngIf="mode === 'battle'" [playerNo]="0" [sign]="markO" [style.opacity]='(nowSign === markO) ? 1 : .5'></app-pick>
-        <app-picture></app-picture>
-        <app-pick *ngIf="mode === 'battle'" [playerNo]="1" [sign]="markX" [style.opacity]='(nowSign === markX) ? 1 : .5'></app-pick> -->
         <app-pick *ngIf="mode === 'battle'" [playerNo]="0" [sign]="marks[0]" [style.opacity]='(nowSign === marks[0]) ? 1 : .5'></app-pick>
         <app-picture></app-picture>
         <app-pick *ngIf="mode === 'battle'" [playerNo]="1" [sign]="marks[1]" [style.opacity]='(nowSign === marks[1]) ? 1 : .5'></app-pick>
@@ -19,7 +16,6 @@
         <button class="robotStyle" (click)="toRobot()">和電腦對戰</button>
         <div class="statusStyle">{{AIStatus}}</div>
     </div>
-    <!-- <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:markO:markX}}</div> -->
     <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:marks}}</div>
     <div class="winStyle flexCenter" *ngIf="whoWin === 0">{{stepMessage}}</div>
     <app-note (noteAction)="toRecord($event)"></app-note>
