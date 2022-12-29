@@ -1,6 +1,5 @@
 import { Component,Output,EventEmitter } from '@angular/core';
 import { GameService } from '../game.service';
-import { stepType } from "../gamemodel.model";
 @Component({
   selector: 'app-note',
   templateUrl: './note.component.html',

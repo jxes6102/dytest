@@ -18,6 +18,7 @@ export class GameService {
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     AIStatus 電腦是否遊玩
     AIfirst 電腦是否先手 1先手 0後手
+    marks 定義符號
   */
   mode:string
   status:string
@@ -32,27 +33,31 @@ export class GameService {
   AIStatus:boolean = false
   AIfirst:number = Math.floor(Math.random() * 2)
 
-  markO:string
-  markX:string
-  // marks:string[] = ["O","X"]
+  // markO:string
+  // markX:string
+  marks:string[] = ["O","X"]
   constructor() {
     this.result = 0
     this.step = 0
     this.gameStep = []
     this.mode = ''
     this.status = 'click'
-    this.markO = "O"
-    this.markX = "X"
+    // this.markO = "O"
+    // this.markX = "X"
     this.setRecord()
 
   }
   // 拿取符號
-  getMarkO () {
-    return this.markO
+  get getMarks () {
+    return this.marks
   }
-  getMarkX () {
-    return this.markX
-  }
+  // 拿取符號
+  // getMarkO () {
+  //   return this.markO
+  // }
+  // getMarkX () {
+  //   return this.markX
+  // }
   // 拿取模式
   getMode() {
     return this.mode
@@ -102,11 +107,14 @@ export class GameService {
     
     const where = (target?.wherePlace || 0) + 1
     if(target.status === 'click') {
-      const sign = target?.content === 1 ? this.markO : this.markX
+      // const sign = target?.content === 1 ? this.markO : this.markX
+      const sign = (target?.content === 1) ? this.marks[0] : this.marks[1]
       return sign + '用了' + target?.useSize + '下在第' + where + '格'
     } else {
+      // if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.getNowSign()
+      // else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.markO : this.markX)
       if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.getNowSign()
-      else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.markO : this.markX)
+      else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[0] : this.marks[1])
     }
     
   }
@@ -130,16 +138,31 @@ export class GameService {
   // 更新選擇效果
   updateChose (sign:string,choseName:string) {
     // 當不是自己的回合時無法選擇自己的大小
-    if(((this.step % 2 == 0) && (sign === this.markX)) || ((this.step % 2 == 1) && (sign === this.markO))) return
+    // if(((this.step % 2 == 0) && (sign === this.markX)) || ((this.step % 2 == 1) && (sign === this.markO))) return
+    if(((this.step % 2 == 0) && (sign === this.marks[1])) || ((this.step % 2 == 1) && (sign === this.marks[0]))) return
     switch (sign) {
-      case this.markO: {
+      // case this.markO: {
+      //   for(let key in this.oData) {
+      //     if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
+      //     else this.oData[key].isChose = false
+      //   }
+      //   break
+      // }
+      // case this.markX: {
+      //   for(let key in this.xData) {
+      //     if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
+      //     else this.xData[key].isChose = false
+      //   }
+      //   break
+      // }
+      case this.marks[0]: {
         for(let key in this.oData) {
           if(this.oData[key].styleName === choseName) this.oData[key].isChose = true
           else this.oData[key].isChose = false
         }
         break
       }
-      case this.markX: {
+      case this.marks[1]: {
         for(let key in this.xData) {
           if(this.xData[key].styleName === choseName) this.xData[key].isChose = true
           else this.xData[key].isChose = false
@@ -153,7 +176,8 @@ export class GameService {
   //   return this.step % 2
   // }
   getNowSign() {
-    return (this.step % 2 === 0) ? this.markO : this.markX
+    // return (this.step % 2 === 0) ? this.markO : this.markX
+    return this.marks[this.step % 2]
   }
   //  點擊格子
   clickAction(name:string) {
@@ -164,7 +188,8 @@ export class GameService {
   clickProcess(name:string) {
     const index = this.viewData.findIndex((item) => item.styleName == name)
     const nowSign = this.getNowSign()
-    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+    // const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
+    const whichSize = nowSign === this.marks[0] ? this.oData.findIndex((item) => item.isChose) : this.xData.findIndex((item) => item.isChose)
     // 判斷是否可點擊
     const canClick = this.ableClick(whichSize,this.viewData[index])
     // 判斷是否可覆蓋
@@ -179,7 +204,9 @@ export class GameService {
     this.viewData[index].data = data
     this.viewData[index].size = sizeName
 
-    if(nowSign === this.markO) this.oData[whichSize].amount--
+    // if(nowSign === this.markO) this.oData[whichSize].amount--
+    // else this.xData[whichSize].amount--
+    if(nowSign === this.marks[0]) this.oData[whichSize].amount--
     else this.xData[whichSize].amount--
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
@@ -202,13 +229,25 @@ export class GameService {
     }
     // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
     switch (this.getNowSign()) {
-      case this.markO: {
+      // case this.markO: {
+      //   if(target?.data !== 1) return
+      //   const where = this.oData.findIndex((item)=> item.styleName === target.size)
+      //   this.oData[where].amount++
+      //   break
+      // }
+      // case this.markX: {
+      //   if(target?.data !== -1) return
+      //   const where = this.xData.findIndex((item)=> item.styleName === target.size)
+      //   this.xData[where].amount++
+      //   break
+      // }
+      case this.marks[0]: {
         if(target?.data !== 1) return
         const where = this.oData.findIndex((item)=> item.styleName === target.size)
         this.oData[where].amount++
         break
       }
-      case this.markX: {
+      case this.marks[1]: {
         if(target?.data !== -1) return
         const where = this.xData.findIndex((item)=> item.styleName === target.size)
         this.xData[where].amount++
@@ -232,21 +271,28 @@ export class GameService {
     // 檢查模式、結果、是否選擇尺寸
     if(this.mode === 'record' || this.result !== 0 || (where === -1)) return false
     // 檢查數量、是否點擊敵對格或空白格
-    const canClickO = (this.oData[where].amount > 0) && (nowSign === this.markO) && (viewData.data <= 0)
-    const canClickX = (this.xData[where].amount > 0) && (nowSign === this.markX) && (viewData.data >= 0)
+    // const canClickO = (this.oData[where].amount > 0) && (nowSign === this.markO) && (viewData.data <= 0)
+    // const canClickX = (this.xData[where].amount > 0) && (nowSign === this.markX) && (viewData.data >= 0)
 
-    return (nowSign === this.markO) ? canClickO : canClickX
+    // return (nowSign === this.markO) ? canClickO : canClickX
+    const canClickO = (this.oData[where].amount > 0) && (nowSign === this.marks[0]) && (viewData.data <= 0)
+    const canClickX = (this.xData[where].amount > 0) && (nowSign === this.marks[1]) && (viewData.data >= 0)
+
+    return (nowSign === this.marks[0]) ? canClickO : canClickX
   }
   // 是否能覆蓋
   canCover (viewWeight:number) {
     const nowSign = this.getNowSign()
-    const choseWeight = (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
+    // const choseWeight = (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
+    const choseWeight = (nowSign === this.marks[0] ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
     return choseWeight > viewWeight
   }
   // 拿取畫面權重
   getViewWeight () {
-    const nowSign = (this.step % 2 === 1) ? this.markO : this.markX
-    return (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
+    // const nowSign = (this.step % 2 === 1) ? this.markO : this.markX
+    // return (nowSign === this.markO ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
+    const nowSign = this.marks[1 - this.step % 2]
+    return (nowSign === this.marks[0] ? this.oData.find((item) => item.isChose)?.weight : this.xData.find((item) => item.isChose)?.weight) || 0
   }
   // 判斷勝負
   judgeVictory() {
@@ -353,23 +399,29 @@ export class GameService {
   checkNext() {
     // console.log('=====================')
     const nowSign = this.getNowSign()
-    let selectData = nowSign=== this.markO ? this.oData : this.xData
+    // let selectData = nowSign === this.markO ? this.oData : this.xData
+    let selectData = nowSign === this.marks[0] ? this.oData : this.xData
     let selectTarget = selectData.find((item) => item.amount > 0)
-    let canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== (this.getNowSign() === this.markO ? 1 : -1))).map((item) => item.styleName)
+    // let canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== (this.getNowSign() === this.markO ? 1 : -1))).map((item) => item.styleName)
+    let canPlace = this.viewData.filter((item) => (item.weight < (selectTarget?.weight || 0)) && (item.data !== (this.getNowSign() === this.marks[0] ? 1 : -1))).map((item) => item.styleName)
     if(!canPlace.length) return
 
-    const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.weight === selectTarget?.weight) : this.xData.findIndex((item) => item.weight === selectTarget?.weight)
+    // const whichSize = nowSign === this.markO ? this.oData.findIndex((item) => item.weight === selectTarget?.weight) : this.xData.findIndex((item) => item.weight === selectTarget?.weight)
+    const whichSize = nowSign === this.marks[0] ? this.oData.findIndex((item) => item.weight === selectTarget?.weight) : this.xData.findIndex((item) => item.weight === selectTarget?.weight)
     let chose = Math.floor(Math.random() * canPlace.length)
     const index = this.viewData.findIndex((item) => item.styleName == canPlace[chose])
 
     // 給予畫面資料
     this.step++
     const sizeName = this.oData[whichSize].styleName
-    const data = (nowSign === this.markO) ? 1 : -1
+    // const data = (nowSign === this.markO) ? 1 : -1
+    const data = (nowSign === this.marks[0]) ? 1 : -1
     this.viewData[index].weight = selectTarget?.weight || 0
     this.viewData[index].data = data
     this.viewData[index].size = sizeName
-    if(nowSign === this.markO) this.oData[whichSize].amount--
+    // if(nowSign === this.markO) this.oData[whichSize].amount--
+    // else this.xData[whichSize].amount--
+    if(nowSign === this.marks[0]) this.oData[whichSize].amount--
     else this.xData[whichSize].amount--
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})

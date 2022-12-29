@@ -15,11 +15,14 @@ export class AllViewComponent {
     markO and markX 兩方的符號
     stepMessage 步驟訊息
   */
-  get markO () {
-    return this.gameService.getMarkO()
-  }
-  get markX () {
-    return this.gameService.getMarkX()
+  // get markO () {
+  //   return this.gameService.getMarkO()
+  // }
+  // get markX () {
+  //   return this.gameService.getMarkX()
+  // }
+  get marks () {
+    return this.gameService.getMarks
   }
   get whoWin () {
     return this.gameService.getWin()

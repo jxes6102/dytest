@@ -12,9 +12,14 @@ export class PickComponent {
     oxData 選擇視窗資料
   */
   @Input() sign?: string
+  @Input() playerNo?:number
   // playerNo:number = 0;
+  // get oxData(){
+  //   return this.sign === this.gameService.getMarkO() ? this.gameService.getOData() : this.gameService.getXData()
+  // }
+
   get oxData(){
-    return this.sign === this.gameService.getMarkO() ? this.gameService.getOData() : this.gameService.getXData()
+    return this.gameService.getMarks[this.playerNo || 0] === this.gameService.getMarks[0] ? this.gameService.getOData() : this.gameService.getXData()
   }
 
   constructor(private gameService: GameService) { }

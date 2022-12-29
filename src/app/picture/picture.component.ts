@@ -14,11 +14,14 @@ export class PictureComponent {
   get viewData(){
     return this.gameService.getViewData()
   }
-  get signX(){
-    return this.gameService.getMarkX()
-  }
-  get signO(){
-    return this.gameService.getMarkO()
+  // get signX(){
+  //   return this.gameService.getMarkX()
+  // }
+  // get signO(){
+  //   return this.gameService.getMarkO()
+  // }
+  get signs() {
+    return this.gameService.getMarks
   }
 
   constructor(private gameService: GameService) {}
