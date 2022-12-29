@@ -12,7 +12,7 @@ export class PictureComponent {
   */
 
   get viewData(){
-    return this.gameService.getViewData()
+    return this.gameService.getViewData
   }
   get signs() {
     return this.gameService.getMarks
