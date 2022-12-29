@@ -17,6 +17,7 @@ export class PictureComponent {
   get signs() {
     return this.gameService.getMarks
   }
+  cssStyle:string[] = ['bigSize','mediumSize','smallSize']
 
   constructor(private gameService: GameService) {}
 

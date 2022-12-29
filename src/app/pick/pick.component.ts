@@ -21,12 +21,14 @@ export class PickComponent {
     return this.gameService.getMarks[this.playerNo || 0]
   }
 
+  cssStyle:string[] = ['bigSize','mediumSize','smallSize']
+
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {}
 
   // 更新選擇效果
-  select(name:string) {
-      this.gameService.updateChose(this.sign || '',name)
+  select(val:number) {
+    this.gameService.updateChose(this.sign || '',val)
   }
 }

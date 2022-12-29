@@ -1,7 +1,7 @@
 export interface stepType {
     wherePlace: number;
     content: number;
-    useSize:string;
+    useSize:number;
     stepID:number;
     status:string
 }
@@ -15,12 +15,11 @@ export interface buttonType {
 export interface viewType {
     styleName: string;
     data: number;
-    size: string
+    size: number
     weight: number
 }
 //每一個選擇框
 export interface xoType {
-    styleName:string;
     amount:number;
     isChose:boolean;
     weight:number;
@@ -38,7 +37,7 @@ export class viewData {
             this.data.push({
                 styleName:"square"+ i.toString(),
                 data:0,
-                size:'',
+                size:0,
                 weight:0
             })
         }
@@ -50,7 +49,6 @@ export class viewData {
  }
 export class selectData {
     private data:xoType[][] = []
-    private styleData:string[] = ["bigSize","mediumSize","smallSize"]
 
     constructor(){
         this.creatData()
@@ -61,7 +59,6 @@ export class selectData {
             this.data[i] = []
             for(let j = 0;j<3;j++) {
                 this.data[i].push({
-                    styleName:this.styleData[j],
                     amount:3,
                     isChose:false,
                     weight:3-j,

@@ -93,18 +93,20 @@ export class GameService {
     if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
     
     const where = (target?.wherePlace || 0) + 1
-    if(target.status === 'click') {
-      const sign = (target?.content === 1) ? this.marks[0] : this.marks[1]
-      return sign + '用了' + target?.useSize + '下在第' + where + '格'
-    } else {
-      if (this.mode === 'battle') return '拿了在第' + where +'格的'+ this.marks[this.stepCount]
-      else return '拿了在第' + where +'格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[0] : this.marks[1])
+    const adjArr = ['bigSize','mediumSize','smallSize']
+    if(target.status === 'click') return this.marks[1 - this.stepCount] + '用了' + adjArr[target?.useSize] + '下在第' + where + '格'
+    else {
+      if (this.mode === 'battle') return '拿了在第' + where + '格的' + this.marks[this.stepCount]
+      else {
+        console.log('dodo')
+        return '拿了在第' + where + '格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[1] : this.marks[0])
+      }
     }
   }
   //清除畫面
   clearView() {
     // 清除遊戲畫面
-    for(let key in this.viewData) this.updateViewData(parseInt(key),0,'',0)
+    for(let key in this.viewData) this.updateViewData(parseInt(key),0,0,0)
 
     // 重置選擇畫面效果
     for(let index in this.OXData) {
@@ -115,11 +117,11 @@ export class GameService {
     }
   }
   // 更新選擇效果
-  updateChose (sign:string,choseName:string) {
+  updateChose (sign:string,val:number) {
     // 當不是自己的回合時無法選擇自己的大小
     if(((this.stepCount == 0) && (sign === this.marks[1])) || ((this.stepCount == 1) && (sign === this.marks[0]))) return
     for(let key in this.OXData[this.stepCount]) {
-      if(this.OXData[this.stepCount][key].styleName === choseName) this.OXData[this.stepCount][key].isChose = true
+      if(parseInt(key) === val) this.OXData[this.stepCount][key].isChose = true
       else this.OXData[this.stepCount][key].isChose = false
     }
   }
@@ -141,13 +143,12 @@ export class GameService {
     if(!canClick || !canCover) return
     // 給予畫面資料
     this.step++
-    const sizeName = this.OXData[1 - this.stepCount][whichSize].styleName
     const data = (this.stepCount == 1) ? 1 : -1
-    this.updateViewData(index,data,sizeName,this.OXData[1 - this.stepCount].find((item) => item.isChose)?.weight || 0)
+    this.updateViewData(index,data,whichSize,this.OXData[1 - this.stepCount].find((item) => item.isChose)?.weight || 0)
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
-    this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -166,14 +167,14 @@ export class GameService {
     }
     // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
     if(((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1))) return
-    const where = this.OXData[this.stepCount].findIndex((item)=> item.styleName === target.size)
+    const where = this.OXData[this.stepCount].findIndex((item)=> item.isChose)
     this.OXData[this.stepCount][where].amount++
 
     //還原上一次修改的資料
     this.checkRecord[index].pop()
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || '',lastTarget?.useSize ? (this.OXData[this.stepCount].length - this.OXData[this.stepCount].findIndex((item)=> item.styleName === lastTarget?.useSize)) : 0)
-    this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || ''),stepID:this.gameStep.length + 1,status:'grab'})
+    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,lastTarget?.useSize ? (this.OXData[this.stepCount].length - this.OXData[this.stepCount].findIndex((item)=> item.isChose)) : 0)
+    this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
 
     this.setStatus()
   }
@@ -252,8 +253,8 @@ export class GameService {
         if(place.includes(this.gameStep[this.step].wherePlace)) {
           // 取同位置上一次的修改紀錄
           const lastRecord = this.gameStep.filter((item) => (item.wherePlace === this.gameStep[this.step].wherePlace) && (item.stepID < this.gameStep[this.step].stepID)).pop()
-          this.updateViewData(this.gameStep[this.step].wherePlace,lastRecord?.content || 0,lastRecord?.useSize || '')
-        } else this.updateViewData(this.gameStep[this.step].wherePlace,0,'')
+          this.updateViewData(this.gameStep[this.step].wherePlace,lastRecord?.content || 0,lastRecord?.useSize || 0)
+        } else this.updateViewData(this.gameStep[this.step].wherePlace,0,0)
         break
       }
     }
@@ -285,21 +286,20 @@ export class GameService {
 
     // 給予畫面資料
     this.step++
-    const sizeName = this.OXData[0][whichSize].styleName
     const data = (this.stepCount === 1) ? 1 : -1
-    this.updateViewData(index,data,sizeName,selectTarget?.weight || 0,)
+    this.updateViewData(index,data,whichSize,selectTarget?.weight || 0,)
 
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
-    this.gameStep.push({wherePlace: index,content: data,useSize:sizeName,stepID:this.gameStep.length + 1,status:'click'})
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
 
     this.judgeVictory()
   }
   //更新遊戲畫面
-  updateViewData (index:number,data:number,sizeName:string,weight?:number) {
+  updateViewData (index:number,data:number,sizeIndex:number,weight?:number) {
     if(weight || weight === 0) this.viewData[index].weight = weight
     this.viewData[index].data = data
-    this.viewData[index].size = sizeName
+    this.viewData[index].size = sizeIndex
   }
 }

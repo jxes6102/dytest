@@ -1,8 +1,8 @@
 <div class="wrap flexCenter">
     <ng-container *ngFor="let item of oxData;let i = index">
-        <div class="block flexCenter" [ngClass]="item.isChose ? ' selectColor' : '' " (click)="select(item.styleName)">
-            <div  class="flexCenter" [ngClass]="item.styleName">{{sign}}</div>
-            <div  class="countStyle ">{{'剩餘數量: ' + item.amount}}</div>
+        <div class="block flexCenter" [ngClass]="item.isChose ? ' selectColor' : '' " (click)="select(i)">
+            <div class="flexCenter" [ngClass]="cssStyle[i]">{{sign}}</div>
+            <div class="countStyle ">{{'剩餘數量: ' + item.amount}}</div>
         </div>
     </ng-container>
 </div>
