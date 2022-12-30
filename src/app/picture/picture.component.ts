@@ -12,13 +12,15 @@ export class PictureComponent {
   */
 
   get viewData(){
-    return this.gameService.getViewData
+    let target:any = this.gameService.getViewData
+    const cssStyle = ['bigSize','mediumSize','smallSize']
+    const blockStr = 'square'
+    for(let index in target) target[index].styleName = blockStr + index + ' ' + cssStyle[target[index].size]
+    return target
   }
   get signs() {
     return this.gameService.getMarks
   }
-  blockStr:string = 'square'
-  cssStyle:string[] = ['bigSize','mediumSize','smallSize']
 
   constructor(private gameService: GameService) {}
 

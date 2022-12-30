@@ -13,9 +13,11 @@ export class PickComponent {
   */
   @Input() playerNo?:number
 
-  cssStyle:string[] = ['bigSize','mediumSize','smallSize']
   get oxData() {
-    return this.gameService.getOXData[this.playerNo || 0]
+    let target:any = this.gameService.getOXData[this.playerNo || 0]
+    const cssStyle = ['bigSize','mediumSize','smallSize']
+    for(let index in target) target[index].styleName = cssStyle[parseInt(index)]
+    return target
   }
 
   get sign() {
