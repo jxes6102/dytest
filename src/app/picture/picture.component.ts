@@ -22,8 +22,12 @@ export class PictureComponent {
 
   constructor(private gameService: GameService) {}
 
-  // 點擊格子
-  action(val:number) {
-    this.gameService.clickAction(val)
+  // 點擊格子 
+  // boxIndex = 格子編號
+  // 0  1  2
+  // 3  4  5
+  // 6  7  8
+  action(boxIndex:number) {
+    this.gameService.clickAction(boxIndex)
   }
 }

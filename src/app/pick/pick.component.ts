@@ -13,6 +13,7 @@ export class PickComponent {
   */
   @Input() playerNo?:number
 
+  cssStyle:string[] = ['bigSize','mediumSize','smallSize']
   get oxData() {
     return this.gameService.getOXData[this.playerNo || 0]
   }
@@ -20,8 +21,6 @@ export class PickComponent {
   get sign() {
     return this.gameService.getMarks[this.playerNo || 0]
   }
-
-  cssStyle:string[] = ['bigSize','mediumSize','smallSize']
 
   constructor(private gameService: GameService) { }
 

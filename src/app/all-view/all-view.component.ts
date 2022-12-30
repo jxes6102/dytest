@@ -46,6 +46,7 @@ export class AllViewComponent {
   renewGame(): void {
     this.gameService.resetGame()
     this.gameService.clearView()
+    this.gameService.changeAIStatus(false)
   }
   //上一步
   last(): void {
@@ -62,15 +63,14 @@ export class AllViewComponent {
   }
   //  切換到對戰模式
   toBattle() {
-    if(this.AIStatus) this.toRobot()
+    if(this.AIStatus) this.gameService.changeAIStatus(false)
     this.gameService.setMode('battle')
     this.renewGame()
   }
   // 和電腦對戰
   toRobot () {
-    // console.log('dodo')
     this.renewGame()
-    this.gameService.setAIStatus()
+    if(!this.AIStatus) this.gameService.changeAIStatus(true)
   }
   //切換狀態
   changeStatus() {

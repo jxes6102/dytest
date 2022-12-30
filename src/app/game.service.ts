@@ -72,16 +72,17 @@ export class GameService {
   get getAIStatus () {
     return this.AIStatus
   }
-  // 改變電腦遊玩狀態
-  setAIStatus () {
-    this.AIStatus = !this.AIStatus
-    this.AIfirst = Math.floor(Math.random() * 2)
-    if(this.AIStatus && this.AIfirst) this.checkNext()
-  }
   // 設定遊戲遊玩狀態
   setStatus () {
     if(this.status === 'click') this.status = 'grab'
     else this.status = 'click'
+  }
+  // 改變電腦遊玩狀態
+  changeAIStatus (val:boolean) {
+    this.AIStatus = val
+    if(!val) return
+    this.AIfirst = Math.floor(Math.random() * 2)
+    if(this.AIfirst) this.checkNext()
   }
   // 拿取遊戲遊玩狀態
   get getStatus () {
