@@ -10,3 +10,15 @@ body {
     align-items: center;
     align-content: center;
 }
+
+.bigSize {
+    font-size: 5em;
+}
+
+.mediumSize {
+    font-size: 3em;
+} 
+
+.smallSize {
+    font-size: 1em;
+} 
