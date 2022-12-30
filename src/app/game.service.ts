@@ -162,13 +162,12 @@ export class GameService {
     }
     // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
     if(((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1))) return
-    const where = this.OXData[this.stepCount].findIndex((item)=> item.isChose)
+    const where = this.viewData[index].size
     this.OXData[this.stepCount][where].amount++
-
     //還原上一次修改的資料
     this.checkRecord[index].pop()
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,lastTarget?.useSize ? (this.OXData[this.stepCount].length - this.OXData[this.stepCount].findIndex((item)=> item.isChose)) : 0)
+    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
 
     this.setStatus()
