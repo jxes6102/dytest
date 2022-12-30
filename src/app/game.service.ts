@@ -24,6 +24,7 @@ export class GameService {
   step:number
   result:number
   allRecords:stepType[][] = []
+  testallRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
   gameStep:stepType[]
   viewData:viewType[] = new viewData().getData
@@ -39,6 +40,12 @@ export class GameService {
     this.mode = ''
     this.status = 'click'
     this.setRecord()
+    // QQQQ
+    for(let i = 0;i<6;i++) {
+      this.testallRecords[i] = []
+    }
+    // console.log('testallRecords',this.testallRecords)
+
 
   }
   // 拿取符號
@@ -146,6 +153,9 @@ export class GameService {
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    // QQQQ
+    this.testallRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -170,7 +180,8 @@ export class GameService {
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
-
+    // QQQQ
+    this.testallRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
     this.setStatus()
   }
   // 判斷勝負
