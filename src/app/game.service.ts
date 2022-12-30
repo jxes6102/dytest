@@ -94,13 +94,13 @@ export class GameService {
     
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
-    if(target.status === 'click') return this.marks[1 - this.stepCount] + '用了' + adjArr[target?.useSize] + '下在第' + where + '格'
-    else {
+
+    if(target.status === 'click'){
+      if(this.mode === 'battle') return this.marks[1 - this.stepCount] + '用了' + adjArr[target?.useSize] + '下在第' + where + '格'
+      else return ((target.content === 1) ? this.marks[0] : this.marks[1]) + '用了' + adjArr[target?.useSize] + '下在第' + where + '格'
+    }else {
       if (this.mode === 'battle') return '拿了在第' + where + '格的' + this.marks[this.stepCount]
-      else {
-        // console.log('dodo')
-        return '拿了在第' + where + '格的' + ((this.gameStep[this.step - 3].content === 1) ? this.marks[1] : this.marks[0])
-      }
+      else return '拿了在第' + where + '格的' + ((target.content === 1) ? this.marks[1] : this.marks[0])
     }
   }
   //清除畫面
