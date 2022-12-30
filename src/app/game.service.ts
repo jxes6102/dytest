@@ -155,7 +155,8 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     // QQQQ
     this.testallRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-
+    console.log('===============================================')
+    console.log('testallRecords',this.testallRecords)
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -182,6 +183,8 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
     // QQQQ
     this.testallRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
+    console.log('===============================================')
+    console.log('testallRecords',this.testallRecords)
     this.setStatus()
   }
   // 判斷勝負
@@ -223,6 +226,9 @@ export class GameService {
     this.result = 0
     this.status = 'click'
     this.checkRecord = new checkData().getData
+    // QQQQ
+    this.testallRecords[0] = []
+    console.log('testallRecords',this.testallRecords)
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
