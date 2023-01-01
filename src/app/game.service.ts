@@ -99,7 +99,7 @@ export class GameService {
   getStepMessage() {
     const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
     if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
-    
+
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
     const battleSign = (target.status === 'click') ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
@@ -155,12 +155,12 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     // QQQQ
     this.testallRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    console.log('===============================================')
-    console.log('testallRecords',this.testallRecords)
+    // console.log('===============================================')
+    // console.log('testallRecords',this.testallRecords)
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
-    if((this.result !== 0) || !this.AIStatus) return 
+    if((this.result !== 0) || !this.AIStatus) return
     else this.checkNext()
   }
   // 拿取動作
@@ -183,8 +183,8 @@ export class GameService {
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
     // QQQQ
     this.testallRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
-    console.log('===============================================')
-    console.log('testallRecords',this.testallRecords)
+    // console.log('===============================================')
+    // console.log('testallRecords',this.testallRecords)
     this.setStatus()
   }
   // 判斷勝負
@@ -227,8 +227,9 @@ export class GameService {
     this.status = 'click'
     this.checkRecord = new checkData().getData
     // QQQQ
+    // console.log('=======================')
     this.testallRecords[0] = []
-    console.log('testallRecords',this.testallRecords)
+    // console.log('testallRecords',this.testallRecords)
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
@@ -244,6 +245,26 @@ export class GameService {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
+    console.log('===============================')
+    // 製造歷史紀錄
+    let historyTarget:stepType[][] = this.testallRecords.slice(1, 6)
+    // console.log('historyTarget',historyTarget)
+    // console.log('this.testallRecords[0]',this.testallRecords[0])
+    for(let i = 0;i<historyTarget.length;i++) {
+      // console.log('historyTarget',historyTarget[i])
+      if(!historyTarget[i].length) {
+        // console.log('qq',this.testallRecords[0])
+        historyTarget[i] = this.testallRecords[0]
+        break
+      }
+    }
+    // 合回allrecord
+    for(let i = 1;i<=5;i++) {
+      this.testallRecords[i] = historyTarget[i-1]
+    }
+
+    console.log('historyTarget',historyTarget)
+    console.log('testallRecords',this.testallRecords)
   }
   // 執行紀錄
   actionRecord (stepVal:number) {
