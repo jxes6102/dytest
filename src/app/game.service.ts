@@ -262,7 +262,7 @@ export class GameService {
     for(let i = 1;i<=5;i++) {
       this.testallRecords[i] = historyTarget[i-1]
     }
-
+    this.testallRecords[0] = []
     console.log('historyTarget',historyTarget)
     console.log('testallRecords',this.testallRecords)
   }
