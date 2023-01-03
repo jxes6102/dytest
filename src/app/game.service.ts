@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemodel.model";
+import { viewType,stepType,xoType,viewData,checkData,selectData,flagType } from "./gamemodel.model";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,10 @@ export class GameService {
   AIfirst:number = Math.floor(Math.random() * 2)
   OXData:xoType[][] = new selectData().getData
   marks:string[] = ["O","X"]
+  gameFlag:flagType = {
+    battle:{key:0,step:0},
+    record:{key:1,step:0}
+  }
 
   constructor() {
     this.result = 0
