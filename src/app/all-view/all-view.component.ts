@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { GameService } from '../game.service';
-import { stepType } from "../gamemodel.model";
 @Component({
   selector: 'app-all-view',
   templateUrl: './all-view.component.html',
@@ -40,7 +39,8 @@ export class AllViewComponent {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.setMode('battle')
+    // QQQ
+    this.gameService.setMode('battle',0)
   }
   // 重置遊戲
   renewGame(): void {
@@ -56,16 +56,10 @@ export class AllViewComponent {
   next(): void {
     this.gameService.actionRecord(1)
   }
-  //  切換到紀錄模式
-  toRecord (data:stepType[]) {
-    this.renewGame()
-    this.gameService.setChose(data)
-  }
   //  切換到對戰模式
   toBattle() {
-    if(this.AIStatus) this.gameService.changeAIStatus(false)
-    this.gameService.setMode('battle')
-    this.renewGame()
+    // QQQ
+    this.gameService.setMode('battle',0)
   }
   // 和電腦對戰
   toRobot () {

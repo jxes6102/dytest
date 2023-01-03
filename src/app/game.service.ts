@@ -35,7 +35,8 @@ export class GameService {
     battle:{key:0,step:0},
     record:{key:1,step:0}
   }
-
+  nowFlag:number[] = [0,0]
+  //QQ
   constructor() {
     this.result = 0
     this.step = 0
@@ -58,8 +59,18 @@ export class GameService {
     return this.mode
   }
   // 設定模式
-  setMode(name: string) {
+  setMode(name: string,val:number) {
+    console.log('===============================')
     this.mode = name
+    // QQQ
+    this.resetGame()
+    this.clearView()
+    if(this.AIStatus) this.changeAIStatus(false)
+
+    this.nowFlag[0] = val
+    if(this.nowFlag[0]) {
+      this.setChose(this.allRecords[val])
+    }
   }
   // 拿取勝利者
   get getWin() {
@@ -218,6 +229,12 @@ export class GameService {
     this.status = 'click'
     this.checkRecord = new checkData().getData
     this.allRecords[0] = []
+
+    //QQ
+    // for(let key in this.gameFlag) {
+    //   this.gameFlag[key].step = 0
+    // }
+    
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {

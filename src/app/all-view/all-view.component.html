@@ -18,6 +18,6 @@
     </div>
     <div class="winStyle flexCenter" *ngIf="whoWin !== 0">{{whoWin | winerPipe:marks}}</div>
     <div class="winStyle flexCenter" *ngIf="whoWin === 0">{{stepMessage}}</div>
-    <app-note (noteAction)="toRecord($event)"></app-note>
+    <app-note></app-note>
 </div>
 <app-test1></app-test1>

@@ -1,4 +1,4 @@
-import { Component,Output,EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { GameService } from '../game.service';
 @Component({
   selector: 'app-note',
@@ -6,7 +6,6 @@ import { GameService } from '../game.service';
   styleUrls: ['./note.component.css']
 })
 export class NoteComponent {
-  @Output() noteAction = new EventEmitter()
   
   get listData () {
     return this.gameService.getAllRecords
@@ -17,7 +16,6 @@ export class NoteComponent {
   ngOnInit(): void {}
   // 切換到紀錄模式
   action(val:number) {
-    this.gameService.setMode('record')
-    this.noteAction.emit(this.listData[val])
+    this.gameService.setMode('record',val + 1)
   }
 }
