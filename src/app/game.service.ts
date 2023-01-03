@@ -41,11 +41,6 @@ export class GameService {
     this.status = 'click'
     this.setRecord()
     // QQQQ
-    for(let i = 0;i<6;i++) {
-      this.testallRecords[i] = []
-    }
-    // console.log('testallRecords',this.testallRecords)
-
 
   }
   // 拿取符號
@@ -245,6 +240,7 @@ export class GameService {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
+    // QQQ
     // console.log('===============================')
     // 處理歷史紀錄
     let historyTarget:stepType[][] = this.testallRecords.slice(1, 6)
@@ -262,9 +258,9 @@ export class GameService {
     // 生成歷史紀錄
     for(let i = 1;i<=5;i++) this.testallRecords[i] = historyTarget[i-1]
     this.testallRecords[0] = []
-
-    console.log('historyTarget',historyTarget)
-    console.log('testallRecords',this.testallRecords)
+    localStorage.setItem('test', JSON.stringify(this.testallRecords))
+    // console.log('historyTarget',historyTarget)
+    // console.log('testallRecords',this.testallRecords)
   }
   // 執行紀錄
   actionRecord (stepVal:number) {
@@ -306,6 +302,14 @@ export class GameService {
   setRecord() {
     const local = JSON.parse(localStorage.getItem('record') || '[]')
     if(local) this.allRecords = local
+    // QQQ
+    // console.log('get')
+
+    if(localStorage.getItem('test')) {
+      this.testallRecords = JSON.parse(localStorage.getItem('test') || '[]')
+    }else {
+      for(let i = 0;i<6;i++) this.testallRecords[i] = []
+    }
   }
   // 電腦動作
   checkNext() {
