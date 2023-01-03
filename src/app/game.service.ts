@@ -245,24 +245,24 @@ export class GameService {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
     this.gameStep = []
-    console.log('===============================')
-    // 製造歷史紀錄
+    // console.log('===============================')
+    // 處理歷史紀錄
     let historyTarget:stepType[][] = this.testallRecords.slice(1, 6)
-    // console.log('historyTarget',historyTarget)
-    // console.log('this.testallRecords[0]',this.testallRecords[0])
-    for(let i = 0;i<historyTarget.length;i++) {
-      // console.log('historyTarget',historyTarget[i])
-      if(!historyTarget[i].length) {
-        // console.log('qq',this.testallRecords[0])
-        historyTarget[i] = this.testallRecords[0]
-        break
+    if(historyTarget.every((item) => item.length > 0)) {
+      historyTarget.shift()
+      historyTarget.push(this.testallRecords[0])
+    }else {
+      for(let i = 0;i<historyTarget.length;i++) {
+        if(!historyTarget[i].length) {
+          historyTarget[i] = this.testallRecords[0]
+          break
+        }
       }
     }
-    // 合回allrecord
-    for(let i = 1;i<=5;i++) {
-      this.testallRecords[i] = historyTarget[i-1]
-    }
+    // 生成歷史紀錄
+    for(let i = 1;i<=5;i++) this.testallRecords[i] = historyTarget[i-1]
     this.testallRecords[0] = []
+
     console.log('historyTarget',historyTarget)
     console.log('testallRecords',this.testallRecords)
   }
@@ -327,6 +327,9 @@ export class GameService {
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    //QQQ
+    this.testallRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    // console.log('testallRecords',this.testallRecords)
 
     this.judgeVictory()
   }
