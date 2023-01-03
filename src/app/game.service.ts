@@ -54,13 +54,16 @@ export class GameService {
   get stepCount () {
     return this.step % 2
   }
+  get teststepCount () {
+    return this.nowFlag[1] % 2
+  }
   // 拿取模式
   get getMode() {
     return this.mode
   }
   // 設定模式
   setMode(name: string,val:number) {
-    console.log('===============================')
+    // console.log('===============================')
     this.mode = name
     // QQQ
     this.resetGame()
@@ -155,6 +158,7 @@ export class GameService {
     if(!canClick || !canCover) return
     // 給予畫面資料
     this.step++
+    this.nowFlag[1]++
     const data = (this.stepCount == 1) ? 1 : -1
     this.updateViewData(index,data,whichSize,this.OXData[1 - this.stepCount].find((item) => item.isChose)?.weight || 0)
     this.OXData[1 - this.stepCount][whichSize].amount--
@@ -234,6 +238,7 @@ export class GameService {
     // for(let key in this.gameFlag) {
     //   this.gameFlag[key].step = 0
     // }
+    this.nowFlag[1] = 0
     
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
@@ -265,12 +270,14 @@ export class GameService {
 
         this.updateViewData(this.gameStep[this.step].wherePlace,this.gameStep[this.step].content,this.gameStep[this.step].useSize)
         this.step += stepVal
+        this.nowFlag[1] += stepVal
         break
       }
       case -1: {
         if((this.step < 1)) return
 
         this.step += stepVal
+        this.nowFlag[1] += stepVal
         // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
         const place = this.gameStep.slice(0,this.step).map((item)=> item.wherePlace)
         // 有修改此位置的紀錄時才還原成在上一次修改的同一格的OX
@@ -311,6 +318,7 @@ export class GameService {
     const index = canPlace[Math.floor(Math.random() * canPlace.length)]
     // 給予畫面資料
     this.step++
+    this.nowFlag[1]++
     const data = (this.stepCount === 1) ? 1 : -1
     this.updateViewData(index,data,whichSize,selectTarget?.weight || 0,)
 
