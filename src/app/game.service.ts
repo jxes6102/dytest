@@ -10,20 +10,20 @@ export class GameService {
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改紀錄
-    gameStep 該局遊戲紀錄
+    recordGameStep 該局遊戲紀錄
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
     AIStatus 電腦是否遊玩
     AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
     gameFlag 遊戲狀態紀錄
-    nowFlag 當前遊戲狀態
+    nowFlag 當前遊戲狀態 0 for battle 1~5 for record
   */
   status:string
   result:number
   allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
-  gameStep:stepType[]
+  recordGameStep:stepType[]
   viewData:viewType[] = new viewData().getData
   AIStatus:boolean = false
   AIfirst:number = Math.floor(Math.random() * 2)
@@ -37,7 +37,7 @@ export class GameService {
 
   constructor() {
     this.result = 0
-    this.gameStep = []
+    this.recordGameStep = []
     this.status = 'click'
     this.setRecord()
 
@@ -97,8 +97,8 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (!this.nowFlag[0]) ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.nowFlag[1] - 1]
-    if (!target)  return (this.nowFlag[0]) ? '這是上' + ((this.allRecords.filter((item) => item.length > 0).length + 1) - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
+    const target = (!this.nowFlag[0]) ? this.allRecords[0][this.allRecords[0].length - 1] : this.recordGameStep[this.nowFlag[1] - 1]
+    if (!target)  return (this.nowFlag[0]) ? '這是上' + ((this.allRecords.filter((item) => item.length > 0).length + 1) - this.allRecords.indexOf(this.recordGameStep)) + '場' : '開始'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -151,9 +151,9 @@ export class GameService {
     this.updateViewData(index,data,whichSize,this.OXData[1 - this.stepCount].find((item) => item.isChose)?.weight || 0)
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    const stepNum = this.allRecords[0].length
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
+    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -164,7 +164,7 @@ export class GameService {
   grabProcess(index:number) {
     const target = this.viewData[index]
     // 同一回合只能拿一次
-    const lastStep = this.gameStep[this.gameStep.length - 1]
+    const lastStep = this.allRecords[0][this.allRecords[0].length - 1]
     if(lastStep?.status === 'grab' || this.result !== 0) {
       this.setStatus()
       return
@@ -177,8 +177,7 @@ export class GameService {
     this.checkRecord[index].pop()
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
-    this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
-    this.allRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
+    this.allRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:'grab'})
     this.setStatus()
   }
   // 判斷勝負
@@ -205,17 +204,17 @@ export class GameService {
       Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
       // 選擇欄位剩餘數量
       const count = this.OXData.flat(1).reduce((acc, item) => acc + item.amount,0)
-      // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重大於等於畫面上敵對和空白格最小重和勝負未分 是平手
+      // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重小於等於畫面上敵對和空白格最小重和勝負未分 是平手
       if(((count === 0) && (this.result === 0)) || ((minViewWeight >= maxChoseWeight) && (this.result === 0))) this.result = 2
 
-    } else if(!this.gameStep[this.nowFlag[1]] && this.result === 0) this.result = 2
+    } else if(!this.recordGameStep[this.nowFlag[1]] && this.result === 0) this.result = 2
 
     if((this.result !== 0) && (!this.nowFlag[0])) this.noteGame()
 
   }
   //重置遊戲
   resetGame() {
-    this.gameStep = []
+    this.recordGameStep = []
     this.result = 0
     this.status = 'click'
     this.checkRecord = new checkData().getData
@@ -223,7 +222,7 @@ export class GameService {
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
-    this.gameStep = []
+    this.recordGameStep = []
     // 處理歷史紀錄
     let historyTarget:stepType[][] = this.allRecords.slice(1, this.allRecords.length)
     if(historyTarget.every((item) => item.length > 0)) {
@@ -246,9 +245,9 @@ export class GameService {
   actionRecord (stepVal:number) {
     switch (stepVal) {
       case 1: {
-        if((this.nowFlag[1] === this.gameStep.length)) return
+        if((this.nowFlag[1] === this.recordGameStep.length)) return
 
-        this.updateViewData(this.gameStep[this.nowFlag[1]].wherePlace,this.gameStep[this.nowFlag[1]].content,this.gameStep[this.nowFlag[1]].useSize)
+        this.updateViewData(this.recordGameStep[this.nowFlag[1]].wherePlace,this.recordGameStep[this.nowFlag[1]].content,this.recordGameStep[this.nowFlag[1]].useSize)
         this.nowFlag[1] += stepVal
         break
       }
@@ -257,18 +256,18 @@ export class GameService {
 
         this.nowFlag[1] += stepVal
         // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
-        const place = this.gameStep.slice(0,this.nowFlag[1]).map((item)=> item.wherePlace)
+        const place = this.recordGameStep.slice(0,this.nowFlag[1]).map((item)=> item.wherePlace)
         // 有修改此位置的紀錄時才還原成在上一次修改的同一格的OX
-        if(place.includes(this.gameStep[this.nowFlag[1]].wherePlace)) {
+        if(place.includes(this.recordGameStep[this.nowFlag[1]].wherePlace)) {
           // 取同位置上一次的修改紀錄
-          const lastRecord = this.gameStep.filter((item) => (item.wherePlace === this.gameStep[this.nowFlag[1]].wherePlace) && (item.stepID < this.gameStep[this.nowFlag[1]].stepID)).pop()
-          this.updateViewData(this.gameStep[this.nowFlag[1]].wherePlace,lastRecord?.content || 0,lastRecord?.useSize || 0)
-        } else this.updateViewData(this.gameStep[this.nowFlag[1]].wherePlace,0,0)
+          const lastRecord = this.recordGameStep.filter((item) => (item.wherePlace === this.recordGameStep[this.nowFlag[1]].wherePlace) && (item.stepID < this.recordGameStep[this.nowFlag[1]].stepID)).pop()
+          this.updateViewData(this.recordGameStep[this.nowFlag[1]].wherePlace,lastRecord?.content || 0,lastRecord?.useSize || 0)
+        } else this.updateViewData(this.recordGameStep[this.nowFlag[1]].wherePlace,0,0)
         break
       }
     }
 
-    if (this.gameStep[this.nowFlag[1] - 1]?.status === 'click')  this.judgeVictory()
+    if (this.recordGameStep[this.nowFlag[1] - 1]?.status === 'click')  this.judgeVictory()
   }
   // 拿取遊戲紀錄
   get getAllRecords() {
@@ -276,7 +275,7 @@ export class GameService {
   }
   // 拿取選擇的紀錄
   setChose(data:stepType[]) {
-    this.gameStep = data
+    this.recordGameStep = data
   }
   // 拿取本地端的紀錄
   setRecord() {
@@ -301,9 +300,9 @@ export class GameService {
 
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+    const stepNum = this.allRecords[0].length
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
+    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
 
     this.judgeVictory()
   }
@@ -331,8 +330,7 @@ export class GameService {
       this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
       this.OXData[1 - this.stepCount][whichSize].amount--
       //紀錄
-      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-      this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
+      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:'click'})
 
       this.judgeVictory()
     }
