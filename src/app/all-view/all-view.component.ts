@@ -24,7 +24,7 @@ export class AllViewComponent {
     return this.gameService.getWin
   }
   get mode () {
-    return this.gameService.getMode
+    return this.gameService.getMode === 0 ? 'battle' : 'record'
   }
   get stepMessage () {
     return this.gameService.getStepMessage()
@@ -38,10 +38,8 @@ export class AllViewComponent {
 
   constructor(private gameService: GameService) {}
 
-  ngOnInit(): void {
-    // QQQ
-    this.gameService.setMode('battle',0)
-  }
+  ngOnInit(): void {}
+
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()
@@ -58,8 +56,7 @@ export class AllViewComponent {
   }
   //  切換到對戰模式
   toBattle() {
-    // QQQ
-    this.gameService.setMode('battle',0)
+    this.gameService.setMode(0)
   }
   // 和電腦對戰
   toRobot () {

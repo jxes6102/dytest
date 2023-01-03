@@ -16,6 +16,6 @@ export class NoteComponent {
   ngOnInit(): void {}
   // 切換到紀錄模式
   action(val:number) {
-    this.gameService.setMode('record',val + 1)
+    this.gameService.setMode(val + 1)
   }
 }

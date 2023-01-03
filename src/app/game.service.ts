@@ -6,9 +6,7 @@ import { viewType,stepType,xoType,viewData,checkData,selectData,flagType } from 
 })
 export class GameService {
   /*
-    mode  模式名稱
     status 點擊動作類別
-    step 遊戲步數
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改紀錄
@@ -18,8 +16,9 @@ export class GameService {
     AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
+    gameFlag 遊戲狀態紀錄
+    nowFlag 當前遊戲狀態
   */
-  mode:string
   status:string
   result:number
   allRecords:stepType[][] = []
@@ -35,11 +34,10 @@ export class GameService {
     record:{key:1,step:0}
   }
   nowFlag:number[] = [0,0]
-  //QQ
+
   constructor() {
     this.result = 0
     this.gameStep = []
-    this.mode = ''
     this.status = 'click'
     this.setRecord()
 
@@ -54,13 +52,10 @@ export class GameService {
   }
   // 拿取模式
   get getMode() {
-    return this.mode
+    return this.nowFlag[0]
   }
   // 設定模式
-  setMode(name: string,val:number) {
-    // console.log('===============================')
-    this.mode = name
-    // QQQ
+  setMode(val:number) {
     this.resetGame()
     this.clearView()
     if(this.AIStatus) this.changeAIStatus(false)
@@ -103,15 +98,15 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.nowFlag[1] - 1]
-    if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
+    const target = (this.nowFlag[0] === 0) ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.nowFlag[1] - 1]
+    if (!target)  return (this.nowFlag[0] !== 0) ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
     const battleSign = (target.status === 'click') ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
     const recordSign = (target.status === 'click') ? ((target.content === 1) ? this.marks[0] : this.marks[1]) : ((target.content === 1) ? this.marks[1] : this.marks[0])
 
-    if((this.mode === 'battle')) return (target.status === 'click') ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
+    if(this.nowFlag[0] === 0) return (target.status === 'click') ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
     else return (target.status === 'click') ? (recordSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + recordSign)
   }
   //清除畫面
@@ -145,7 +140,7 @@ export class GameService {
   clickProcess(index:number) {
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
     // 檢查模式、結果、是否選擇尺寸
-    if(this.mode === 'record' || this.result !== 0 || (whichSize === -1)) return
+    if(this.nowFlag[0] !== 0 || this.result !== 0 || (whichSize === -1)) return
     // 判斷是否可點擊
     const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     // 判斷是否可覆蓋
@@ -202,7 +197,7 @@ export class GameService {
     }
 
     // 計算對戰或紀錄模式時平手條件
-    if(this.mode === 'battle') {
+    if(this.nowFlag[0] === 0) {
       // 當前選擇欄位剩餘最大重
       const target = this.OXData[this.stepCount].filter(item => item.amount > 0).map(item => item.weight)
       const maxChoseWeight = Math.max(...(target.length ? target : [0]))
@@ -216,7 +211,7 @@ export class GameService {
 
     } else if(!this.gameStep[this.nowFlag[1]] && this.result === 0) this.result = 2
 
-    if((this.result !== 0) && (this.mode === 'battle')) this.noteGame()
+    if((this.result !== 0) && (this.nowFlag[0] === 0)) this.noteGame()
 
   }
   //重置遊戲
@@ -227,10 +222,6 @@ export class GameService {
     this.checkRecord = new checkData().getData
     this.allRecords[0] = []
 
-    //QQ
-    // for(let key in this.gameFlag) {
-    //   this.gameFlag[key].step = 0
-    // }
     this.nowFlag[1] = 0
     
   }
