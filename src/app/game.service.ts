@@ -93,7 +93,9 @@ export class GameService {
   //拿取步驟訊息
   getStepMessage() {
     const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
-    if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
+    // QQQ
+    // if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
+    if (!target)  return (this.mode === 'record') ? '這是上' + (this.testallRecords.length - this.testallRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -294,8 +296,12 @@ export class GameService {
   getAllRecords() {
     return this.allRecords
   }
+  gettestAllRecords() {
+    return this.testallRecords
+  }
   // 拿取選擇的紀錄
   setChose(data:stepType[]) {
+    // QQQ
     this.gameStep = data
   }
   // 拿取本地端的紀錄
