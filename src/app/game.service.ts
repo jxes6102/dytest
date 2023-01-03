@@ -24,7 +24,6 @@ export class GameService {
   step:number
   result:number
   allRecords:stepType[][] = []
-  testallRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
   gameStep:stepType[]
   viewData:viewType[] = new viewData().getData
@@ -40,7 +39,6 @@ export class GameService {
     this.mode = ''
     this.status = 'click'
     this.setRecord()
-    // QQQQ
 
   }
   // 拿取符號
@@ -93,9 +91,7 @@ export class GameService {
   //拿取步驟訊息
   getStepMessage() {
     const target = (this.mode === 'battle') ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.step - 1]
-    // QQQ
-    // if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
-    if (!target)  return (this.mode === 'record') ? '這是上' + (this.testallRecords.length - this.testallRecords.indexOf(this.gameStep)) + '場' : '開始'
+    if (!target)  return (this.mode === 'record') ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -150,10 +146,7 @@ export class GameService {
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    // QQQQ
-    this.testallRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    // console.log('===============================================')
-    // console.log('testallRecords',this.testallRecords)
+    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -178,10 +171,7 @@ export class GameService {
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
     this.gameStep.push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
-    // QQQQ
-    this.testallRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
-    // console.log('===============================================')
-    // console.log('testallRecords',this.testallRecords)
+    this.allRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.gameStep.length + 1,status:'grab'})
     this.setStatus()
   }
   // 判斷勝負
@@ -223,46 +213,28 @@ export class GameService {
     this.result = 0
     this.status = 'click'
     this.checkRecord = new checkData().getData
-    // QQQQ
-    // console.log('=======================')
-    this.testallRecords[0] = []
-    // console.log('testallRecords',this.testallRecords)
+    this.allRecords[0] = []
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
-    if((this.gameStep.length === 0) || (this.result === 0)){
-      this.gameStep = []
-      return
-    }
-
-    this.allRecords.push(this.gameStep)
-    // 超過記錄上限時刪除
-    if(this.allRecords.length > 5) this.allRecords.shift()
-
-    localStorage.setItem('record', JSON.stringify(this.allRecords))
-
     this.gameStep = []
-    // QQQ
-    // console.log('===============================')
     // 處理歷史紀錄
-    let historyTarget:stepType[][] = this.testallRecords.slice(1, 6)
+    let historyTarget:stepType[][] = this.allRecords.slice(1, 6)
     if(historyTarget.every((item) => item.length > 0)) {
       historyTarget.shift()
-      historyTarget.push(this.testallRecords[0])
+      historyTarget.push(this.allRecords[0])
     }else {
       for(let i = 0;i<historyTarget.length;i++) {
         if(!historyTarget[i].length) {
-          historyTarget[i] = this.testallRecords[0]
+          historyTarget[i] = this.allRecords[0]
           break
         }
       }
     }
     // 生成歷史紀錄
-    for(let i = 1;i<=5;i++) this.testallRecords[i] = historyTarget[i-1]
-    this.testallRecords[0] = []
-    localStorage.setItem('test', JSON.stringify(this.testallRecords))
-    // console.log('historyTarget',historyTarget)
-    // console.log('testallRecords',this.testallRecords)
+    for(let i = 1;i<=5;i++) this.allRecords[i] = historyTarget[i-1]
+    this.allRecords[0] = []
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
   // 執行紀錄
   actionRecord (stepVal:number) {
@@ -293,29 +265,17 @@ export class GameService {
     if (this.gameStep[this.step - 1]?.status === 'click')  this.judgeVictory()
   }
   // 拿取遊戲紀錄
-  getAllRecords() {
-    return this.allRecords
-  }
-  gettestAllRecords() {
-    return this.testallRecords
+  get getAllRecords() {
+    return this.allRecords.filter((item,index) => ((item.length > 0) && (index !== 0)))
   }
   // 拿取選擇的紀錄
   setChose(data:stepType[]) {
-    // QQQ
     this.gameStep = data
   }
   // 拿取本地端的紀錄
   setRecord() {
-    const local = JSON.parse(localStorage.getItem('record') || '[]')
-    if(local) this.allRecords = local
-    // QQQ
-    // console.log('get')
-
-    if(localStorage.getItem('test')) {
-      this.testallRecords = JSON.parse(localStorage.getItem('test') || '[]')
-    }else {
-      for(let i = 0;i<6;i++) this.testallRecords[i] = []
-    }
+    if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
+    else for(let i = 0;i<6;i++) this.allRecords[i] = []
   }
   // 電腦動作
   checkNext() {
@@ -337,9 +297,7 @@ export class GameService {
     //紀錄
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
     this.gameStep.push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    //QQQ
-    this.testallRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
-    // console.log('testallRecords',this.testallRecords)
+    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.gameStep.length + 1,status:'click'})
 
     this.judgeVictory()
   }
