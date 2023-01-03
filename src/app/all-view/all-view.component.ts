@@ -38,7 +38,10 @@ export class AllViewComponent {
 
   constructor(private gameService: GameService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.gameService.recoverData()
+    window.onbeforeunload = () => this.gameService.setBattle()
+  }
 
   // 重置遊戲
   renewGame(): void {
@@ -54,9 +57,10 @@ export class AllViewComponent {
   next(): void {
     this.gameService.actionRecord(1)
   }
-  //  切換到對戰模式
+  // 切換到對戰模式
   toBattle() {
     this.gameService.setMode(0)
+    this.gameService.recoverData()
   }
   // 和電腦對戰
   toRobot () {
