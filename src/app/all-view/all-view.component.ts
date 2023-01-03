@@ -24,7 +24,7 @@ export class AllViewComponent {
     return this.gameService.getWin
   }
   get mode () {
-    return this.gameService.getMode === 0 ? 'battle' : 'record'
+    return !this.gameService.getMode ? 'battle' : 'record'
   }
   get stepMessage () {
     return this.gameService.getStepMessage()

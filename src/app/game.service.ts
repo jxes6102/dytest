@@ -61,9 +61,8 @@ export class GameService {
     if(this.AIStatus) this.changeAIStatus(false)
 
     this.nowFlag[0] = val
-    if(this.nowFlag[0]) {
-      this.setChose(this.allRecords[val])
-    }
+    if(this.nowFlag[0]) this.setChose(this.allRecords[val])
+
   }
   // 拿取勝利者
   get getWin() {
@@ -98,15 +97,15 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.nowFlag[0] === 0) ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.nowFlag[1] - 1]
-    if (!target)  return (this.nowFlag[0] !== 0) ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
+    const target = (!this.nowFlag[0]) ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.nowFlag[1] - 1]
+    if (!target)  return (this.nowFlag[0]) ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
     const battleSign = (target.status === 'click') ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
     const recordSign = (target.status === 'click') ? ((target.content === 1) ? this.marks[0] : this.marks[1]) : ((target.content === 1) ? this.marks[1] : this.marks[0])
 
-    if(this.nowFlag[0] === 0) return (target.status === 'click') ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
+    if(!this.nowFlag[0]) return (target.status === 'click') ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
     else return (target.status === 'click') ? (recordSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + recordSign)
   }
   //清除畫面
@@ -140,7 +139,7 @@ export class GameService {
   clickProcess(index:number) {
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
     // 檢查模式、結果、是否選擇尺寸
-    if(this.nowFlag[0] !== 0 || this.result !== 0 || (whichSize === -1)) return
+    if(this.nowFlag[0] || this.result !== 0 || (whichSize === -1)) return
     // 判斷是否可點擊
     const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     // 判斷是否可覆蓋
@@ -197,7 +196,7 @@ export class GameService {
     }
 
     // 計算對戰或紀錄模式時平手條件
-    if(this.nowFlag[0] === 0) {
+    if(!this.nowFlag[0]) {
       // 當前選擇欄位剩餘最大重
       const target = this.OXData[this.stepCount].filter(item => item.amount > 0).map(item => item.weight)
       const maxChoseWeight = Math.max(...(target.length ? target : [0]))
@@ -211,7 +210,7 @@ export class GameService {
 
     } else if(!this.gameStep[this.nowFlag[1]] && this.result === 0) this.result = 2
 
-    if((this.result !== 0) && (this.nowFlag[0] === 0)) this.noteGame()
+    if((this.result !== 0) && (!this.nowFlag[0])) this.noteGame()
 
   }
   //重置遊戲
