@@ -98,7 +98,7 @@ export class GameService {
   //拿取步驟訊息
   getStepMessage() {
     const target = (!this.nowFlag[0]) ? this.gameStep[this.gameStep.length - 1] : this.gameStep[this.nowFlag[1] - 1]
-    if (!target)  return (this.nowFlag[0]) ? '這是上' + (this.allRecords.length - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
+    if (!target)  return (this.nowFlag[0]) ? '這是上' + ((this.allRecords.filter((item) => item.length > 0).length + 1) - this.allRecords.indexOf(this.gameStep)) + '場' : '開始'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -228,7 +228,7 @@ export class GameService {
   noteGame() {
     this.gameStep = []
     // 處理歷史紀錄
-    let historyTarget:stepType[][] = this.allRecords.slice(1, 6)
+    let historyTarget:stepType[][] = this.allRecords.slice(1, this.allRecords.length)
     if(historyTarget.every((item) => item.length > 0)) {
       historyTarget.shift()
       historyTarget.push(this.allRecords[0])
