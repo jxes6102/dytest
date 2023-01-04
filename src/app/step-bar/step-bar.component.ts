@@ -19,5 +19,6 @@ export class StepBarComponent {
     if((target <= 0) || (target > this.stepLen) || isNaN(target)) return
 
     this.gameService.skipAction(target)
+    this.value = ''
   }
 }

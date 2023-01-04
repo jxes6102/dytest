@@ -17,7 +17,7 @@ export class GameService {
     AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
-    nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record index 1 is stepNum
+    nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
   */
   status:string
   result:number
