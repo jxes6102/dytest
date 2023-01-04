@@ -267,8 +267,6 @@ export class GameService {
         break
       }
     }
-
-    if (this.recordGameStep[this.nowFlag[1] - 1]?.status === this.clickStatus[0])  this.judgeVictory()
   }
   // 拿取遊戲紀錄
   get getAllRecords() {
@@ -336,6 +334,6 @@ export class GameService {
       this.nowFlag[1]++
     }
 
-    this.judgeVictory()
+    if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
   }
 }
