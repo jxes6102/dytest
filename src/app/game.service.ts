@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType,xoType,viewData,checkData,selectData,flagType } from "./gamemodel.model";
+import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemodel.model";
 
 @Injectable({
   providedIn: 'root'
@@ -7,17 +7,16 @@ import { viewType,stepType,xoType,viewData,checkData,selectData,flagType } from 
 export class GameService {
   /*
     status 當前點擊動作
-    clickStatus 點擊動作類別
+    clickStatus 點擊動作類別 click點擊 grab拿取
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改紀錄
     recordGameStep 該局遊戲紀錄
-    viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
+    viewData  畫面資料
     AIStatus 電腦是否遊玩
     AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
-    gameFlag 遊戲狀態紀錄
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record index 1 is stepNum
   */
   status:string
@@ -30,10 +29,6 @@ export class GameService {
   AIfirst:number = Math.floor(Math.random() * 2)
   OXData:xoType[][] = new selectData().getData
   marks:string[] = ["O","X"]
-  gameFlag:flagType = {
-    battle:{key:0,step:0},
-    record:{key:1,step:0}
-  }
   nowFlag:number[] = [0,0]
   clickStatus:string[] = ['click','grab']
 
@@ -337,9 +332,8 @@ export class GameService {
       this.OXData[1 - this.stepCount][whichSize].amount--
       //紀錄
       this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
-
-      this.judgeVictory()
     }
+    this.judgeVictory()
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {

@@ -23,15 +23,6 @@ export interface xoType {
     isChose:boolean
     weight:number
 }
-
-export interface flagType {
-    [name:string]:nameType,
-}
-export interface nameType {
-    key:number
-    step:number
-}
-
 export class viewData {
     private data:viewType[] = []
 
