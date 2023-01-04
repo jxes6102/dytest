@@ -17,6 +17,7 @@ export class StepBarComponent {
   send(data:string) {
     const target = Number(data)
     if((target <= 0) || (target > this.stepLen )) return
-    console.log('dodo')
+    // console.log('dodo')
+    this.gameService.skipAction(target - 1)
   }
 }

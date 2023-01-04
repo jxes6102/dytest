@@ -341,4 +341,13 @@ export class GameService {
       this.judgeVictory()
     }
   }
+  // 紀錄模式切換步驟
+  skipAction(val:number) {
+    this.clearView()
+    console.log("================================")
+    let target = this.recordGameStep.slice(0,val + 1)
+    // console.log('skipAction',val)
+    // console.log('target',target)
+
+  }
 }
