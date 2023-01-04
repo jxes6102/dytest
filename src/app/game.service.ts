@@ -17,7 +17,7 @@ export class GameService {
     marks 定義符號
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
     gameFlag 遊戲狀態紀錄
-    nowFlag 當前遊戲狀態 0 for battle 1~5 for record
+    nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record index 1 is stepNum
   */
   status:string
   result:number
@@ -40,7 +40,6 @@ export class GameService {
     this.recordGameStep = []
     this.status = 'click'
     this.setRecord()
-
   }
   // 拿取符號
   get getMarks () {
@@ -56,13 +55,11 @@ export class GameService {
   }
   // 設定模式
   setMode(val:number) {
-    this.resetGame()
     this.clearView()
-    if(this.AIStatus) this.changeAIStatus(false)
+    this.resetData()
 
     this.nowFlag[0] = val
     if(!this.isBattle) this.setChose(this.allRecords[val])
-
   }
   // 拿取勝利者
   get getWin() {
@@ -193,7 +190,6 @@ export class GameService {
       this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
         ? this.viewData[i].data : this.result
     }
-
     // 計算對戰或紀錄模式時平手條件
     if(this.isBattle) {
       // 當前選擇欄位剩餘最大重
@@ -214,6 +210,11 @@ export class GameService {
   }
   //重置遊戲
   resetGame() {
+    this.resetData()
+    this.allRecords[0] = []
+  }
+  // 重置資料 
+  resetData () {
     this.recordGameStep = []
     this.result = 0
     this.status = 'click'
@@ -297,7 +298,6 @@ export class GameService {
     this.nowFlag[1]++
     const data = (this.stepCount === 1) ? 1 : -1
     this.updateViewData(index,data,whichSize,selectTarget?.weight || 0,)
-
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
@@ -314,7 +314,7 @@ export class GameService {
   }
   // 存入在對戰模式且未分勝敗資料
   setBattle() {
-    if(this.allRecords[0].length) localStorage.setItem('record', JSON.stringify(this.allRecords))
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
   // 回復畫面資料
   recoverData() {
