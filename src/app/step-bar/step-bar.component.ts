@@ -16,8 +16,8 @@ export class StepBarComponent {
 
   send(data:string) {
     const target = Number(data)
-    if((target <= 0) || (target > this.stepLen ) || isNaN(target)) return
+    if((target <= 0) || (target > this.stepLen) || isNaN(target)) return
 
-    this.gameService.skipAction(target - 1)
+    this.gameService.skipAction(target)
   }
 }

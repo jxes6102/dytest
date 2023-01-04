@@ -217,7 +217,6 @@ export class GameService {
     } else if(!this.recordGameStep[this.nowFlag[1]] && !this.result) this.result = 2
 
     if(this.result && (this.isBattle)) this.noteGame()
-
   }
   //重置遊戲
   resetGame() {
@@ -253,20 +252,11 @@ export class GameService {
     this.allRecords[0] = []
     localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
-  // 執行紀錄
+  // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
-    switch (stepVal) {
-      case 1: {
-        if((this.nowFlag[1] === this.recordGameStep.length)) return
-        this.skipAction(this.nowFlag[1])
-        break
-      }
-      case -1: {
-        if((this.nowFlag[1] < 1)) return
-        this.skipAction(this.nowFlag[1] - 2)
-        break
-      }
-    }
+    // 當按上一步時紀錄已到第0筆 按下一步時紀錄已到最後一筆 不動作
+    if(((this.nowFlag[1] === this.recordGameStep.length) && (stepVal === 1)) || ((this.nowFlag[1] < 1) && (stepVal === -1))) return
+    this.skipAction(this.nowFlag[1] + stepVal)
   }
   // 拿取遊戲紀錄
   get getAllRecords() {
@@ -327,7 +317,7 @@ export class GameService {
     this.clearView()
     this.result = 0
     this.nowFlag[1] = 0
-    const target = this.recordGameStep.slice(0,val + 1)
+    const target = this.recordGameStep.slice(0,val)
     
     for(let item of target){
       this.updateViewData(item.wherePlace,item.content,item.useSize,this.OXData[this.stepCount].length - item.useSize)
