@@ -1,0 +1,6 @@
+<div class="wrap flexCenter">
+    <div>1~</div>
+    <input class="inputStyle" maxlength="3" type="text" [(ngModel)]="value">
+    <div>{{ '~' + stepLen}}</div>
+    <button class="robotStyle" (click)="send(value)">切換步驟</button>
+</div>

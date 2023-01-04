@@ -78,6 +78,10 @@ export class GameService {
   get getAIStatus () {
     return this.AIStatus
   }
+  // 拿取該局紀錄資料
+  get getRecordData () {
+    return this.recordGameStep
+  }
   // 設定遊戲遊玩狀態
   setStatus () {
     if(this.status === this.clickStatus[0]) this.status = this.clickStatus[1]

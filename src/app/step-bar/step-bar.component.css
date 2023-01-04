@@ -1,0 +1,30 @@
+.wrap {
+    margin:10px 0px;
+    gap: 10px;
+}
+
+.robotStyle{
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: white;
+    background-color: #e91a1a;
+    box-shadow: 0 0 4px #999;
+    outline: none;
+
+    background-position: center;
+    transition: background 0.8s;
+
+}
+
+.robotStyle:hover {
+    background: #f07474 radial-gradient(circle, transparent 1%, #f07474 1%) center/15000%;
+}
+
+.inputStyle {
+    width: 50px;
+    height: 20px;
+}

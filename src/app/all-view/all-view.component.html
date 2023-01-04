@@ -4,6 +4,7 @@
         <app-picture></app-picture>
         <app-pick *ngIf="mode === 'battle'" [playerNo]="1" [style.opacity]='(nowSign === marks[1]) ? 1 : .5'></app-pick>
     </div>
+    <app-step-bar *ngIf="mode === 'record'" ></app-step-bar>
     <div class="menu flexCenter" *ngIf="mode === 'record'">
         <button class="generalStyle" (click)="last()">上一步</button>
         <button class="backStyle" (click)="toBattle()">回到對戰模式</button>
