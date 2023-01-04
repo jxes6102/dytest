@@ -16,8 +16,8 @@ export class StepBarComponent {
 
   send(data:string) {
     const target = Number(data)
-    if((target <= 0) || (target > this.stepLen )) return
-    // console.log('dodo')
+    if((target <= 0) || (target > this.stepLen ) || isNaN(target)) return
+
     this.gameService.skipAction(target - 1)
   }
 }

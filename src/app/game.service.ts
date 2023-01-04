@@ -344,10 +344,15 @@ export class GameService {
   // 紀錄模式切換步驟
   skipAction(val:number) {
     this.clearView()
-    console.log("================================")
-    let target = this.recordGameStep.slice(0,val + 1)
-    // console.log('skipAction',val)
-    // console.log('target',target)
+    this.result = 0
+    this.nowFlag[1] = 0
+    const target = this.recordGameStep.slice(0,val + 1)
+    
+    for(let item of target){
+      this.updateViewData(item.wherePlace,item.content,item.useSize,this.OXData[this.stepCount].length - item.useSize)
+      this.nowFlag[1]++
+    }
 
+    this.judgeVictory()
   }
 }
