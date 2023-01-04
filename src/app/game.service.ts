@@ -103,9 +103,9 @@ export class GameService {
     const adjArr = ['bigSize','mediumSize','smallSize']
     const battleSign = (target.status === this.clickStatus[0]) ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
     const recordSign = (target.status === this.clickStatus[0]) ? ((target.content === 1) ? this.marks[0] : this.marks[1]) : ((target.content === 1) ? this.marks[1] : this.marks[0])
+    const sign = (this.isBattle) ? battleSign : recordSign
 
-    if(this.isBattle) return (target.status === this.clickStatus[0]) ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
-    else return (target.status === this.clickStatus[0]) ? (recordSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + recordSign)
+    return (target.status === this.clickStatus[0]) ? (sign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + sign)
   }
   //清除畫面
   clearView() {
