@@ -272,7 +272,7 @@ export class GameService {
   get getAllRecords() {
     return this.allRecords.filter((item,index) => ((item.length > 0) && (index !== 0)))
   }
-  // 拿取選擇的紀錄
+  // 設定選擇的紀錄
   setChose(data:stepType[]) {
     this.recordGameStep = data
   }
