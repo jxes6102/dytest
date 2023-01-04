@@ -128,6 +128,16 @@ export class GameService {
       else this.OXData[this.stepCount][key].isChose = false
     }
   }
+  //更新遊戲畫面
+  updateViewData (index:number,data:number,sizeIndex:number,weight?:number) {
+    if(weight || (weight === 0)) this.viewData[index].weight = weight
+    this.viewData[index].data = data
+    this.viewData[index].size = sizeIndex
+  }
+  // 存入在對戰模式且未分勝敗資料
+  setBattle() {
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
+  }
   //點擊格子
   clickAction(index:number) {
     if(this.status === this.clickStatus[0]) this.clickProcess(index)
@@ -248,23 +258,12 @@ export class GameService {
     switch (stepVal) {
       case 1: {
         if((this.nowFlag[1] === this.recordGameStep.length)) return
-
-        this.updateViewData(this.recordGameStep[this.nowFlag[1]].wherePlace,this.recordGameStep[this.nowFlag[1]].content,this.recordGameStep[this.nowFlag[1]].useSize)
-        this.nowFlag[1] += stepVal
+        this.skipAction(this.nowFlag[1])
         break
       }
       case -1: {
         if((this.nowFlag[1] < 1)) return
-
-        this.nowFlag[1] += stepVal
-        // 拿取這在此步驟之前(不包括自己)所有修改位置陣列
-        const place = this.recordGameStep.slice(0,this.nowFlag[1]).map((item)=> item.wherePlace)
-        // 有修改此位置的紀錄時才還原成在上一次修改的同一格的OX
-        if(place.includes(this.recordGameStep[this.nowFlag[1]].wherePlace)) {
-          // 取同位置上一次的修改紀錄
-          const lastRecord = this.recordGameStep.filter((item) => (item.wherePlace === this.recordGameStep[this.nowFlag[1]].wherePlace) && (item.stepID < this.recordGameStep[this.nowFlag[1]].stepID)).pop()
-          this.updateViewData(this.recordGameStep[this.nowFlag[1]].wherePlace,lastRecord?.content || 0,lastRecord?.useSize || 0)
-        } else this.updateViewData(this.recordGameStep[this.nowFlag[1]].wherePlace,0,0)
+        this.skipAction(this.nowFlag[1] - 2)
         break
       }
     }
@@ -306,16 +305,6 @@ export class GameService {
     this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()
-  }
-  //更新遊戲畫面
-  updateViewData (index:number,data:number,sizeIndex:number,weight?:number) {
-    if(weight || (weight === 0)) this.viewData[index].weight = weight
-    this.viewData[index].data = data
-    this.viewData[index].size = sizeIndex
-  }
-  // 存入在對戰模式且未分勝敗資料
-  setBattle() {
-    localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
   // 回復畫面資料
   recoverData() {
