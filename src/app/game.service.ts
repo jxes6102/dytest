@@ -6,7 +6,8 @@ import { viewType,stepType,xoType,viewData,checkData,selectData,flagType } from 
 })
 export class GameService {
   /*
-    status 點擊動作類別
+    status 當前點擊動作
+    clickStatus 點擊動作類別
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改紀錄
@@ -34,11 +35,12 @@ export class GameService {
     record:{key:1,step:0}
   }
   nowFlag:number[] = [0,0]
+  clickStatus:string[] = ['click','grab']
 
   constructor() {
     this.result = 0
     this.recordGameStep = []
-    this.status = 'click'
+    this.status = this.clickStatus[0]
     this.setRecord()
   }
   // 拿取符號
@@ -78,8 +80,8 @@ export class GameService {
   }
   // 設定遊戲遊玩狀態
   setStatus () {
-    if(this.status === 'click') this.status = 'grab'
-    else this.status = 'click'
+    if(this.status === this.clickStatus[0]) this.status = this.clickStatus[1]
+    else this.status = this.clickStatus[0]
   }
   // 改變電腦遊玩狀態
   changeAIStatus (val:boolean) {
@@ -99,11 +101,11 @@ export class GameService {
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
-    const battleSign = (target.status === 'click') ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
-    const recordSign = (target.status === 'click') ? ((target.content === 1) ? this.marks[0] : this.marks[1]) : ((target.content === 1) ? this.marks[1] : this.marks[0])
+    const battleSign = (target.status === this.clickStatus[0]) ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
+    const recordSign = (target.status === this.clickStatus[0]) ? ((target.content === 1) ? this.marks[0] : this.marks[1]) : ((target.content === 1) ? this.marks[1] : this.marks[0])
 
-    if(this.isBattle) return (target.status === 'click') ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
-    else return (target.status === 'click') ? (recordSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + recordSign)
+    if(this.isBattle) return (target.status === this.clickStatus[0]) ? (battleSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + battleSign)
+    else return (target.status === this.clickStatus[0]) ? (recordSign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + recordSign)
   }
   //清除畫面
   clearView() {
@@ -129,14 +131,14 @@ export class GameService {
   }
   //點擊格子
   clickAction(index:number) {
-    if(this.status === 'click') this.clickProcess(index)
+    if(this.status === this.clickStatus[0]) this.clickProcess(index)
     else this.grabProcess(index)
   }
   // 點擊動作
   clickProcess(index:number) {
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
     // 檢查模式、結果、是否選擇尺寸
-    if(!this.isBattle || this.result !== 0 || (whichSize === -1)) return
+    if(!this.isBattle || this.result || (whichSize === -1)) return
     // 判斷是否可點擊
     const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     // 判斷是否可覆蓋
@@ -149,12 +151,12 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
-    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
-    if((this.result !== 0) || !this.AIStatus) return
+    if(this.result || !this.AIStatus) return
     else this.checkNext()
   }
   // 拿取動作
@@ -162,7 +164,7 @@ export class GameService {
     const target = this.viewData[index]
     // 同一回合只能拿一次
     const lastStep = this.allRecords[0][this.allRecords[0].length - 1]
-    if(lastStep?.status === 'grab' || this.result !== 0) {
+    if((lastStep?.status === this.clickStatus[1]) || this.result) {
       this.setStatus()
       return
     }
@@ -174,7 +176,7 @@ export class GameService {
     this.checkRecord[index].pop()
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
-    this.allRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:'grab'})
+    this.allRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]})
     this.setStatus()
   }
   // 判斷勝負
@@ -200,12 +202,12 @@ export class GameService {
       Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
       // 選擇欄位剩餘數量
       const count = this.OXData.flat(1).reduce((acc, item) => acc + item.amount,0)
-      // 選擇欄位剩餘數量等於零和勝負未分 當前選擇欄位剩餘的最大重小於等於畫面上敵對和空白格最小重和勝負未分 是平手
-      if(((count === 0) && (this.result === 0)) || ((minViewWeight >= maxChoseWeight) && (this.result === 0))) this.result = 2
+      // 選擇欄位剩餘數量等於零和勝負未分 畫面上敵對和空白格最小重 大於等於 當前選擇欄位剩餘的最大重 和勝負未分 是平手
+      if((!count && !this.result) || ((minViewWeight >= maxChoseWeight) && !this.result)) this.result = 2
 
-    } else if(!this.recordGameStep[this.nowFlag[1]] && this.result === 0) this.result = 2
+    } else if(!this.recordGameStep[this.nowFlag[1]] && !this.result) this.result = 2
 
-    if((this.result !== 0) && (this.isBattle)) this.noteGame()
+    if(this.result && (this.isBattle)) this.noteGame()
 
   }
   //重置遊戲
@@ -217,7 +219,7 @@ export class GameService {
   resetData () {
     this.recordGameStep = []
     this.result = 0
-    this.status = 'click'
+    this.status = this.clickStatus[0]
     this.checkRecord = new checkData().getData
     this.nowFlag[1] = 0
   }
@@ -268,7 +270,7 @@ export class GameService {
       }
     }
 
-    if (this.recordGameStep[this.nowFlag[1] - 1]?.status === 'click')  this.judgeVictory()
+    if (this.recordGameStep[this.nowFlag[1] - 1]?.status === this.clickStatus[0])  this.judgeVictory()
   }
   // 拿取遊戲紀錄
   get getAllRecords() {
@@ -301,14 +303,14 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
-    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:'click'})
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()
   }
   //更新遊戲畫面
   updateViewData (index:number,data:number,sizeIndex:number,weight?:number) {
-    if(weight || weight === 0) this.viewData[index].weight = weight
+    if(weight || (weight === 0)) this.viewData[index].weight = weight
     this.viewData[index].data = data
     this.viewData[index].size = sizeIndex
   }
@@ -325,12 +327,12 @@ export class GameService {
       const whichSize = item.useSize
       const index = item.wherePlace
       // 給予畫面資料
-      if(item.status === 'click') this.nowFlag[1]++
+      if(item.status === this.clickStatus[0]) this.nowFlag[1]++
       const data = (this.stepCount === 1) ? 1 : -1
       this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
       this.OXData[1 - this.stepCount][whichSize].amount--
       //紀錄
-      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:'click'})
+      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
 
       this.judgeVictory()
     }
