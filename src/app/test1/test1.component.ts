@@ -28,8 +28,8 @@ export class Test1Component {
 
     // console.log('a')
     const resp = await this.httpGET('https://api.thecatapi.com/v1/images/search?limit=10');
-    this.imgUrlLeft = Object.values(resp)[0].url
-    this.imgUrlRight = Object.values(resp)[6].url
+    this.imgUrlLeft = Object.values(resp)[0].url || ''
+    this.imgUrlRight = Object.values(resp)[6].url ||  ''
     // console.log('c')
     // console.log('2 ngOnInit')
   }
@@ -38,14 +38,14 @@ export class Test1Component {
     const apiUrl = args[0] || ''
 
     try {
-        const result$ = this.http.get(apiUrl).pipe(
+        const result = this.http.get(apiUrl).pipe(
             tap((resp: object) => {
                 // console.log('resp',resp)
                 return resp;
             })
         )
         // console.log('b')
-        return await lastValueFrom(result$)
+        return await lastValueFrom(result)
     } catch (err) {
         return Promise.reject(err)
     }
