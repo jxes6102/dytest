@@ -288,6 +288,26 @@ export class GameService {
     if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
     else for(let i = 0;i<6;i++) this.allRecords[i] = []
   }
+  // 紀錄模式切換步驟
+  skipAction(val:number) {
+    this.clearView()
+    this.result = 0
+    this.nowFlag[1] = 0
+    this.checkRecord = new checkData().getData
+    const target = this.recordGameStep.slice(0,val)
+    
+    for(let item of target){
+      this.checkRecord[item.wherePlace].push({wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
+      this.nowFlag[1]++
+    }
+
+    for(let i = 0;i<9;i++) {
+      const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
+      if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
+    }
+
+    if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
+  }
   // 電腦動作
   checkNext() {
     // selectTarget 選取要下的大小
@@ -310,25 +330,5 @@ export class GameService {
     this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()
-  }
-  // 紀錄模式切換步驟
-  skipAction(val:number) {
-    this.clearView()
-    this.result = 0
-    this.nowFlag[1] = 0
-    this.checkRecord = new checkData().getData
-    const target = this.recordGameStep.slice(0,val)
-    
-    for(let item of target){
-      this.checkRecord[item.wherePlace].push({wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
-      this.nowFlag[1]++
-    }
-
-    for(let i = 0;i<9;i++) {
-      const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
-      if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
-    }
-
-    if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
   }
 }
