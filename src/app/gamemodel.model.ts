@@ -5,12 +5,6 @@ export interface stepType {
     stepID:number
     status:string
 }
-export interface buttonType {
-    text:string
-    mode:string
-    styleName:string
-    isClose:boolean
-}
 //每一個格子
 export interface viewType {
     data: number
