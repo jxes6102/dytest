@@ -51,14 +51,6 @@ export class AllViewComponent {
     this.gameService.clearView()
     this.gameService.changeAIStatus(false)
   }
-  //上一步
-  last(): void {
-    this.gameService.actionRecord(-1)
-  }
-  //下一步
-  next(): void {
-    this.gameService.actionRecord(1)
-  }
   // 切換到對戰模式
   toBattle() {
     this.gameService.setMode(0)

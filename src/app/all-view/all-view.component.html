@@ -6,9 +6,7 @@
     </div>
     <app-step-bar *ngIf="mode === 'record'" ></app-step-bar>
     <div class="menu flexCenter" *ngIf="mode === 'record'">
-        <button class="generalStyle" (click)="last()">上一步</button>
         <button class="backStyle" (click)="toBattle()">回到對戰模式</button>
-        <button class="generalStyle" (click)="next()">下一步</button>
     </div>
     <div class="menu flexCenter" *ngIf="mode === 'battle'">
         <div class="statusStyle">{{status}}</div>

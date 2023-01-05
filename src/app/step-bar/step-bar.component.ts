@@ -21,4 +21,12 @@ export class StepBarComponent {
     this.gameService.skipAction(target)
     this.value = ''
   }
+  //上一步
+  last(): void {
+    this.gameService.actionRecord(-1)
+  }
+  //下一步
+  next(): void {
+    this.gameService.actionRecord(1)
+  }
 }
