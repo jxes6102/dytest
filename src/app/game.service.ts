@@ -310,18 +310,23 @@ export class GameService {
       //紀錄
       this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
     }
-    this.judgeVictory()
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {
     this.clearView()
     this.result = 0
     this.nowFlag[1] = 0
+    this.checkRecord = new checkData().getData
     const target = this.recordGameStep.slice(0,val)
     
     for(let item of target){
-      this.updateViewData(item.wherePlace,item.content,item.useSize,this.OXData[this.stepCount].length - item.useSize)
+      this.checkRecord[item.wherePlace].push({wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
       this.nowFlag[1]++
+    }
+
+    for(let i = 0;i<9;i++) {
+      const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
+      if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
     }
 
     if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
