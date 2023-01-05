@@ -6,36 +6,33 @@ import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemo
 })
 export class GameService {
   /*
-    status 當前點擊動作
     clickStatus 點擊動作類別 click點擊 grab拿取
+    status 當前點擊動作
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改紀錄
     recordGameStep 該局遊戲紀錄
+    OXData 選擇視窗資料 index 0 for player1,index 1 for player2
     viewData  畫面資料
     AIStatus 電腦是否遊玩
     AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
-    OXData 選擇視窗資料 index 0 for player1,index 1 for player2
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
   */
-  status:string
-  result:number
+  clickStatus:string[] = ['click','grab']
+  status:string = this.clickStatus[0]
+  result:number = 0
   allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
-  recordGameStep:stepType[]
+  recordGameStep:stepType[] = []
+  OXData:xoType[][] = new selectData().getData
   viewData:viewType[] = new viewData().getData
   AIStatus:boolean = false
   AIfirst:number = Math.floor(Math.random() * 2)
-  OXData:xoType[][] = new selectData().getData
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
-  clickStatus:string[] = ['click','grab']
-
+  
   constructor() {
-    this.result = 0
-    this.recordGameStep = []
-    this.status = this.clickStatus[0]
     this.setRecord()
   }
   // 拿取符號
@@ -62,6 +59,7 @@ export class GameService {
   get getWin() {
     return this.result
   }
+  //拿取選擇畫面資料
   get getOXData() {
     return this.OXData
   }
@@ -69,29 +67,27 @@ export class GameService {
   get getViewData () {
     return this.viewData
   }
-  // 拿取電腦遊玩狀態
-  get getAIStatus () {
-    return this.AIStatus
-  }
-  // 拿取該局紀錄資料
-  get getRecordData () {
-    return this.recordGameStep
-  }
   // 設定遊戲遊玩狀態
   setStatus () {
     if(this.status === this.clickStatus[0]) this.status = this.clickStatus[1]
     else this.status = this.clickStatus[0]
   }
-  // 改變電腦遊玩狀態
-  changeAIStatus (val:boolean) {
-    this.AIStatus = val
-    if(!val) return
-    this.AIfirst = Math.floor(Math.random() * 2)
-    if(this.AIfirst) this.checkNext()
-  }
   // 拿取遊戲遊玩狀態
   get getStatus () {
     return this.status
+  }
+  //重置遊戲
+  resetGame() {
+    this.resetData()
+    this.allRecords[0] = []
+  }
+  // 重置資料 
+  resetData () {
+    this.recordGameStep = []
+    this.result = 0
+    this.status = this.clickStatus[0]
+    this.checkRecord = new checkData().getData
+    this.nowFlag[1] = 0
   }
   //拿取步驟訊息
   getStepMessage() {
@@ -235,18 +231,9 @@ export class GameService {
 
     if(this.result && (this.isBattle)) this.noteGame()
   }
-  //重置遊戲
-  resetGame() {
-    this.resetData()
-    this.allRecords[0] = []
-  }
-  // 重置資料 
-  resetData () {
-    this.recordGameStep = []
-    this.result = 0
-    this.status = this.clickStatus[0]
-    this.checkRecord = new checkData().getData
-    this.nowFlag[1] = 0
+  // 拿取該局紀錄資料
+  get getRecordData () {
+    return this.recordGameStep
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
@@ -307,6 +294,17 @@ export class GameService {
     }
 
     if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
+  }
+  // 拿取電腦遊玩狀態
+  get getAIStatus () {
+    return this.AIStatus
+  }
+  // 改變電腦遊玩狀態
+  changeAIStatus (val:boolean) {
+    this.AIStatus = val
+    if(!val) return
+    this.AIfirst = Math.floor(Math.random() * 2)
+    if(this.AIfirst) this.checkNext()
   }
   // 電腦動作
   checkNext() {
