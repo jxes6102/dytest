@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RecordService } from './record.service';
 import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemodel.model";
 
 @Injectable({
@@ -32,8 +33,9 @@ export class GameService {
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
   
-  constructor() {
+  constructor(private recordService: RecordService) {
     this.setRecord()
+    this.recordService.test()
   }
   // 拿取符號
   get getMarks () {
