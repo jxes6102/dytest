@@ -106,4 +106,10 @@
     flex-direction: column;
     scale: 0.4;
 }
+.menu {
+    width: 150%;
+    height: auto;
+    margin-top: 20px;
+    gap: 20px;
+}
 }
