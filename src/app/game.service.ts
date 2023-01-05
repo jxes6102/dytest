@@ -138,6 +138,23 @@ export class GameService {
   setBattle() {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
+  // 回復畫面資料
+  recoverData() {
+    const target = this.allRecords[0]
+    if(!target.length) return
+
+    for(let item of target) {
+      const whichSize = item.useSize
+      const index = item.wherePlace
+      // 給予畫面資料
+      if(item.status === this.clickStatus[0]) this.nowFlag[1]++
+      const data = (this.stepCount === 1) ? 1 : -1
+      this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
+      this.OXData[1 - this.stepCount][whichSize].amount--
+      //紀錄
+      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+    }
+  }
   //點擊格子
   clickAction(index:number) {
     if(this.status === this.clickStatus[0]) this.clickProcess(index)
@@ -293,23 +310,6 @@ export class GameService {
     this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()
-  }
-  // 回復畫面資料
-  recoverData() {
-    const target = this.allRecords[0]
-    if(!target.length) return
-
-    for(let item of target) {
-      const whichSize = item.useSize
-      const index = item.wherePlace
-      // 給予畫面資料
-      if(item.status === this.clickStatus[0]) this.nowFlag[1]++
-      const data = (this.stepCount === 1) ? 1 : -1
-      this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
-      this.OXData[1 - this.stepCount][whichSize].amount--
-      //紀錄
-      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
-    }
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {
