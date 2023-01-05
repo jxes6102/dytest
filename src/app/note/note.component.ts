@@ -17,6 +17,5 @@ export class NoteComponent {
   // 切換到紀錄模式
   action(val:number) {
     this.gameService.setMode(val + 1)
-    this.gameService.setBattle()
   }
 }

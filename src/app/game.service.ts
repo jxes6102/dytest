@@ -130,7 +130,7 @@ export class GameService {
     this.viewData[index].data = data
     this.viewData[index].size = sizeIndex
   }
-  // 存入在對戰模式且未分勝敗資料
+  // 存入對戰資料
   setBattle() {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
@@ -254,7 +254,7 @@ export class GameService {
     // 生成歷史紀錄
     for(let i = 1;i<=5;i++) this.allRecords[i] = historyTarget[i-1]
     this.allRecords[0] = []
-    localStorage.setItem('record', JSON.stringify(this.allRecords))
+    this.setBattle()
   }
   // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
