@@ -40,7 +40,9 @@ export class AllViewComponent {
 
   ngOnInit(): void {
     this.gameService.recoverData()
-    window.onbeforeunload = () => this.gameService.setBattle()
+    window.onbeforeunload = () => {
+      if(!this.AIStatus) this.gameService.setBattle()
+    }
   }
 
   // 重置遊戲
