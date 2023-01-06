@@ -201,7 +201,7 @@ export class GameService {
     const where = this.viewData[index].size
     this.OXData[this.stepCount][where].amount++
     //還原上一次修改的資料
-    this.recordService.deleteCheckRecord(index)
+    this.recordService.updatedCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]})

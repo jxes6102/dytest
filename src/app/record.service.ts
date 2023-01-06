@@ -46,11 +46,9 @@ export class RecordService {
   clearCheckRecord() {
     this.checkRecord = new checkData().getData
   }
-  updatedCheckRecord(index:number,data:stepType) {
-    this.checkRecord[index].push(data) 
-  }
-  deleteCheckRecord(index:number) {
-    this.checkRecord[index].pop()
+  updatedCheckRecord(index:number,data?:stepType) {
+    if(data)this.checkRecord[index].push(data)
+    else this.checkRecord[index].pop()
   }
   //拿取本地紀錄
   setLocal() {
