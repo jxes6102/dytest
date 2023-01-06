@@ -40,7 +40,7 @@ export class GameService {
   }
   
   constructor(private recordService: RecordService) {
-    // 拿取本地端的紀錄
+    // 拿取本地端紀錄
     this.recordService.setLocal()
   }
   // 拿取符號
@@ -61,7 +61,7 @@ export class GameService {
     this.resetData()
 
     this.nowFlag[0] = val
-    if(!this.isBattle) this.setChose(this.allRecords[val])
+    if(!this.isBattle) this.recordService.setNowRecord(this.allRecords[val])
   }
   // 拿取勝利者
   get getWin() {
@@ -248,10 +248,6 @@ export class GameService {
   // 拿取遊戲紀錄
   get getAllRecords() {
     return this.allRecords.filter((item,index) => ((item.length > 0) && (index !== 0)))
-  }
-  // 設定選擇的紀錄
-  setChose(data:stepType[]) {
-    this.recordService.setNowRecord(data)
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {
