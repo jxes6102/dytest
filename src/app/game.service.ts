@@ -40,7 +40,8 @@ export class GameService {
   }
   
   constructor(private recordService: RecordService) {
-    this.setRecord()
+    // 拿取本地端的紀錄
+    this.recordService.setLocal()
   }
   // 拿取符號
   get getMarks () {
@@ -137,10 +138,6 @@ export class GameService {
     this.viewData[index].data = data
     this.viewData[index].size = sizeIndex
   }
-  // 存入對戰資料
-  setBattle() {
-    localStorage.setItem('record', JSON.stringify(this.allRecords))
-  }
   // 回復畫面資料
   recoverData() {
     const target = this.allRecords[0]
@@ -180,8 +177,8 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]}) 
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -205,7 +202,7 @@ export class GameService {
     this.checkRecord[index].pop()
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
-    this.allRecords[0].push({wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]})
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]})
     this.setStatus()
   }
   // 判斷勝負
@@ -242,6 +239,10 @@ export class GameService {
   get getRecordData () {
     return this.recordGameStep
   }
+  // 存入對戰資料
+  setBattle() {
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
+  }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
     this.recordService.setNowRecord([])
@@ -276,11 +277,6 @@ export class GameService {
   // 設定選擇的紀錄
   setChose(data:stepType[]) {
     this.recordService.setNowRecord(data)
-  }
-  // 拿取本地端的紀錄
-  setRecord() {
-    if(localStorage.getItem('record')) this.recordService.setAllRecords(JSON.parse(localStorage.getItem('record') || '[]'))
-    else this.recordService.setAllRecords(new Array(6))
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {

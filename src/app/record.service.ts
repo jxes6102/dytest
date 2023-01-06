@@ -26,4 +26,13 @@ export class RecordService {
     this.allRecords = data
   }
 
+  updatedAllRecords(index:number,data:stepType) {
+    this.allRecords[index].push(data) 
+  }
+
+  setLocal() {
+    if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
+    else this.allRecords = new Array(6)
+  }
+
 }
