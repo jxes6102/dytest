@@ -43,7 +43,6 @@ export class GameService {
   }
   
   constructor(private recordService: RecordService) {
-    // 拿取本地端紀錄
     this.recordService.setLocal()
   }
   // 拿取符號
@@ -259,13 +258,10 @@ export class GameService {
     this.nowFlag[1] = 0
     this.recordService.clearCheckRecord()
     const target = this.recordGameStep.slice(0,val)
-    
-    for(let item of target){
-      this.recordService.updatedCheckRecord(item.wherePlace,{wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
-      this.nowFlag[1]++
-    }
+    this.recordService.setCheckRecord(target)
+    this.nowFlag[1] = val
     //修改畫面
-    for(let i = 0;i<9;i++) {
+    for(let i = 0;i<this.checkRecord.length;i++) {
       const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
       if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
     }

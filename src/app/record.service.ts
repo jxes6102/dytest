@@ -38,6 +38,9 @@ export class RecordService {
     return this.checkRecord
   }
   //修改格子紀錄
+  setCheckRecord(data:stepType[]) {
+    for(let item of data)this.updatedCheckRecord(item.wherePlace,{wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.checkRecord[item.wherePlace].length,status:item.status})
+  }
   clearCheckRecord() {
     this.checkRecord = new checkData().getData
   }
