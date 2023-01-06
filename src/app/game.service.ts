@@ -241,7 +241,7 @@ export class GameService {
   }
   // 存入對戰資料
   setBattle() {
-    localStorage.setItem('record', JSON.stringify(this.allRecords))
+    this.recordService.saveBattle()
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {

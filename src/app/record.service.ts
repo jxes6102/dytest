@@ -35,4 +35,8 @@ export class RecordService {
     else this.allRecords = new Array(6)
   }
 
+  saveBattle() {
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
+  }
+
 }
