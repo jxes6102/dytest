@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RecordService } from './record.service';
-import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemodel.model";
+import { viewType,xoType,viewData,selectData } from "./gamemodel.model";
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +10,19 @@ export class GameService {
     clickStatus 點擊動作類別 click點擊 grab拿取
     status 當前點擊動作
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
-    allRecords 所有遊戲紀錄
-    checkRecord 紀錄每個格子的修改紀錄
-    recordGameStep 該局遊戲紀錄
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
     viewData  畫面資料
     AIStatus 電腦是否遊玩
     AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
+    allRecords 所有遊戲紀錄
+    checkRecord 紀錄每個格子的修改紀錄
+    recordGameStep 該局遊戲紀錄
   */
   clickStatus:string[] = ['click','grab']
   status:string = this.clickStatus[0]
   result:number = 0
-  checkRecord:stepType[][] = new checkData().getData
   OXData:xoType[][] = new selectData().getData
   viewData:viewType[] = new viewData().getData
   AIStatus:boolean = false
@@ -37,6 +36,10 @@ export class GameService {
   // 拿取全部對戰資料
   get allRecords() {
     return this.recordService.getAllRecords
+  }
+  // 拿取格子紀錄
+  get checkRecord() {
+    return this.recordService.getCheckRecord
   }
   
   constructor(private recordService: RecordService) {
@@ -94,7 +97,7 @@ export class GameService {
     this.recordService.setNowRecord([])
     this.result = 0
     this.status = this.clickStatus[0]
-    this.checkRecord = new checkData().getData
+    this.recordService.clearCheckRecord()
     this.nowFlag[1] = 0
   }
   //拿取步驟訊息
@@ -152,7 +155,7 @@ export class GameService {
       this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
       this.OXData[1 - this.stepCount][whichSize].amount--
       //紀錄
-      this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+      this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
     }
   }
   //點擊格子
@@ -177,7 +180,7 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]}) 
+    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
     // 勝負判斷
     this.judgeVictory()
@@ -199,7 +202,7 @@ export class GameService {
     const where = this.viewData[index].size
     this.OXData[this.stepCount][where].amount++
     //還原上一次修改的資料
-    this.checkRecord[index].pop()
+    this.recordService.deleteCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]})
@@ -254,11 +257,11 @@ export class GameService {
     this.clearView()
     this.result = 0
     this.nowFlag[1] = 0
-    this.checkRecord = new checkData().getData
+    this.recordService.clearCheckRecord()
     const target = this.recordGameStep.slice(0,val)
     
     for(let item of target){
-      this.checkRecord[item.wherePlace].push({wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
+      this.recordService.updatedCheckRecord(item.wherePlace,{wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
       this.nowFlag[1]++
     }
 
@@ -298,7 +301,7 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
-    this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()

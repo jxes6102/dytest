@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { stepType } from "./gamemodel.model";
+import { stepType,checkData } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -7,6 +7,7 @@ export class RecordService {
 
   nowRecord:stepType[] = []
   allRecords:stepType[][] = []
+  checkRecord:stepType[][] = new checkData().getData
 
   constructor() {}
   //拿取現在紀錄
@@ -27,6 +28,20 @@ export class RecordService {
   }
   updatedAllRecords(index:number,data:stepType) {
     this.allRecords[index].push(data) 
+  }
+  //拿取格子紀錄
+  get getCheckRecord() {
+    return this.checkRecord
+  }
+  //修改格子紀錄
+  clearCheckRecord() {
+    this.checkRecord = new checkData().getData
+  }
+  updatedCheckRecord(index:number,data:stepType) {
+    this.checkRecord[index].push(data) 
+  }
+  deleteCheckRecord(index:number) {
+    this.checkRecord[index].pop()
   }
   //拿取本地紀錄
   setLocal() {
