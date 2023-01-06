@@ -25,7 +25,7 @@
 
 @media screen and (max-width: 768px) {
     .wrap {
-        width: 70px;
+        width: 65px;
         height: 300px;
         margin: 10px 0px;
         background: linear-gradient(to bottom right,#ffc3a0,#ffafbd);
@@ -35,8 +35,8 @@
     }
     
     .block{
-        width: 70px;
-        height: 70px;
+        width: 65px;
+        height: 65px;
         flex-direction: column;
     }
 
