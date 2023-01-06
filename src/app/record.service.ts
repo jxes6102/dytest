@@ -4,7 +4,11 @@ import { stepType,checkData } from "./gamemodel.model";
   providedIn: 'root'
 })
 export class RecordService {
-
+  /*
+    nowRecord 該局遊戲紀錄
+    allRecords 所有遊戲紀錄
+    checkRecord 紀錄每個格子的修改紀錄
+  */
   nowRecord:stepType[] = []
   allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
@@ -52,7 +56,7 @@ export class RecordService {
   saveBattle() {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
-  //記錄此次遊戲，只記錄有分勝敗的局
+  //記錄此次遊戲
   noteGame() {
     this.nowRecord = []
     // 處理歷史紀錄

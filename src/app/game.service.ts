@@ -264,7 +264,7 @@ export class GameService {
       this.recordService.updatedCheckRecord(item.wherePlace,{wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.nowFlag[1] ,status:item.status})
       this.nowFlag[1]++
     }
-
+    //修改畫面
     for(let i = 0;i<9;i++) {
       const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
       if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
