@@ -101,7 +101,7 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    if(this.isBattle && !this.allRecords[0].length) return '開始'
+    if(this.isBattle && !this.allRecords[0]?.length) return '開始'
     const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
     if (!target)  return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
 
@@ -249,7 +249,7 @@ export class GameService {
   }
   // 拿取遊戲紀錄
   get getAllRecords() {
-    return this.allRecords.filter((item,index) => ((item.length > 0) && (index !== 0)))
+    return this.allRecords.filter((item,index) => ((item?.length > 0) && (index !== 0)))
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {

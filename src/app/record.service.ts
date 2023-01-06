@@ -10,7 +10,7 @@ export class RecordService {
     checkRecord 紀錄每個格子的修改
   */
   nowRecord:stepType[] = []
-  allRecords:stepType[][] = new Array(6).fill([])
+  allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
 
   constructor() {}
@@ -32,7 +32,7 @@ export class RecordService {
     this.allRecords = data
   }
   updatedAllRecords(index:number,data:stepType) {
-    if(!this.allRecords[index].length) this.allRecords[index] = []
+    if(!this.allRecords[index]?.length) this.allRecords[index] = []
     this.allRecords[index].push(data)
   }
   //拿取格子紀錄
@@ -54,7 +54,7 @@ export class RecordService {
   //拿取本地紀錄
   setLocal() {
     if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
-    else this.allRecords = new Array(6).fill([])
+    else this.allRecords = []
   }
   //紀錄對戰資料
   saveBattle() {
