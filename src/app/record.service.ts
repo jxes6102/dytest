@@ -10,7 +10,7 @@ export class RecordService {
     checkRecord 紀錄每個格子的修改
   */
   nowRecord:stepType[] = []
-  allRecords:stepType[][] = []
+  allRecords:stepType[][] = new Array(6).fill([])
   checkRecord:stepType[][] = new checkData().getData
 
   constructor() {}
@@ -32,7 +32,8 @@ export class RecordService {
     this.allRecords = data
   }
   updatedAllRecords(index:number,data:stepType) {
-    this.allRecords[index].push(data) 
+    if(!this.allRecords[index].length) this.allRecords[index] = []
+    this.allRecords[index].push(data)
   }
   //拿取格子紀錄
   get getCheckRecord() {
@@ -53,7 +54,7 @@ export class RecordService {
   //拿取本地紀錄
   setLocal() {
     if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
-    else this.allRecords = new Array(6)
+    else this.allRecords = new Array(6).fill([])
   }
   //紀錄對戰資料
   saveBattle() {
@@ -64,12 +65,12 @@ export class RecordService {
     this.nowRecord = []
     // 處理歷史紀錄
     let historyTarget:stepType[][] = this.allRecords.slice(1, this.allRecords.length)
-    if(historyTarget.every((item) => item.length > 0)) {
+    if(historyTarget.every((item) => item?.length > 0)) {
       historyTarget.shift()
       historyTarget.push(this.allRecords[0])
     }else {
       for(let i = 0;i<historyTarget.length;i++) {
-        if(!historyTarget[i].length) {
+        if(!historyTarget[i]?.length) {
           historyTarget[i] = this.allRecords[0]
           break
         }

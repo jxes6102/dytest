@@ -101,8 +101,9 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0].length - 1] : this.nowRecord[this.nowFlag[1] - 1]
-    if (!target)  return (this.isBattle) ? '開始' : '這是上' + ((this.allRecords.filter((item) => item.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
+    if(this.isBattle && !this.allRecords[0].length) return '開始'
+    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
+    if (!target)  return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -142,7 +143,7 @@ export class GameService {
   // 回復畫面資料
   recoverData() {
     const target = this.allRecords[0]
-    if(!target.length) return
+    if(!target?.length) return
 
     for(let item of target) {
       const whichSize = item.useSize
@@ -177,8 +178,8 @@ export class GameService {
     this.updateViewData(index,data,whichSize,this.OXData[1 - this.stepCount].find((item) => item.isChose)?.weight || 0)
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
-    const stepNum = this.allRecords[0].length
-    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+    const stepNum = this.allRecords[0]?.length || 0
+    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
     // 勝負判斷
     this.judgeVictory()
