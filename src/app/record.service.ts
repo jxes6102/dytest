@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { viewType,stepType,xoType,viewData,checkData,selectData } from "./gamemodel.model";
+import { stepType } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })

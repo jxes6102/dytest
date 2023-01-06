@@ -303,7 +303,7 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0].length
     this.checkRecord[index].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.allRecords[0].push({wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()
   }
