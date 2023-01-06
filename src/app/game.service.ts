@@ -233,32 +233,11 @@ export class GameService {
 
     } else if(!this.recordGameStep[this.nowFlag[1]] && !this.result) this.result = 2
 
-    if(this.result && (this.isBattle)) this.noteGame()
+    if(this.result && (this.isBattle)) this.recordService.noteGame()
   }
   // 存入對戰資料
   setBattle() {
     this.recordService.saveBattle()
-  }
-  //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
-  noteGame() {
-    this.recordService.setNowRecord([])
-    // 處理歷史紀錄
-    let historyTarget:stepType[][] = this.allRecords.slice(1, this.allRecords.length)
-    if(historyTarget.every((item) => item.length > 0)) {
-      historyTarget.shift()
-      historyTarget.push(this.allRecords[0])
-    }else {
-      for(let i = 0;i<historyTarget.length;i++) {
-        if(!historyTarget[i].length) {
-          historyTarget[i] = this.allRecords[0]
-          break
-        }
-      }
-    }
-    // 生成歷史紀錄
-    for(let i = 1;i<=5;i++) this.allRecords[i] = historyTarget[i-1]
-    this.allRecords[0] = []
-    this.setBattle()
   }
   // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
