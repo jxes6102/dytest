@@ -23,19 +23,24 @@ export class GameService {
   clickStatus:string[] = ['click','grab']
   status:string = this.clickStatus[0]
   result:number = 0
-  allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
-  recordGameStep:stepType[] = []
   OXData:xoType[][] = new selectData().getData
   viewData:viewType[] = new viewData().getData
   AIStatus:boolean = false
   AIfirst:number = Math.floor(Math.random() * 2)
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
+
+  get recordGameStep() {
+    return this.recordService.getNowRecord
+  }
+
+  get allRecords() {
+    return this.recordService.getAllRecords
+  }
   
   constructor(private recordService: RecordService) {
     this.setRecord()
-    this.recordService.test()
   }
   // 拿取符號
   get getMarks () {
@@ -85,7 +90,7 @@ export class GameService {
   }
   // 重置資料 
   resetData () {
-    this.recordGameStep = []
+    this.recordService.setNowRecord([])
     this.result = 0
     this.status = this.clickStatus[0]
     this.checkRecord = new checkData().getData
@@ -239,7 +244,7 @@ export class GameService {
   }
   //記錄此次遊戲，只記錄有分勝敗的局，最多5筆
   noteGame() {
-    this.recordGameStep = []
+    this.recordService.setNowRecord([])
     // 處理歷史紀錄
     let historyTarget:stepType[][] = this.allRecords.slice(1, this.allRecords.length)
     if(historyTarget.every((item) => item.length > 0)) {
@@ -270,12 +275,12 @@ export class GameService {
   }
   // 設定選擇的紀錄
   setChose(data:stepType[]) {
-    this.recordGameStep = data
+    this.recordService.setNowRecord(data)
   }
   // 拿取本地端的紀錄
   setRecord() {
-    if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
-    else for(let i = 0;i<6;i++) this.allRecords[i] = []
+    if(localStorage.getItem('record')) this.recordService.setAllRecords(JSON.parse(localStorage.getItem('record') || '[]'))
+    else this.recordService.setAllRecords(new Array(6))
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {
