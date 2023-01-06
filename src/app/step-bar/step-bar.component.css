@@ -11,8 +11,8 @@
 
 @media screen and (max-width: 768px) {
     .wrap {
-        width: 150vw;
-        margin:10px 0px;
+        width: 100%;
+        margin-top: 10px;
         gap: 10px;
     }
 }

@@ -34,10 +34,8 @@ body {
     background-color: rgb(101 163 13);
     box-shadow: 0 0 4px #999;
     outline: none;
-
     background-position: center;
     transition: background 0.8s;
-
 }
 
 .generalStyle:hover {
@@ -55,10 +53,8 @@ body {
     background-color: #2196f3;
     box-shadow: 0 0 4px #999;
     outline: none;
-
     background-position: center;
     transition: background 0.8s;
-
 }
 
 .backStyle:hover {
@@ -76,12 +72,57 @@ body {
     background-color: #e91a1a;
     box-shadow: 0 0 4px #999;
     outline: none;
-
     background-position: center;
     transition: background 0.8s;
-
 }
 
 .robotStyle:hover {
     background: #f07474 radial-gradient(circle, transparent 1%, #f07474 1%) center/15000%;
+}
+
+@media screen and (max-width: 768px) {
+    .generalStyle{
+        border: none;
+        border-radius: 5px;
+        padding: 6px 9px;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: white;
+        background-color: rgb(101 163 13);
+        box-shadow: 0 0 4px #999;
+        outline: none;
+        background-position: center;
+        transition: background 0.8s;
+    }
+    
+    .backStyle{
+        border: none;
+        border-radius: 5px;
+        padding: 6px 9px;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: white;
+        background-color: #2196f3;
+        box-shadow: 0 0 4px #999;
+        outline: none;
+        background-position: center;
+        transition: background 0.8s;
+    }
+    
+    .robotStyle{
+        border: none;
+        border-radius: 5px;
+        padding: 6px 9px;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: white;
+        background-color: #e91a1a;
+        box-shadow: 0 0 4px #999;
+        outline: none;
+        background-position: center;
+        transition: background 0.8s;
+    }
 }
