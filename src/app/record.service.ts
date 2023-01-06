@@ -7,7 +7,7 @@ export class RecordService {
   /*
     nowRecord 該局遊戲紀錄
     allRecords 所有遊戲紀錄
-    checkRecord 紀錄每個格子的修改紀錄
+    checkRecord 紀錄每個格子的修改
   */
   nowRecord:stepType[] = []
   allRecords:stepType[][] = []

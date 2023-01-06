@@ -17,7 +17,7 @@ export class GameService {
     marks 定義符號
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
     allRecords 所有遊戲紀錄
-    checkRecord 紀錄每個格子的修改紀錄
+    checkRecord 紀錄每個格子的修改
     nowRecord 該局遊戲紀錄
   */
   clickStatus:string[] = ['click','grab']
