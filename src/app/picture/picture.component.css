@@ -79,3 +79,87 @@
     border-left: 1px solid #252a34;
     border-top: 1px solid #252a34;
 }
+
+@media screen and (max-width: 768px) {
+    .playView {
+        width: 180px;
+        height: 180px;
+        margin-top: 10px;
+        display: grid;
+        grid-template-areas:
+            "area0 area1 area2"
+            "area3 area4 area5"
+            "area6 area7 area8"
+        ;
+    }
+    
+    .square0 {
+        grid-area: area0;
+        width: 60px;
+        height: 60px;
+        border-right: 1px solid #252a34;
+        border-bottom: 1px solid #252a34;
+    }
+    .square1 {
+        grid-area: area1;
+        width: 60px;
+        height: 60px;
+        border-left: 1px solid #252a34;
+        border-right: 1px solid #252a34;
+        border-bottom: 1px solid #252a34;
+    }
+    .square2 {
+        grid-area: area2;
+        width: 60px;
+        height: 60px;
+        border-left: 1px solid #252a34;
+        border-bottom: 1px solid #252a34;
+    }
+    .square3 {
+        grid-area: area3;
+        width: 60px;
+        height: 60px;
+        border-right: 1px solid #252a34;
+        border-top: 1px solid #252a34;
+        border-bottom: 1px solid #252a34;
+    }
+    .square4 {
+        grid-area: area4;
+        width: 60px;
+        height: 60px;
+        border-left: 1px solid #252a34;
+        border-right: 1px solid #252a34;
+        border-top: 1px solid #252a34;
+        border-bottom: 1px solid #252a34;
+    }
+    .square5 {
+        grid-area: area5;
+        width: 60px;
+        height: 60px;
+        border-left: 1px solid #252a34;
+        border-top: 1px solid #252a34;
+        border-bottom: 1px solid #252a34;
+    }
+    .square6 {
+        grid-area: area6;
+        width: 60px;
+        height: 60px;
+        border-right: 1px solid #252a34;
+        border-top: 1px solid #252a34;
+    }
+    .square7 {
+        grid-area: area7;
+        width: 60px;
+        height: 60px;
+        border-left: 1px solid #252a34;
+        border-right: 1px solid #252a34;
+        border-top: 1px solid #252a34;
+    }
+    .square8 {
+        grid-area: area8;
+        width: 60px;
+        height: 60px;
+        border-left: 1px solid #252a34;
+        border-top: 1px solid #252a34;
+    }
+}

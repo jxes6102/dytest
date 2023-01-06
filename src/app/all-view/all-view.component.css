@@ -46,4 +46,8 @@
     .statusStyle {
         font-size: 12px;
     }
+    .board{
+        width: 100%;
+        gap: 15px;
+    }
 }
