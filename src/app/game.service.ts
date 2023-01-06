@@ -18,7 +18,7 @@ export class GameService {
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改紀錄
-    recordGameStep 該局遊戲紀錄
+    nowRecord 該局遊戲紀錄
   */
   clickStatus:string[] = ['click','grab']
   status:string = this.clickStatus[0]
@@ -30,7 +30,7 @@ export class GameService {
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
   // 拿取該局紀錄資料
-  get recordGameStep() {
+  get nowRecord() {
     return this.recordService.getNowRecord
   }
   // 拿取全部對戰資料
@@ -101,8 +101,8 @@ export class GameService {
   }
   //拿取步驟訊息
   getStepMessage() {
-    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0].length - 1] : this.recordGameStep[this.nowFlag[1] - 1]
-    if (!target)  return (this.isBattle) ? '開始' : '這是上' + ((this.allRecords.filter((item) => item.length > 0).length + 1) - this.allRecords.indexOf(this.recordGameStep)) + '場'
+    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0].length - 1] : this.nowRecord[this.nowFlag[1] - 1]
+    if (!target)  return (this.isBattle) ? '開始' : '這是上' + ((this.allRecords.filter((item) => item.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
 
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -233,7 +233,7 @@ export class GameService {
       // 選擇欄位剩餘數量等於零和勝負未分 畫面上敵對和空白格最小重 大於等於 當前選擇欄位剩餘的最大重 和勝負未分 是平手
       if((!count && !this.result) || ((minViewWeight >= maxChoseWeight) && !this.result)) this.result = 2
 
-    } else if(!this.recordGameStep[this.nowFlag[1]] && !this.result) this.result = 2
+    } else if(!this.nowRecord[this.nowFlag[1]] && !this.result) this.result = 2
 
     if(this.result && (this.isBattle)) this.recordService.noteGame()
   }
@@ -244,7 +244,7 @@ export class GameService {
   // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
     // 當按上一步時紀錄已到第0筆 按下一步時紀錄已到最後一筆 不動作
-    if(((this.nowFlag[1] === this.recordGameStep.length) && (stepVal === 1)) || ((this.nowFlag[1] < 1) && (stepVal === -1))) return
+    if(((this.nowFlag[1] === this.nowRecord.length) && (stepVal === 1)) || ((this.nowFlag[1] < 1) && (stepVal === -1))) return
     this.skipAction(this.nowFlag[1] + stepVal)
   }
   // 拿取遊戲紀錄
@@ -255,7 +255,7 @@ export class GameService {
   skipAction(val:number) {
     this.clearView()
     this.result = 0
-    const target = this.recordGameStep.slice(0,val)
+    const target = this.nowRecord.slice(0,val)
     this.recordService.setCheckRecord(target)
     this.nowFlag[1] = val
     //修改畫面
