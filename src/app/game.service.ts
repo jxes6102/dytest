@@ -89,7 +89,7 @@ export class GameService {
   //重置遊戲
   resetGame() {
     this.resetData()
-    this.allRecords[0] = []
+    this.recordService.clearAllRecords()
   }
   // 重置資料 
   resetData () {
@@ -295,7 +295,7 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0].length
-    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
 
     this.judgeVictory()

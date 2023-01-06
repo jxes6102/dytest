@@ -35,6 +35,9 @@ export class RecordService {
     if(!this.allRecords[index]?.length) this.allRecords[index] = []
     this.allRecords[index].push(data)
   }
+  clearAllRecords() {
+    this.allRecords[0] = []
+  }
   //拿取格子紀錄
   get getCheckRecord() {
     return this.checkRecord
