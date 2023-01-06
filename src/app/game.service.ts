@@ -30,11 +30,11 @@ export class GameService {
   AIfirst:number = Math.floor(Math.random() * 2)
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
-
+  // 拿取該局紀錄資料
   get recordGameStep() {
     return this.recordService.getNowRecord
   }
-
+  // 拿取全部對戰資料
   get allRecords() {
     return this.recordService.getAllRecords
   }
@@ -234,10 +234,6 @@ export class GameService {
     } else if(!this.recordGameStep[this.nowFlag[1]] && !this.result) this.result = 2
 
     if(this.result && (this.isBattle)) this.noteGame()
-  }
-  // 拿取該局紀錄資料
-  get getRecordData () {
-    return this.recordGameStep
   }
   // 存入對戰資料
   setBattle() {
