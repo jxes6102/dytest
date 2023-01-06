@@ -19,8 +19,9 @@ export class RecordService {
     return this.nowRecord
   }
   //修改現在紀錄
-  setNowRecord(data:stepType[]) {
-    this.nowRecord = data
+  setNowRecord(val:number) {
+    if(val) this.nowRecord = this.allRecords[val]
+    else this.nowRecord = []
   }
   //拿取紀錄
   get getAllRecords() {
@@ -39,6 +40,7 @@ export class RecordService {
   }
   //修改格子紀錄
   setCheckRecord(data:stepType[]) {
+    this.clearCheckRecord()
     for(let item of data)this.updatedCheckRecord(item.wherePlace,{wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.checkRecord[item.wherePlace].length,status:item.status})
   }
   clearCheckRecord() {

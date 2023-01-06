@@ -63,7 +63,7 @@ export class GameService {
     this.resetData()
 
     this.nowFlag[0] = val
-    if(!this.isBattle) this.recordService.setNowRecord(this.allRecords[val])
+    if(!this.isBattle) this.recordService.setNowRecord(val)
   }
   // 拿取勝利者
   get getWin() {
@@ -93,7 +93,7 @@ export class GameService {
   }
   // 重置資料 
   resetData () {
-    this.recordService.setNowRecord([])
+    this.recordService.setNowRecord(0)
     this.result = 0
     this.status = this.clickStatus[0]
     this.recordService.clearCheckRecord()
@@ -255,8 +255,6 @@ export class GameService {
   skipAction(val:number) {
     this.clearView()
     this.result = 0
-    this.nowFlag[1] = 0
-    this.recordService.clearCheckRecord()
     const target = this.recordGameStep.slice(0,val)
     this.recordService.setCheckRecord(target)
     this.nowFlag[1] = val
