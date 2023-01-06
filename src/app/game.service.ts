@@ -104,11 +104,18 @@ export class GameService {
     if(this.isBattle && !this.allRecords[0]?.length) return '開始'
     const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
     if (!target)  return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
-
+    // QQQQ
     const where = (target?.wherePlace || 0) + 1
     const adjArr = ['bigSize','mediumSize','smallSize']
     const battleSign = (target.status === this.clickStatus[0]) ? this.marks[1 - this.stepCount] : this.marks[this.stepCount]
     const recordSign = (target.status === this.clickStatus[0]) ? ((target.content === 1) ? this.marks[0] : this.marks[1]) : ((target.content === 1) ? this.marks[1] : this.marks[0])
+    console.log('====================================================')
+    // console.log('target',target)
+    // console.log('recordSign',recordSign)
+    console.log('checkRecord',this.checkRecord)
+    console.log('wherePlace',this.checkRecord[(target.wherePlace)])
+
+
     const sign = (this.isBattle) ? battleSign : recordSign
 
     return (target.status === this.clickStatus[0]) ? (sign + '用了' + adjArr[target?.useSize] + '下在第' + where + '格') : ('拿了在第' + where + '格的' + sign)
