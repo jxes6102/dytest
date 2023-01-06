@@ -6,6 +6,10 @@ import { GameService } from '../game.service';
   styleUrls: ['./step-bar.component.css']
 })
 export class StepBarComponent {
+  /**
+   * value 查詢的值
+   * stepLen 查詢上限
+   */
   value:string = ''
 
   constructor(private gameService: GameService) {}
@@ -13,7 +17,7 @@ export class StepBarComponent {
   get stepLen() {
     return this.gameService.nowRecord.length
   }
-
+  //發送要查的步驟
   send(data:string) {
     const target = Number(data)
     if((target <= 0) || (target > this.stepLen) || isNaN(target)) return

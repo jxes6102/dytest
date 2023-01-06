@@ -26,8 +26,6 @@ export class PickComponent {
 
   constructor(private gameService: GameService) { }
 
-  ngOnInit(): void {}
-
   // 更新選擇效果
   select(val:number) {
     this.gameService.updateChose(this.sign || '',val)

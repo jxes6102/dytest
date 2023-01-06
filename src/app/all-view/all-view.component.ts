@@ -13,6 +13,7 @@ export class AllViewComponent {
     nowSign 判斷是屬於O或X的回合
     marks 兩方的符號
     stepMessage 步驟訊息
+    AIStatus 電腦對戰狀態
   */
   get marks () {
     return this.gameService.getMarks
@@ -44,7 +45,6 @@ export class AllViewComponent {
       if(!this.AIStatus) this.gameService.setBattle()
     }
   }
-
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()

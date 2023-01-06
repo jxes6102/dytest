@@ -6,7 +6,7 @@ import { GameService } from '../game.service';
   styleUrls: ['./picture.component.css']
 })
 export class PictureComponent {
-   /*
+  /*
     signs  符號
     viewData  畫面資料 styleName識別所點區域 data紀錄圈叉 sizeOX大小
   */

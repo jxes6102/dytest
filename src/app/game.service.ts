@@ -116,7 +116,6 @@ export class GameService {
   clearView() {
     // 清除遊戲畫面
     for(let key in this.viewData) this.updateViewData(parseInt(key),0,0,0)
-
     // 重置選擇畫面效果
     for(let index in this.OXData) {
       for(let item of this.OXData[index]) {
