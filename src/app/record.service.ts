@@ -12,6 +12,7 @@ export class RecordService {
   nowRecord:stepType[] = []
   allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
+  testallRecords:stepType[][][] = []
 
   constructor() {}
   //拿取現在紀錄
@@ -27,13 +28,18 @@ export class RecordService {
   get getAllRecords() {
     return this.allRecords
   }
-  //修改紀錄
-  setAllRecords(data:stepType[][]) {
-    this.allRecords = data
+  get gettestAllRecords() {
+    return this.testallRecords
   }
+  //修改紀錄
+  // QQQQ
   updatedAllRecords(index:number,data:stepType) {
     if(!this.allRecords[index]?.length) this.allRecords[index] = []
     this.allRecords[index].push(data)
+
+    if(!this.testallRecords[index]?.length) this.testallRecords[index] = []
+    this.testallRecords[index].push([data])
+    console.log('this.testallRecords',this.testallRecords[index])
   }
   clearAllRecords() {
     this.allRecords[0] = []

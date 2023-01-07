@@ -37,6 +37,10 @@ export class GameService {
   get allRecords() {
     return this.recordService.getAllRecords
   }
+  // QQQQ
+  get testallRecords() {
+    return this.recordService.gettestAllRecords
+  }
   // 拿取格子紀錄
   get checkRecord() {
     return this.recordService.getCheckRecord
