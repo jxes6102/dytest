@@ -14,6 +14,7 @@ import { NoteComponent } from './note/note.component';
 import { FormtestComponent } from './formtest/formtest.component';
 import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { StepBarComponent } from './step-bar/step-bar.component';
+import { Test2Component } from './test2/test2.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { StepBarComponent } from './step-bar/step-bar.component';
     AllViewComponent,
     NoteComponent,
     FormtestComponent,
-    StepBarComponent
+    StepBarComponent,
+    Test2Component
   ],
   imports: [
     CommonModule ,
