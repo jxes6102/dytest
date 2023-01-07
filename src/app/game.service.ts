@@ -110,9 +110,10 @@ export class GameService {
     const check = (target.status === this.clickStatus[0]) ? signTarget : 
       (signTarget === 0) ? false : (signTarget === 1) ? -1 : 1
 
-    let sign 
+    let sign
     if(check) sign = (check === 1) ? this.marks[0] : this.marks[1] 
     else {
+      // 處理在拿取後為空格找不到上個符號
       if(!this.isBattle) sign = (this.checkRecord[where][this.checkRecord[where].length - 2].content === 1) ? this.marks[0] : this.marks[1] 
       else {
         const historyTarget = this.allRecords[0].filter((item) => item.wherePlace === where)
