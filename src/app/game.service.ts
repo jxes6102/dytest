@@ -174,14 +174,12 @@ export class GameService {
   }
   // 點擊動作
   clickProcess(index:number) {
+    if(!this.isBattle) return
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
-    // 檢查模式、結果、是否選擇尺寸
-    if(!this.isBattle || this.result || (whichSize === -1)) return
-    // 判斷是否可點擊
     const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
-    // 判斷是否可覆蓋
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
-    if(!canClick || !canCover) return
+    // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊
+    if(!canClick || !canCover || this.result || (whichSize === -1)) return
     // 給予畫面資料
     this.nowFlag[1]++
     const data = (this.stepCount == 1) ? 1 : -1
