@@ -28,7 +28,7 @@ export class AllViewComponent {
     return this.gameService.isBattle ? 'battle' : 'record'
   }
   get stepMessage () {
-    return this.gameService.getStepMessage()
+    return this.gameService.getStepMessage
   }
   get status () {
     return this.gameService.getStatus
