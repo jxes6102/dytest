@@ -45,7 +45,7 @@ export class GameService {
   get checkRecord() {
     return this.recordService.getCheckRecord
   }
-  
+
   constructor(private recordService: RecordService) {
     this.recordService.setLocal()
   }
@@ -95,7 +95,7 @@ export class GameService {
     this.resetData()
     this.recordService.clearAllRecords()
   }
-  // 重置資料 
+  // 重置資料
   resetData () {
     this.recordService.setNowRecord(0)
     this.result = 0
@@ -111,17 +111,17 @@ export class GameService {
     const where = (target?.wherePlace || 0)
     const adjArr = ['bigSize','mediumSize','smallSize']
     const signTarget = this.checkRecord[where][this.checkRecord[where].length - 1]?.content || 0
-    const check = (target.status === this.clickStatus[0]) ? signTarget : 
+    const check = (target.status === this.clickStatus[0]) ? signTarget :
       (signTarget === 0) ? false : (signTarget === 1) ? -1 : 1
 
     let sign
-    if(check) sign = (check === 1) ? this.marks[0] : this.marks[1] 
+    if(check) sign = (check === 1) ? this.marks[0] : this.marks[1]
     else {
       // 處理在拿取後為空格找不到上個符號
-      if(!this.isBattle) sign = (this.checkRecord[where][this.checkRecord[where].length - 2].content === 1) ? this.marks[0] : this.marks[1] 
+      if(!this.isBattle) sign = (this.checkRecord[where][this.checkRecord[where].length - 2].content === 1) ? this.marks[0] : this.marks[1]
       else {
         const historyTarget = this.allRecords[0].filter((item) => item.wherePlace === where)
-        sign = (historyTarget[historyTarget.length - 2].content === 1) ? this.marks[0] : this.marks[1] 
+        sign = (historyTarget[historyTarget.length - 2].content === 1) ? this.marks[0] : this.marks[1]
       }
     }
 
@@ -192,7 +192,7 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0]?.length || 0
     this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus[0]===this.clickStatus[0])
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -216,7 +216,7 @@ export class GameService {
     this.recordService.updatedCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]})
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus[1]===this.clickStatus[0])
     this.setStatus()
   }
   // 判斷勝負
@@ -308,7 +308,7 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0].length
     this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus[0]===this.clickStatus[0])
 
     this.judgeVictory()
   }
