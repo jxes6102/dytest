@@ -101,27 +101,29 @@ export class GameService {
   }
   //拿取步驟訊息
   get getStepMessage() {
-    if(this.isBattle && !this.allRecords[0]?.length) return '開始'
-    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
-    if (!target)  return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
-    const where = (target?.wherePlace || 0)
-    const adjArr = ['bigSize','mediumSize','smallSize']
-    const signTarget = this.checkRecord[where][this.checkRecord[where].length - 1]?.content || 0
-    const check = (target.status === this.clickStatus[0]) ? signTarget :
-      (signTarget === 0) ? false : (signTarget === 1) ? -1 : 1
+    // if(this.isBattle && !this.allRecords[0]?.length) return '開始'
+    // const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
+    // if (!target)  return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
+    // const where = (target?.wherePlace || 0)
+    // const adjArr = ['bigSize','mediumSize','smallSize']
+    // const signTarget = this.checkRecord[where][this.checkRecord[where].length - 1]?.content || 0
+    // const check = (target.status === this.clickStatus[0]) ? signTarget :
+    //   (signTarget === 0) ? false : (signTarget === 1) ? -1 : 1
 
-    let sign
-    if(check) sign = (check === 1) ? this.marks[0] : this.marks[1]
-    else {
-      // 處理在拿取後為空格找不到上個符號
-      if(!this.isBattle) sign = (this.checkRecord[where][this.checkRecord[where].length - 2].content === 1) ? this.marks[0] : this.marks[1]
-      else {
-        const historyTarget = this.allRecords[0].filter((item) => item.wherePlace === where)
-        sign = (historyTarget[historyTarget.length - 2].content === 1) ? this.marks[0] : this.marks[1]
-      }
-    }
+    // let sign
+    // if(check) sign = (check === 1) ? this.marks[0] : this.marks[1]
+    // else {
+    //   // 處理在拿取後為空格找不到上個符號
+    //   if(!this.isBattle) sign = (this.checkRecord[where][this.checkRecord[where].length - 2].content === 1) ? this.marks[0] : this.marks[1]
+    //   else {
+    //     const historyTarget = this.allRecords[0].filter((item) => item.wherePlace === where)
+    //     sign = (historyTarget[historyTarget.length - 2].content === 1) ? this.marks[0] : this.marks[1]
+    //   }
+    // }
 
-    return (target.status === this.clickStatus[0]) ? (sign + '用了' + adjArr[target?.useSize] + '下在第' + (where + 1) + '格') : ('拿了在第' + (where + 1) + '格的' + sign)
+    // return (target.status === this.clickStatus[0]) ? (sign + '用了' + adjArr[target?.useSize] + '下在第' + (where + 1) + '格') : ('拿了在第' + (where + 1) + '格的' + sign)
+
+    return 'QQ'
   }
   //清除畫面
   clearView() {
@@ -154,18 +156,35 @@ export class GameService {
   recoverData() {
     const target = this.allRecords[0]
     if(!target?.length) return
+    // for(let item of target) {
+    //   const whichSize = item.useSize
+    //   const index = item.wherePlace
+    //   // 給予畫面資料
+    //   if(item.status === this.clickStatus[0]) this.nowFlag[1]++
+    //   const data = (this.stepCount === 1) ? 1 : -1
+    //   this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
+    //   this.OXData[1 - this.stepCount][whichSize].amount--
+    //   //紀錄
+    //   this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+    // }
 
-    for(let item of target) {
-      const whichSize = item.useSize
-      const index = item.wherePlace
-      // 給予畫面資料
-      if(item.status === this.clickStatus[0]) this.nowFlag[1]++
-      const data = (this.stepCount === 1) ? 1 : -1
-      this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
-      this.OXData[1 - this.stepCount][whichSize].amount--
-      //紀錄
-      this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+
+
+    // QQQQ
+    for(let items of target) {
+      for(let item of items){
+          const whichSize = item.useSize
+          const index = item.wherePlace
+          // 給予畫面資料
+          if(item.status === this.clickStatus[0]) this.nowFlag[1]++
+          const data = (this.stepCount === 1) ? 1 : -1
+          this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
+          this.OXData[1 - this.stepCount][whichSize].amount--
+          //紀錄
+          this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+      }
     }
+    
   }
   //點擊格子
   clickAction(index:number) {
@@ -198,12 +217,22 @@ export class GameService {
   // 拿取動作
   grabProcess(index:number) {
     const target = this.viewData[index]
+    // QQQQ
     // 同一回合只能拿一次
+    // const lastStep = this.allRecords[0][this.allRecords[0].length - 1]
+    // if((lastStep?.status === this.clickStatus[1]) || this.result) {
+    //   this.setStatus()
+    //   return
+    // }
+
     const lastStep = this.allRecords[0][this.allRecords[0].length - 1]
-    if((lastStep?.status === this.clickStatus[1]) || this.result) {
+    console.log('lastStep',lastStep)
+    if(this.result) {
       this.setStatus()
       return
     }
+
+
     // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
     if(((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1))) return
     const where = this.viewData[index].size
@@ -211,6 +240,7 @@ export class GameService {
     //還原上一次修改的資料
     this.recordService.updatedCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
+    // console.log('lastTarget',lastTarget)
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus)
     this.setStatus()
@@ -261,6 +291,7 @@ export class GameService {
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {
+    // QQQQ
     this.clearView()
     this.result = 0
     const target = this.nowRecord.slice(0,val)
@@ -272,7 +303,8 @@ export class GameService {
       if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
     }
 
-    if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
+    // if(target[target.length - 1]?.status === this.clickStatus[0]) this.judgeVictory()
+    this.judgeVictory()
   }
   // 拿取電腦遊玩狀態
   get getAIStatus () {
