@@ -123,6 +123,27 @@ export class GameService {
 
     // return (target.status === this.clickStatus[0]) ? (sign + '用了' + adjArr[target?.useSize] + '下在第' + (where + 1) + '格') : ('拿了在第' + (where + 1) + '格的' + sign)
 
+
+
+
+
+    console.log("==============================")
+    if(this.isBattle && !this.allRecords[0]?.length) return '開始'
+    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
+    
+    // console.log('len',target?.length)
+    
+    
+    if(!target?.length) return 'QQ'
+    
+    const sign = (target[target.length - 1].content === 1) ? this.marks[0] : this.marks[1]
+    const adjArr = ['bigSize','mediumSize','smallSize']
+    if(target?.length === 1) {
+      return (sign + '用了' + adjArr[target[0].useSize] + '下在第' + (target[0].wherePlace + 1) + '格')
+    }else {
+      return ('拿了在第' + ((target[0].wherePlace + 1)) + '格的' + sign + '下在第' + ((target[1].wherePlace + 1)) + '格')
+    }
+    
     return 'QQ'
   }
   //清除畫面
