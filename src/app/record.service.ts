@@ -13,7 +13,7 @@ export class RecordService {
   allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
   testallRecords:stepType[][][] = []
-  grabData:any = false
+  grabData:stepType[] = []
 
   constructor() {}
   //拿取現在紀錄
@@ -42,32 +42,16 @@ export class RecordService {
 
     if(!this.testallRecords[index]?.length) this.testallRecords[index] = []
 
-    
-
-    // if(isClick) this.testallRecords[index].push([data])
-    // else this.grabData = data
-    // console.log('this.grabData',this.grabData)
-    // console.log('data',data.status)
-
-
-    // let last = this.testallRecords[index][this.testallRecords[index].length-1] || false
-    // console.log('last',last)
-    // console.log(last[0]?.status)
-
-    if(this.grabData) {
-      console.log('this.grabData',this.grabData)
-      
+    if(this.grabData.length) {
       this.grabData.push(data)
-      // console.log('target',target)
       this.testallRecords[index].push(this.grabData)
-      this.grabData = false
+      this.grabData = []
     }else {
       this.testallRecords[index].push([data])
     }
 
     if(data.status === status[1]){
-      this.grabData = this.testallRecords[index].pop()
-      console.log('this.grabData',this.grabData)
+      this.grabData = this.testallRecords[index].pop() || []
     }
     
     console.log('testallRecords',this.testallRecords[index])
