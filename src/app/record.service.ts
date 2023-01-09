@@ -12,8 +12,15 @@ export class RecordService {
   nowRecord:stepType[] = []
   allRecords:stepType[][] = []
   checkRecord:stepType[][] = new checkData().getData
+
+
+
   testallRecords:stepType[][][] = []
   grabData:stepType[] = []
+  testnowRecord:stepType[][] = []
+
+
+
 
   constructor() {}
   //拿取現在紀錄
@@ -24,21 +31,22 @@ export class RecordService {
   setNowRecord(val:number) {
     if(val) this.nowRecord = this.allRecords[val]
     else this.nowRecord = []
+
+
+
+    if(val) this.testnowRecord = this.testallRecords[val]
+    else this.testnowRecord = []
   }
   //拿取紀錄
   get getAllRecords() {
     return this.allRecords
   }
-  get gettestAllRecords() {
-    return this.testallRecords
-  }
   //修改紀錄
-  // QQQQ
   updatedAllRecords(index:number,data:stepType,status:string[]) {
     if(!this.allRecords[index]?.length) this.allRecords[index] = []
     this.allRecords[index].push(data)
-    console.log('===========================================================')
-    // console.log('allRecords[index]',this.allRecords[index])
+
+
 
     if(!this.testallRecords[index]?.length) this.testallRecords[index] = []
     // 當上一步是拿取時，將點擊和拿取組合成同一步驟
@@ -52,11 +60,14 @@ export class RecordService {
     }else {
       this.testallRecords[index].push([data])
     }
-    
-    console.log('testallRecords',this.testallRecords[index])
+
   }
   clearAllRecords() {
     this.allRecords[0] = []
+
+
+
+    this.testallRecords[0] = []
   }
   //拿取格子紀錄
   get getCheckRecord() {
@@ -78,10 +89,19 @@ export class RecordService {
   setLocal() {
     if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
     else this.allRecords = []
+
+
+
+    if(localStorage.getItem('testrecord')) this.testallRecords = JSON.parse(localStorage.getItem('testrecord') || '[]')
+    else this.testallRecords = []
   }
   //紀錄對戰資料
   saveBattle() {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
+
+
+    
+    localStorage.setItem('record', JSON.stringify(this.testallRecords))
   }
   //記錄此次遊戲
   noteGame() {
@@ -102,6 +122,27 @@ export class RecordService {
     // 生成歷史紀錄
     for(let i = 1;i<=5;i++) this.allRecords[i] = historyTarget[i-1]
     this.allRecords[0] = []
+    this.saveBattle()
+
+
+
+    this.testnowRecord = []
+    // 處理歷史紀錄
+    let testhistoryTarget:stepType[][][] = this.testallRecords.slice(1, this.testallRecords.length)
+    if(testhistoryTarget.every((item) => item?.length > 0)) {
+      testhistoryTarget.shift()
+      testhistoryTarget.push(this.testallRecords[0])
+    }else {
+      for(let i = 0;i<testhistoryTarget.length;i++) {
+        if(!testhistoryTarget[i]?.length) {
+          testhistoryTarget[i] = this.testallRecords[0]
+          break
+        }
+      }
+    }
+    // 生成歷史紀錄
+    for(let i = 1;i<=5;i++) this.testallRecords[i] = testhistoryTarget[i-1]
+    this.testallRecords[0] = []
     this.saveBattle()
   }
 
