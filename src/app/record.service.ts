@@ -46,6 +46,9 @@ export class RecordService {
     }else this.allRecords[index].push([data])
 
   }
+  deleteAllRecords() {
+    this.allRecords[0].pop()
+  }
   clearAllRecords() {
     this.allRecords[0] = []
   }

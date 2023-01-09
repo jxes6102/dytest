@@ -154,16 +154,22 @@ export class GameService {
   }
   // 回復畫面資料
   recoverData() {
-    const target = this.allRecords[0]
-    if(!target?.length) return
+    // const target = this.allRecords[0]
+    if(!this.allRecords[0]?.length) return
+    // if((this.allRecords[0][this.allRecords[0].length - 1].length === 1) && (this.allRecords[0][this.allRecords[0].length - 1][0].status === this.clickStatus[1])) this.recordService.deleteAllRecords()
 
-    for(let items of target) {
+    for(let items of this.allRecords[0]) {
       for(let item of items){
+          // 復原時最新一步剛好在拿取中且未點擊時需回復選擇畫面
           const whichSize = item.useSize
           const index = item.wherePlace
           // 給予畫面資料
           if(item.status === this.clickStatus[0]) this.nowFlag[1]++
+          console.log('============================================')
+          // data 只有 1 -1 need 0 condition
           const data = (this.stepCount === 1) ? 1 : -1
+          console.log('item',item)
+          console.log('data',index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
           this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
           this.OXData[1 - this.stepCount][whichSize].amount--
           //紀錄
