@@ -26,6 +26,7 @@ export class RecordService {
   //拿取現在紀錄
   get getNowRecord() {
     return this.nowRecord
+    // return this.testnowRecord
   }
   //修改現在紀錄
   setNowRecord(val:number) {
@@ -40,6 +41,7 @@ export class RecordService {
   //拿取紀錄
   get getAllRecords() {
     return this.allRecords
+    // return this.testallRecords
   }
   //修改紀錄
   updatedAllRecords(index:number,data:stepType,status:string[]) {
@@ -100,7 +102,7 @@ export class RecordService {
     localStorage.setItem('record', JSON.stringify(this.allRecords))
 
 
-    
+
     localStorage.setItem('record', JSON.stringify(this.testallRecords))
   }
   //記錄此次遊戲
