@@ -41,7 +41,7 @@ export class RecordService {
     // console.log('allRecords[index]',this.allRecords[index])
 
     if(!this.testallRecords[index]?.length) this.testallRecords[index] = []
-
+    // 當上一步是拿取時，將點擊和拿取組合成同一步驟
     if(this.grabData.length) {
       this.grabData.push(data)
       this.testallRecords[index].push(this.grabData)
@@ -49,7 +49,7 @@ export class RecordService {
     }else {
       this.testallRecords[index].push([data])
     }
-
+    // 當這一步是拿取時，存到grabData且不新增到testallRecords
     if(data.status === status[1]){
       this.grabData = this.testallRecords[index].pop() || []
     }
