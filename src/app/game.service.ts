@@ -173,18 +173,18 @@ export class GameService {
   }
   //點擊格子
   clickAction(index:number) {
+    if(!this.isBattle) return
     if(this.status === this.clickStatus[0]) this.clickProcess(index)
     else this.grabProcess(index)
   }
   // 點擊動作
   clickProcess(index:number) {
-    if(!this.isBattle) return
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
     const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
     // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊
     if(!canClick || !canCover || this.result || (whichSize === -1)) return
-    // 重製切換狀態 
+    // 重製切換狀態
     this.choseLock = false
     // 給予畫面資料
     this.nowFlag[1]++
