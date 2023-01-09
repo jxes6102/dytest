@@ -192,7 +192,7 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0]?.length || 0
     this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus[0]===this.clickStatus[0])
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus)
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -216,7 +216,7 @@ export class GameService {
     this.recordService.updatedCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus[1]===this.clickStatus[0])
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus)
     this.setStatus()
   }
   // 判斷勝負
@@ -308,7 +308,7 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0].length
     this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus[0]===this.clickStatus[0])
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus)
 
     this.judgeVictory()
   }
