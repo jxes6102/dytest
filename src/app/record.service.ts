@@ -46,12 +46,11 @@ export class RecordService {
       this.grabData.push(data)
       this.testallRecords[index].push(this.grabData)
       this.grabData = []
+    // 當這一步是拿取時，存到grabData且不新增到testallRecords
+    }else if(data.status === status[1]){
+      this.grabData = [data]
     }else {
       this.testallRecords[index].push([data])
-    }
-    // 當這一步是拿取時，存到grabData且不新增到testallRecords
-    if(data.status === status[1]){
-      this.grabData = this.testallRecords[index].pop() || []
     }
     
     console.log('testallRecords',this.testallRecords[index])
