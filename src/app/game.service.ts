@@ -204,14 +204,14 @@ export class GameService {
   // 拿取動作
   grabProcess(index:number) {
     const target = this.viewData[index]
-    if(this.result || this.choseLock) {
+    const where = this.viewData[index].size
+    const canPlace = this.canMove[index].filter((item) => (this.marks[this.stepCount] !== (this.viewData[item].data === 1 ? this.marks[0] : this.marks[1])) && (this.viewData[item].weight > 0) && (this.viewData[item].weight < this.OXData[this.stepCount][where].weight))
+    // 判斷只能 拿屬於自己的標誌 覆蓋格子周圍的敵方標誌且不可放在空格上
+    if(this.result || this.choseLock || ((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1)) || (!canPlace.length)) {
       this.setStatus()
       return
     }
-    // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
-    if(((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1))) return
-    const where = this.viewData[index].size
-    //更新選擇畫面和鎖住選擇畫面和再次選取
+    //更新選擇畫面和鎖住選擇畫面跟再次選取
     this.OXData[this.stepCount][where].amount++
     this.updateChose((this.checkRecord[index][this.checkRecord[index].length - 1].content === 1) ? this.marks[0] : this.marks[1],this.checkRecord[index][this.checkRecord[index].length - 1].useSize)
     this.choseLock = true
