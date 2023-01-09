@@ -53,18 +53,16 @@ export class RecordService {
     if(!this.testallRecords[index]?.length) this.testallRecords[index] = []
     // 當上一步是拿取時，將點擊和拿取組合成同一步驟
     if(this.grabData.length) {
+      this.testallRecords[index].pop()
       this.grabData.push(data)
       this.testallRecords[index].push(this.grabData)
       this.grabData = []
-    // 當這一步是拿取時，存到grabData且不新增到testallRecords
+    // 當這一步是拿取時，存到grabData
     }else if(data.status === status[1]){
       this.grabData = [data]
-    }else {
       this.testallRecords[index].push([data])
-    }
+    }else this.testallRecords[index].push([data])
 
-
-    // console.log('testallRecords',this.testallRecords[index])
   }
   clearAllRecords() {
     this.allRecords[0] = []
