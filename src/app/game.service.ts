@@ -19,6 +19,7 @@ export class GameService {
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改
     nowRecord 該局遊戲紀錄
+    choseLock 是否可切換選擇大小畫面和動作類別
   */
   clickStatus:string[] = ['click','grab']
   status:string = this.clickStatus[0]
@@ -29,6 +30,7 @@ export class GameService {
   AIfirst:number = Math.floor(Math.random() * 2)
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
+  choseLock:boolean = false
   canMove:number[][] = [
     [1,3,4],
     [0,2,3,4,5],
@@ -107,6 +109,7 @@ export class GameService {
     this.status = this.clickStatus[0]
     this.recordService.clearCheckRecord()
     this.nowFlag[1] = 0
+    this.choseLock = false
   }
   //拿取步驟訊息
   get getStepMessage() {
@@ -135,6 +138,7 @@ export class GameService {
   }
   // 更新選擇效果
   updateChose (sign:string,val:number) {
+    if(this.choseLock) return
     // 當不是自己的回合時無法選擇自己的大小
     if(((this.stepCount == 0) && (sign === this.marks[1])) || ((this.stepCount == 1) && (sign === this.marks[0]))) return
     for(let key in this.OXData[this.stepCount]) {
@@ -180,6 +184,8 @@ export class GameService {
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
     // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊
     if(!canClick || !canCover || this.result || (whichSize === -1)) return
+    // 重製切換狀態 
+    this.choseLock = false
     // 給予畫面資料
     this.nowFlag[1]++
     const data = (this.stepCount == 1) ? 1 : -1
@@ -198,19 +204,18 @@ export class GameService {
   // 拿取動作
   grabProcess(index:number) {
     const target = this.viewData[index]
-    const lastStep = this.allRecords[0][this.allRecords[0].length - 1]
-    if(this.result) {
+    if(this.result || this.choseLock) {
       this.setStatus()
       return
     }
     // 判斷只能拿屬於自己的OX之後將拿回的OX加到選擇畫面上
     if(((this.stepCount === 0) && (target?.data !== 1)) || ((this.stepCount === 1) && (target?.data !== -1))) return
     const where = this.viewData[index].size
+    //更新選擇畫面和鎖住選擇畫面和再次選取
     this.OXData[this.stepCount][where].amount++
+    this.updateChose((this.checkRecord[index][this.checkRecord[index].length - 1].content === 1) ? this.marks[0] : this.marks[1],this.checkRecord[index][this.checkRecord[index].length - 1].useSize)
+    this.choseLock = true
     //還原上一次修改的資料
-    console.log('this.checkRecord[index]',this.checkRecord[index][this.checkRecord[index].length - 1])
-
-    
     this.recordService.updatedCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
