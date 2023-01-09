@@ -14,7 +14,9 @@ export class RecordService {
   grabData:stepType[] = []
   nowRecord:stepType[][] = []
 
-  constructor() {}
+  constructor() {
+    this.setLocal()
+  }
   //拿取現在紀錄
   get getNowRecord() {
     return this.nowRecord

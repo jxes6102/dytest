@@ -29,6 +29,17 @@ export class GameService {
   AIfirst:number = Math.floor(Math.random() * 2)
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
+  canMove:number[][] = [
+    [1,3,4],
+    [0,2,3,4,5],
+    [1,4,5],
+    [0,1,4,6,7],
+    [0,1,2,3,5,6,7,8],
+    [1,2,4,7,8],
+    [3,4,7],
+    [3,4,5,6,8],
+    [4,5,7]
+  ]
   // 拿取該局紀錄資料
   get nowRecord() {
     return this.recordService.getNowRecord
@@ -42,9 +53,7 @@ export class GameService {
     return this.recordService.getCheckRecord
   }
 
-  constructor(private recordService: RecordService) {
-    this.recordService.setLocal()
-  }
+  constructor(private recordService: RecordService) {}
   // 拿取符號
   get getMarks () {
     return this.marks
@@ -199,6 +208,9 @@ export class GameService {
     const where = this.viewData[index].size
     this.OXData[this.stepCount][where].amount++
     //還原上一次修改的資料
+    console.log('this.checkRecord[index]',this.checkRecord[index][this.checkRecord[index].length - 1])
+
+    
     this.recordService.updatedCheckRecord(index)
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
