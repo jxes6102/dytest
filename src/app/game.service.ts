@@ -261,10 +261,10 @@ export class GameService {
 
     if(this.result && (this.isBattle)) this.recordService.noteGame()
   }
-  // 存入對戰資料
-  setBattle() {
-    this.recordService.saveBattle()
-  }
+  // // 存入對戰資料
+  // setBattle() {
+  //   this.recordService.saveBattle()
+  // }
   // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
     // 當按上一步時紀錄已到第0筆 按下一步時紀錄已到最後一筆 不動作
