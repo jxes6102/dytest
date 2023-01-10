@@ -164,9 +164,12 @@ export class GameService {
           if(item.status === this.clickStatus[0]){
             this.nowFlag[1]++
             this.OXData[1 - this.stepCount][whichSize].amount--
-          }else this.OXData[this.stepCount][whichSize].amount++
+          }else {
+            this.OXData[this.stepCount][whichSize].amount++
+            const last = this.checkRecord[index][this.checkRecord[index].length - 1]
+            this.updateChose(this.marks[this.stepCount],last.useSize)
+          }
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
-          this.updateChose(this.marks[this.stepCount],whichSize)
           if(item.status === this.clickStatus[0]) this.choseLock = false
           else this.choseLock = true
           //紀錄
