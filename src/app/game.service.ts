@@ -161,19 +161,20 @@ export class GameService {
     for(let items of this.allRecords[0]) {
       for(let item of items){
           // 復原時最新一步剛好在拿取中且未點擊時需回復選擇畫面
+          // console.log('=============================')
+          // console.log('item',item)
           const whichSize = item.useSize
           const index = item.wherePlace
           // 給予畫面資料
           if(item.status === this.clickStatus[0]) this.nowFlag[1]++
-          console.log('============================================')
-          // data 只有 1 -1 need 0 condition
-          const data = (this.stepCount === 1) ? 1 : -1
-          console.log('item',item)
-          console.log('data',index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
-          this.updateViewData(index,data,whichSize,this.OXData[this.stepCount].length - whichSize)
+          else this.OXData[this.stepCount][whichSize].amount++
+          this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
           this.OXData[1 - this.stepCount][whichSize].amount--
+          this.updateChose(this.marks[this.stepCount],whichSize)
+          if(item.status === this.clickStatus[0]) this.choseLock = false
+          else this.choseLock = true
           //紀錄
-          this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+          this.recordService.updatedCheckRecord(index,{wherePlace: index,content: item.content,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
       }
     }
   }
@@ -186,9 +187,9 @@ export class GameService {
   // 點擊動作
   clickProcess(index:number) {
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
-    const canClick = (this.OXData[this.stepCount][whichSize].amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
+    const canClick = (this.OXData[this.stepCount][whichSize]?.amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
-    const grabStatus = ((this.allRecords[0].length ? this.allRecords[0][this.allRecords[0].length-1][0].status : false) === this.clickStatus[1]) && (!this.viewData[index].data)
+    const grabStatus = ((this.allRecords[0].length ? this.allRecords[0][this.allRecords[0].length-1][this.allRecords[0][this.allRecords[0].length-1].length - 1].status : false) === this.clickStatus[1]) && (!this.viewData[index].data)
     // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊、上一步是拿取時不可下在空格
     if(!canClick || !canCover || this.result || (whichSize === -1) || grabStatus) return
     // 重製切換狀態
