@@ -20,6 +20,7 @@ export class GameService {
     checkRecord 紀錄每個格子的修改
     nowRecord 該局遊戲紀錄
     choseLock 是否可切換選擇大小畫面和動作類別
+    canMove 每個格子可下的範圍
   */
   clickStatus:string[] = ['click','grab']
   status:string = this.clickStatus[0]
@@ -32,15 +33,15 @@ export class GameService {
   nowFlag:number[] = [0,0]
   choseLock:boolean = false
   canMove:number[][] = [
-    [1,3,4],
-    [0,2,3,4,5],
-    [1,4,5],
-    [0,1,4,6,7],
-    [0,1,2,3,5,6,7,8],
-    [1,2,4,7,8],
-    [3,4,7],
-    [3,4,5,6,8],
-    [4,5,7]
+    [1,3],
+    [0,2,4],
+    [1,5],
+    [0,4,6],
+    [1,3,5,7],
+    [2,4,8],
+    [3,7],
+    [4,6,8],
+    [5,7]
   ]
   // 拿取該局紀錄資料
   get nowRecord() {
@@ -226,7 +227,7 @@ export class GameService {
     //還原上一次修改的資料
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
     const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,(3 - (lastTarget?.useSize || nowTarget.useSize)))
+    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0)
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus)
     this.recordService.updatedCheckRecord(index)
     this.setStatus()
@@ -237,29 +238,39 @@ export class GameService {
     const condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
     const condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
     this.result = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.result
-
-    for(let i = 0 ;i<3; i++) {
-      const condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
-      const condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
-      this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
-        ? this.viewData[i].data : this.result
+    if(!this.result) {
+      for(let i = 0 ;i<3; i++) {
+        const condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
+        const condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
+        this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
+          ? this.viewData[i].data : this.result
+      }
     }
     // 計算對戰或紀錄模式時平手條件
-    if(this.isBattle) {
-      // 當前選擇欄位剩餘最大重
-      const target = this.OXData[this.stepCount].filter(item => item.amount > 0).map(item => item.weight)
-      const maxChoseWeight = Math.max(...(target.length ? target : [0]))
-      // 畫面敵對和空白最小重
-      const minViewWeight = (this.stepCount === 0) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
-      Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
-      // 選擇欄位剩餘數量
-      const count = this.OXData.flat(1).reduce((acc, item) => acc + item.amount,0)
-      // 選擇欄位剩餘數量等於零和勝負未分 畫面上敵對和空白格最小重 大於等於 當前選擇欄位剩餘的最大重 和勝負未分 是平手
-      if((!count && !this.result) || ((minViewWeight >= maxChoseWeight) && !this.result)) this.result = 2
+    if(this.isBattle && !this.result) {
+      // 當前選擇欄位剩餘數量
+      const count = this.OXData[this.stepCount].reduce((acc, item) => acc + item.amount,0)
+      // 有無空格可下
+      const hasSpace = this.viewData.some((item)=> !item.data)
+      if(count && hasSpace) return
+      // 當自己的每個格子周圍都不能再拿取或覆蓋時平手
+      let proceeStatus = false
+      let nowSign = this.marks[this.stepCount] === this.marks[0] ? 1 : -1
+      for(let i = 0;i<9;i++) {
+        if(!(this.viewData[i].data === nowSign)) continue
+        for(let place of this.canMove[i]){
+          if((this.viewData[i].weight > this.viewData[place].weight) && this.viewData[place].weight) {
+            proceeStatus = true
+            break
+          }
+        }
+        if(proceeStatus) break
+      }
+      if(!proceeStatus) this.result = 2
 
     } else if(!this.nowRecord[this.nowFlag[1]] && !this.result) this.result = 2
 
-    if(this.result && (this.isBattle)) this.recordService.noteGame()
+    if(this.result && this.isBattle)this.recordService.noteGame()
   }
   // // 存入對戰資料
   // setBattle() {
