@@ -56,13 +56,13 @@ export class AllViewComponent {
     this.gameService.setMode(0)
     this.gameService.recoverData()
   }
+  //切換狀態
+  changeStatus() {
+    this.gameService.setStatus()
+  }
   // // 和電腦對戰
   // toRobot () {
   //   this.renewGame()
   //   if(!this.AIStatus) this.gameService.changeAIStatus(true)
   // }
-  //切換狀態
-  changeStatus() {
-    this.gameService.setStatus()
-  }
 }

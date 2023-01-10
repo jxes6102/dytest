@@ -12,8 +12,6 @@ export class GameService {
     result 遊戲狀態 0:勝負未分 1:O獲勝 -1:X獲勝 2:平手
     OXData 選擇視窗資料 index 0 for player1,index 1 for player2
     viewData  畫面資料
-    AIStatus 電腦是否遊玩
-    AIfirst 電腦是否先手 1先手 0後手
     marks 定義符號
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
     allRecords 所有遊戲紀錄
@@ -21,14 +19,14 @@ export class GameService {
     nowRecord 該局遊戲紀錄
     choseLock 是否可切換選擇大小畫面和動作類別
     canMove 每個格子可下的範圍
+    AIStatus 電腦是否遊玩
+    AIfirst 電腦是否先手 1先手 0後手
   */
   clickStatus:string[] = ['click','grab']
   status:string = this.clickStatus[0]
   result:number = 0
   OXData:xoType[][] = new selectData().getData
   viewData:viewType[] = new viewData().getData
-  // AIStatus:boolean = false
-  // AIfirst:number = Math.floor(Math.random() * 2)
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
   choseLock:boolean = false
@@ -43,6 +41,8 @@ export class GameService {
     [4,6,8],
     [5,7]
   ]
+  // AIStatus:boolean = false
+  // AIfirst:number = Math.floor(Math.random() * 2)
   // 拿取該局紀錄資料
   get nowRecord() {
     return this.recordService.getNowRecord
@@ -277,10 +277,6 @@ export class GameService {
 
     if(this.result && this.isBattle)this.recordService.noteGame()
   }
-  // // 存入對戰資料
-  // setBattle() {
-  //   this.recordService.saveBattle()
-  // }
   // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
     // 當按上一步時紀錄已到第0筆 按下一步時紀錄已到最後一筆 不動作
@@ -306,6 +302,10 @@ export class GameService {
 
     this.judgeVictory()
   }
+  // // 存入對戰資料
+  // setBattle() {
+  //   this.recordService.saveBattle()
+  // }
   // // 拿取電腦遊玩狀態
   // get getAIStatus () {
   //   return this.AIStatus
