@@ -26,8 +26,8 @@ export class GameService {
   result:number = 0
   OXData:xoType[][] = new selectData().getData
   viewData:viewType[] = new viewData().getData
-  AIStatus:boolean = false
-  AIfirst:number = Math.floor(Math.random() * 2)
+  // AIStatus:boolean = false
+  // AIfirst:number = Math.floor(Math.random() * 2)
   marks:string[] = ["O","X"]
   nowFlag:number[] = [0,0]
   choseLock:boolean = false
