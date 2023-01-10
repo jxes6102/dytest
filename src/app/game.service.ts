@@ -154,22 +154,18 @@ export class GameService {
   }
   // 回復畫面資料
   recoverData() {
-    // const target = this.allRecords[0]
     if(!this.allRecords[0]?.length) return
-    // if((this.allRecords[0][this.allRecords[0].length - 1].length === 1) && (this.allRecords[0][this.allRecords[0].length - 1][0].status === this.clickStatus[1])) this.recordService.deleteAllRecords()
 
     for(let items of this.allRecords[0]) {
       for(let item of items){
-          // 復原時最新一步剛好在拿取中且未點擊時需回復選擇畫面
-          // console.log('=============================')
-          // console.log('item',item)
           const whichSize = item.useSize
           const index = item.wherePlace
           // 給予畫面資料
-          if(item.status === this.clickStatus[0]) this.nowFlag[1]++
-          else this.OXData[this.stepCount][whichSize].amount++
+          if(item.status === this.clickStatus[0]){
+            this.nowFlag[1]++
+            this.OXData[1 - this.stepCount][whichSize].amount--
+          }else this.OXData[this.stepCount][whichSize].amount++
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
-          this.OXData[1 - this.stepCount][whichSize].amount--
           this.updateChose(this.marks[this.stepCount],whichSize)
           if(item.status === this.clickStatus[0]) this.choseLock = false
           else this.choseLock = true
@@ -224,10 +220,11 @@ export class GameService {
     this.updateChose((this.checkRecord[index][this.checkRecord[index].length - 1].content === 1) ? this.marks[0] : this.marks[1],this.checkRecord[index][this.checkRecord[index].length - 1].useSize)
     this.choseLock = true
     //還原上一次修改的資料
+    const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
+    const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
+    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,(3 - (lastTarget?.useSize || nowTarget.useSize)))
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus)
     this.recordService.updatedCheckRecord(index)
-    const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || 0,((3 -  lastTarget?.useSize) || 0))
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || 0),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus)
     this.setStatus()
   }
   // 判斷勝負

@@ -8,6 +8,7 @@ export class RecordService {
     nowRecord 該局遊戲紀錄
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改
+    grabData 拿取步驟的暫存資料
   */
   checkRecord:stepType[][] = new checkData().getData
   allRecords:stepType[][][] = []
