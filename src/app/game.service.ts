@@ -206,8 +206,8 @@ export class GameService {
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
-    if(this.result || !this.AIStatus) return
-    else this.checkNext()
+    // if(this.result || !this.AIStatus) return
+    // else this.checkNext()
   }
   // 拿取動作
   grabProcess(index:number) {
@@ -289,38 +289,38 @@ export class GameService {
 
     this.judgeVictory()
   }
-  // 拿取電腦遊玩狀態
-  get getAIStatus () {
-    return this.AIStatus
-  }
-  // 改變電腦遊玩狀態
-  changeAIStatus (val:boolean) {
-    this.AIStatus = val
-    if(!val) return
-    this.AIfirst = Math.floor(Math.random() * 2)
-    if(this.AIfirst) this.checkNext()
-  }
+  // // 拿取電腦遊玩狀態
+  // get getAIStatus () {
+  //   return this.AIStatus
+  // }
+  // // 改變電腦遊玩狀態
+  // changeAIStatus (val:boolean) {
+  //   this.AIStatus = val
+  //   if(!val) return
+  //   this.AIfirst = Math.floor(Math.random() * 2)
+  //   if(this.AIfirst) this.checkNext()
+  // }
   // 電腦動作
-  checkNext() {
-    // selectTarget 選取要下的大小
-    // canPlace 尋找可以下的地方
-    const selectTarget = this.OXData[this.stepCount].find((item) => item.amount > 0)
-    let canPlace = []
-    for(let key in this.viewData ) if(this.viewData[key].weight < (selectTarget?.weight || 0) && (this.viewData[key].data !== ((this.stepCount === 0) ? 1 : -1))) canPlace.push(parseInt(key))
-    if(!canPlace.length) return
+  // checkNext() {
+  //   // selectTarget 選取要下的大小
+  //   // canPlace 尋找可以下的地方
+  //   const selectTarget = this.OXData[this.stepCount].find((item) => item.amount > 0)
+  //   let canPlace = []
+  //   for(let key in this.viewData ) if(this.viewData[key].weight < (selectTarget?.weight || 0) && (this.viewData[key].data !== ((this.stepCount === 0) ? 1 : -1))) canPlace.push(parseInt(key))
+  //   if(!canPlace.length) return
 
-    const whichSize = this.OXData[this.stepCount].findIndex((item) => item.weight === selectTarget?.weight)
-    const index = canPlace[Math.floor(Math.random() * canPlace.length)]
-    // 給予畫面資料
-    this.nowFlag[1]++
-    const data = (this.stepCount === 1) ? 1 : -1
-    this.updateViewData(index,data,whichSize,selectTarget?.weight || 0,)
-    this.OXData[1 - this.stepCount][whichSize].amount--
-    //紀錄
-    const stepNum = this.allRecords[0].length
-    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus)
+  //   const whichSize = this.OXData[this.stepCount].findIndex((item) => item.weight === selectTarget?.weight)
+  //   const index = canPlace[Math.floor(Math.random() * canPlace.length)]
+  //   // 給予畫面資料
+  //   this.nowFlag[1]++
+  //   const data = (this.stepCount === 1) ? 1 : -1
+  //   this.updateViewData(index,data,whichSize,selectTarget?.weight || 0,)
+  //   this.OXData[1 - this.stepCount][whichSize].amount--
+  //   //紀錄
+  //   const stepNum = this.allRecords[0].length
+  //   this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
+  //   this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus)
 
-    this.judgeVictory()
-  }
+  //   this.judgeVictory()
+  // }
 }

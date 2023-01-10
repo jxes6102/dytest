@@ -33,9 +33,9 @@ export class AllViewComponent {
   get status () {
     return this.gameService.getStatus
   }
-  get AIStatus () {
-    return this.gameService.getAIStatus
-  }
+  // get AIStatus () {
+  //   return this.gameService.getAIStatus
+  // }
 
   constructor(private gameService: GameService) {}
 
@@ -49,18 +49,18 @@ export class AllViewComponent {
   renewGame(): void {
     this.gameService.resetGame()
     this.gameService.clearView()
-    this.gameService.changeAIStatus(false)
+    // this.gameService.changeAIStatus(false)
   }
   // 切換到對戰模式
   toBattle() {
     this.gameService.setMode(0)
     this.gameService.recoverData()
   }
-  // 和電腦對戰
-  toRobot () {
-    this.renewGame()
-    if(!this.AIStatus) this.gameService.changeAIStatus(true)
-  }
+  // // 和電腦對戰
+  // toRobot () {
+  //   this.renewGame()
+  //   if(!this.AIStatus) this.gameService.changeAIStatus(true)
+  // }
   //切換狀態
   changeStatus() {
     this.gameService.setStatus()
