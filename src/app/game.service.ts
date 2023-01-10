@@ -257,11 +257,7 @@ export class GameService {
       // 畫面敵對和空白最小重
       const minViewWeight = (this.stepCount === 0) ? Math.min(...this.viewData.filter((item) => item.data !== 1).map(item => item.weight)) :
       Math.min(...this.viewData.filter((item) => item.data !== -1).map(item => item.weight))
-      // 當前選擇欄位剩餘數量
-      const count = this.OXData[this.stepCount].reduce((acc, item) => acc + item.amount,0)
-      // 有無空格可下
-      const hasSpace = this.viewData.some((item)=> !item.data)
-      if((count && hasSpace) || (maxChoseWeight > minViewWeight)) return
+      if(maxChoseWeight > minViewWeight) return
       // 當自己的每個格子周圍都不能再拿取覆蓋時平手
       let proceeStatus = false
       let nowSign = this.marks[this.stepCount] === this.marks[0] ? 1 : -1
