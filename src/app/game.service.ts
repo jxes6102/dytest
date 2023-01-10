@@ -235,17 +235,20 @@ export class GameService {
   // 判斷勝負
   judgeVictory() {
     this.result = 0
-    const condition1 = Math.abs(this.viewData[0].data + this.viewData[4].data + this.viewData[8].data)
-    const condition2 = Math.abs(this.viewData[2].data + this.viewData[4].data + this.viewData[6].data)
-    this.result = ((condition1 === 3) || (condition2 === 3)) ? this.viewData[4].data : this.result
-    if(!this.result) {
-      for(let i = 0 ;i<3; i++) {
-        const condition3 = Math.abs(this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data)
-        const condition4 = Math.abs(this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data)
-        this.result = (condition3 === 3) ? this.viewData[3*i].data : (condition4 === 3)
-          ? this.viewData[i].data : this.result
-      }
+    let conditionArr = []
+    const condition1 = this.viewData[0].data + this.viewData[4].data + this.viewData[8].data
+    const condition2 = this.viewData[2].data + this.viewData[4].data + this.viewData[6].data
+    conditionArr.push(condition1,condition2)
+    for(let i = 0 ;i<3; i++) {
+      const condition3 = this.viewData[3*i].data + this.viewData[3*i+1].data + this.viewData[3*i+2].data
+      const condition4 = this.viewData[i].data + this.viewData[i+3].data + this.viewData[i+6].data
+      conditionArr.push(condition3,condition4)
     }
+    const player1Win = conditionArr.some((item)=> item === 3)
+    const player2Win = conditionArr.some((item)=> item === -3)
+    if(player1Win && player2Win) this.result = 2
+    else if(player1Win) this.result = 1
+    else if(player2Win) this.result = -1
     // 計算對戰或紀錄模式時平手條件
     if(this.isBattle && !this.result) {
       // 當前選擇欄位剩餘數量

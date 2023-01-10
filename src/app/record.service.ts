@@ -17,6 +17,7 @@ export class RecordService {
 
   constructor() {
     this.setLocal()
+    console.log('allRecords',this.allRecords[5])
   }
   //拿取現在紀錄
   get getNowRecord() {
