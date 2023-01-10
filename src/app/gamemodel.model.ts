@@ -1,3 +1,8 @@
+export enum clickStatus
+{
+   click='click',
+   grab='grab'
+}
 export interface stepType {
     wherePlace: number
     content: number
@@ -78,3 +83,4 @@ export class checkData {
         return this.data
     } 
  }
+ 

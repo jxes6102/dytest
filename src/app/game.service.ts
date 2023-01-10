@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RecordService } from './record.service';
-import { viewType,xoType,viewData,selectData } from "./gamemodel.model";
+import { viewType,xoType,viewData,selectData,clickStatus } from "./gamemodel.model";
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,15 @@ export class GameService {
     viewData  畫面資料
     marks 定義符號
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
-    allRecords 所有遊戲紀錄
-    checkRecord 紀錄每個格子的修改
-    nowRecord 該局遊戲紀錄
     choseLock 是否可切換選擇大小畫面和動作類別
     canMove 每個格子可下的範圍
     AIStatus 電腦是否遊玩
     AIfirst 電腦是否先手 1先手 0後手
+    allRecords 所有遊戲紀錄
+    checkRecord 紀錄每個格子的修改
+    nowRecord 該局遊戲紀錄
   */
-  clickStatus:string[] = ['click','grab']
-  status:string = this.clickStatus[0]
+  status:string = clickStatus.click
   result:number = 0
   OXData:xoType[][] = new selectData().getData
   viewData:viewType[] = new viewData().getData
@@ -91,8 +90,8 @@ export class GameService {
   }
   // 設定遊戲遊玩狀態
   setStatus () {
-    if(this.status === this.clickStatus[0]) this.status = this.clickStatus[1]
-    else this.status = this.clickStatus[0]
+    if(this.status === clickStatus.click) this.status = clickStatus.grab
+    else this.status = clickStatus.click
   }
   // 拿取遊戲遊玩狀態
   get getStatus () {
@@ -107,7 +106,7 @@ export class GameService {
   resetData () {
     this.recordService.setNowRecord(0)
     this.result = 0
-    this.status = this.clickStatus[0]
+    this.status = clickStatus.click
     this.recordService.clearCheckRecord()
     this.nowFlag[1] = 0
     this.choseLock = false
@@ -121,7 +120,7 @@ export class GameService {
     const sign = (target[target.length - 1].content === 1) ? this.marks[0] : this.marks[1]
     const adjArr = ['bigSize','mediumSize','smallSize']
     if(target?.length === 1) {
-      if(target[0].status === this.clickStatus[1]) return '拿了' + this.marks[this.stepCount]
+      if(target[0].status === clickStatus.grab) return '拿了' + this.marks[this.stepCount]
       else return (sign + '用了' + adjArr[target[0].useSize] + '下在第' + (target[0].wherePlace + 1) + '格')
     }else return ('拿了在第' + ((target[0].wherePlace + 1)) + '格的' + sign + '下在第' + ((target[1].wherePlace + 1)) + '格')
   }
@@ -162,7 +161,7 @@ export class GameService {
           const whichSize = item.useSize
           const index = item.wherePlace
           // 給予畫面資料
-          if(item.status === this.clickStatus[0]){
+          if(item.status === clickStatus.click){
             this.nowFlag[1]++
             this.OXData[1 - this.stepCount][whichSize].amount--
           }else {
@@ -171,17 +170,17 @@ export class GameService {
             this.updateChose(this.marks[this.stepCount],last.useSize)
           }
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
-          if(item.status === this.clickStatus[0]) this.choseLock = false
+          if(item.status === clickStatus.click) this.choseLock = false
           else this.choseLock = true
           //紀錄
-          this.recordService.updatedCheckRecord(index,{wherePlace: index,content: item.content,useSize:whichSize,stepID:this.allRecords[0].length ,status:this.clickStatus[0]})
+          this.recordService.updatedCheckRecord(index,{wherePlace: index,content: item.content,useSize:whichSize,stepID:this.allRecords[0].length ,status:clickStatus.click})
       }
     }
   }
   //點擊格子
   clickAction(index:number) {
     if(!this.isBattle) return
-    if(this.status === this.clickStatus[0]) this.clickProcess(index)
+    if(this.status === clickStatus.click) this.clickProcess(index)
     else this.grabProcess(index)
   }
   // 點擊動作
@@ -190,7 +189,7 @@ export class GameService {
     const canClick = (this.OXData[this.stepCount][whichSize]?.amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
     const lastTarget = (this.allRecords[0]?.length ? this.allRecords[0][this.allRecords[0].length-1][this.allRecords[0][this.allRecords[0].length-1].length - 1] : null)
-    const grabStatus = (lastTarget?.status === this.clickStatus[1]) && ((!this.viewData[index].data) || (lastTarget?.wherePlace === index) || !(this.canMove[lastTarget?.wherePlace || 0].includes(index)))
+    const grabStatus = (lastTarget?.status === clickStatus.grab) && ((!this.viewData[index].data) || (lastTarget?.wherePlace === index) || !(this.canMove[lastTarget?.wherePlace || 0].includes(index)))
     // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊、上一步是拿取時只能 下在鄰近格子 不可下在空格和原本的格子
     if(!canClick || !canCover || this.result || (whichSize === -1) || grabStatus) return
     // 重製切換狀態
@@ -202,8 +201,8 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0]?.length || 0
-    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus)
+    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
     // 勝負判斷
     this.judgeVictory()
     // 判斷勝敗狀態、對戰模式 來決定電腦動作
@@ -228,7 +227,7 @@ export class GameService {
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
     const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0)
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:this.clickStatus[1]},this.clickStatus)
+    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:clickStatus.grab})
     this.recordService.updatedCheckRecord(index)
     this.setStatus()
   }

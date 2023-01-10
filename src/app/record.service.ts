@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { stepType,checkData } from "./gamemodel.model";
+import { stepType,checkData,clickStatus } from "./gamemodel.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -10,14 +10,13 @@ export class RecordService {
     checkRecord 紀錄每個格子的修改
     grabData 拿取步驟的暫存資料
   */
-  checkRecord:stepType[][] = new checkData().getData
-  allRecords:stepType[][][] = []
-  grabData:stepType[] = []
   nowRecord:stepType[][] = []
+  allRecords:stepType[][][] = []
+  checkRecord:stepType[][] = new checkData().getData
+  grabData:stepType[] = []
 
   constructor() {
     this.setLocal()
-    console.log('allRecords',this.allRecords[5])
   }
   //拿取現在紀錄
   get getNowRecord() {
@@ -33,7 +32,7 @@ export class RecordService {
     return this.allRecords
   }
   //修改紀錄
-  updatedAllRecords(index:number,data:stepType,status:string[]) {
+  updatedAllRecords(index:number,data:stepType) {
     if(!this.allRecords[index]?.length) this.allRecords[index] = []
     // 當上一步是拿取時，將點擊和拿取組合成同一步驟
     if(this.grabData.length) {
@@ -42,7 +41,7 @@ export class RecordService {
       this.allRecords[index].push(this.grabData)
       this.grabData = []
     // 當這一步是拿取時，存到grabData
-    }else if(data.status === status[1]){
+    }else if(data.status === clickStatus.grab){
       this.grabData = [data]
       this.allRecords[index].push([data])
     }else this.allRecords[index].push([data])
