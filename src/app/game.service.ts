@@ -190,8 +190,8 @@ export class GameService {
     const canClick = (this.OXData[this.stepCount][whichSize]?.amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
     const lastTarget = (this.allRecords[0]?.length ? this.allRecords[0][this.allRecords[0].length-1][this.allRecords[0][this.allRecords[0].length-1].length - 1] : null)
-    const grabStatus = (lastTarget?.status === this.clickStatus[1]) && ((!this.viewData[index].data) || (lastTarget?.wherePlace === index))
-    // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊、上一步是拿取時不可下在空格和原本的格子
+    const grabStatus = (lastTarget?.status === this.clickStatus[1]) && ((!this.viewData[index].data) || (lastTarget?.wherePlace === index) || !(this.canMove[lastTarget?.wherePlace || 0].includes(index)))
+    // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊、上一步是拿取時只能 下在鄰近格子 不可下在空格和原本的格子
     if(!canClick || !canCover || this.result || (whichSize === -1) || grabStatus) return
     // 重製切換狀態
     this.choseLock = false
