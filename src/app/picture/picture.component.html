@@ -1,4 +1,4 @@
-<div class="playView">
+<div class="playView baseSize">
     <ng-container *ngFor="let item of viewData;let i = index">
         <div class="flexCenter blockSize" [ngClass]="item.styleName" (click)="action(i)">{{item.data | displayPipe:signs}}</div>
     </ng-container>
