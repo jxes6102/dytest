@@ -22,4 +22,8 @@
     .stepStyle {
         font-size: 12px;
     }
+    .inputStyle {
+        width: 25px;
+        height: 20px;
+    }
 }
