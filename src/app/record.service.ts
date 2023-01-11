@@ -69,6 +69,10 @@ export class RecordService {
     if(data)this.checkRecord[index].push(data)
     else this.checkRecord[index].pop()
   }
+  //清除grab紀錄
+  clearGrabData() {
+    this.grabData = []
+  }
   //拿取本地紀錄
   setLocal() {
     if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')

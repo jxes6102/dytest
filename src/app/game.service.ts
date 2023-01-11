@@ -108,6 +108,7 @@ export class GameService {
     this.result = 0
     this.status = clickStatus.click
     this.recordService.clearCheckRecord()
+    this.recordService.clearGrabData()
     this.nowFlag[1] = 0
     this.choseLock = false
   }
