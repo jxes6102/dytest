@@ -33,23 +33,16 @@ export class AllViewComponent {
   get status () {
     return this.gameService.getStatus
   }
-  // get AIStatus () {
-  //   return this.gameService.getAIStatus
-  // }
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.gameService.recoverData()
-    window.onbeforeunload = () => {
-      // if(!this.AIStatus) this.gameService.setBattle()
-    }
   }
   // 重置遊戲
   renewGame(): void {
     this.gameService.resetGame()
     this.gameService.clearView()
-    // this.gameService.changeAIStatus(false)
   }
   // 切換到對戰模式
   toBattle() {
@@ -60,9 +53,4 @@ export class AllViewComponent {
   changeStatus() {
     this.gameService.setStatus()
   }
-  // // 和電腦對戰
-  // toRobot () {
-  //   this.renewGame()
-  //   if(!this.AIStatus) this.gameService.changeAIStatus(true)
-  // }
 }

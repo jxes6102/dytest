@@ -16,8 +16,6 @@ export class GameService {
     nowFlag 當前遊戲狀態 index 0 is 0 for battle 1~5 for record, index 1 is stepNum
     choseLock 是否可切換選擇大小畫面和動作類別
     canMove 每個格子可下的範圍
-    AIStatus 電腦是否遊玩
-    AIfirst 電腦是否先手 1先手 0後手
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改
     nowRecord 該局遊戲紀錄
@@ -40,8 +38,6 @@ export class GameService {
     [4,6,8],
     [5,7]
   ]
-  // AIStatus:boolean = false
-  // AIfirst:number = Math.floor(Math.random() * 2)
   // 拿取該局紀錄資料
   get nowRecord() {
     return this.recordService.getNowRecord
@@ -205,9 +201,6 @@ export class GameService {
     this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
     // 勝負判斷
     this.judgeVictory()
-    // 判斷勝敗狀態、對戰模式 來決定電腦動作
-    // if(this.result || !this.AIStatus) return
-    // else this.checkNext()
   }
   // 拿取動作
   grabProcess(index:number) {
@@ -301,42 +294,5 @@ export class GameService {
 
     this.judgeVictory()
   }
-  // // 存入對戰資料
-  // setBattle() {
-  //   this.recordService.saveBattle()
-  // }
-  // // 拿取電腦遊玩狀態
-  // get getAIStatus () {
-  //   return this.AIStatus
-  // }
-  // // 改變電腦遊玩狀態
-  // changeAIStatus (val:boolean) {
-  //   this.AIStatus = val
-  //   if(!val) return
-  //   this.AIfirst = Math.floor(Math.random() * 2)
-  //   if(this.AIfirst) this.checkNext()
-  // }
-  // 電腦動作
-  // checkNext() {
-  //   // selectTarget 選取要下的大小
-  //   // canPlace 尋找可以下的地方
-  //   const selectTarget = this.OXData[this.stepCount].find((item) => item.amount > 0)
-  //   let canPlace = []
-  //   for(let key in this.viewData ) if(this.viewData[key].weight < (selectTarget?.weight || 0) && (this.viewData[key].data !== ((this.stepCount === 0) ? 1 : -1))) canPlace.push(parseInt(key))
-  //   if(!canPlace.length) return
 
-  //   const whichSize = this.OXData[this.stepCount].findIndex((item) => item.weight === selectTarget?.weight)
-  //   const index = canPlace[Math.floor(Math.random() * canPlace.length)]
-  //   // 給予畫面資料
-  //   this.nowFlag[1]++
-  //   const data = (this.stepCount === 1) ? 1 : -1
-  //   this.updateViewData(index,data,whichSize,selectTarget?.weight || 0,)
-  //   this.OXData[1 - this.stepCount][whichSize].amount--
-  //   //紀錄
-  //   const stepNum = this.allRecords[0].length
-  //   this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]})
-  //   this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:this.clickStatus[0]},this.clickStatus)
-
-  //   this.judgeVictory()
-  // }
 }
