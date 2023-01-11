@@ -82,20 +82,20 @@ export class RecordService {
   noteGame() {
     this.nowRecord = []
     // 處理歷史紀錄
-    let testhistoryTarget:stepType[][][] = this.allRecords.slice(1, this.allRecords.length)
-    if(testhistoryTarget.every((item) => item?.length > 0)) {
-      testhistoryTarget.shift()
-      testhistoryTarget.push(this.allRecords[0])
+    let historyTarget:stepType[][][] = this.allRecords.slice(1, this.allRecords.length)
+    if(historyTarget.every((item) => item?.length > 0)) {
+      historyTarget.shift()
+      historyTarget.push(this.allRecords[0])
     }else {
-      for(let i = 0;i<testhistoryTarget.length;i++) {
-        if(!testhistoryTarget[i]?.length) {
-          testhistoryTarget[i] = this.allRecords[0]
+      for(let i = 0;i<historyTarget.length;i++) {
+        if(!historyTarget[i]?.length) {
+          historyTarget[i] = this.allRecords[0]
           break
         }
       }
     }
     // 生成歷史紀錄
-    for(let i = 1;i<=5;i++) this.allRecords[i] = testhistoryTarget[i-1]
+    for(let i = 1;i<=5;i++) this.allRecords[i] = historyTarget[i-1]
     this.allRecords[0] = []
     this.saveBattle()
   }
