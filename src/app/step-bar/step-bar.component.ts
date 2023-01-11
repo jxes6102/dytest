@@ -9,6 +9,7 @@ export class StepBarComponent {
   /**
    * value 查詢的值
    * stepLen 查詢上限
+   * step 當前步驟
    */
   value:string = ''
 
@@ -16,6 +17,9 @@ export class StepBarComponent {
 
   get stepLen() {
     return this.gameService.nowRecord.length
+  }
+  get step () {
+    return this.gameService.getStep
   }
   //發送要查的步驟
   send(data:string) {

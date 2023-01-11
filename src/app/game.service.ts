@@ -52,6 +52,10 @@ export class GameService {
   }
 
   constructor(private recordService: RecordService) {}
+  // 拿取當前步驟
+  get getStep () {
+    return this.nowFlag[1]
+  }
   // 拿取符號
   get getMarks () {
     return this.marks

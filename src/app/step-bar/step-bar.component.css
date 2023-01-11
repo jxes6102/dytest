@@ -5,14 +5,21 @@
 }
 
 .inputStyle {
-    width: 50px;
+    width: 30px;
     height: 20px;
+}
+
+.stepStyle {
+    font-size: 20px;
 }
 
 @media screen and (max-width: 768px) {
     .wrap {
         width: 100%;
         margin-top: 10px;
-        gap: 10px;
+        gap: 5px;
+    }
+    .stepStyle {
+        font-size: 12px;
     }
 }
