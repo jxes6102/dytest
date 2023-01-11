@@ -101,6 +101,7 @@ export class GameService {
   resetGame() {
     this.resetData()
     this.recordService.clearAllRecords()
+    this.recordService.clearGrabData()
   }
   // 重置資料
   resetData () {
@@ -108,7 +109,6 @@ export class GameService {
     this.result = 0
     this.status = clickStatus.click
     this.recordService.clearCheckRecord()
-    this.recordService.clearGrabData()
     this.nowFlag[1] = 0
     this.choseLock = false
   }
