@@ -1,8 +1,8 @@
 <div class="wrap flexCenter">
     <div class="board flexCenter">
-        <app-pick *ngIf="mode === 'battle'" [playerNo]="0" [style.opacity]='(nowSign === marks[0]) ? 1 : .5'></app-pick>
+        <app-pick [playerNo]="0" [style.opacity]='(nowSign === marks[0]) ? 1 : .5'></app-pick>
         <app-picture></app-picture>
-        <app-pick *ngIf="mode === 'battle'" [playerNo]="1" [style.opacity]='(nowSign === marks[1]) ? 1 : .5'></app-pick>
+        <app-pick [playerNo]="1" [style.opacity]='(nowSign === marks[1]) ? 1 : .5'></app-pick>
     </div>
     <app-step-bar *ngIf="mode === 'record'" ></app-step-bar>
     <div class="menu flexCenter" *ngIf="mode === 'record'">

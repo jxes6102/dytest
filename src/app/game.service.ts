@@ -134,7 +134,7 @@ export class GameService {
   }
   // 更新選擇效果
   updateChose (sign:string,val:number) {
-    if(this.choseLock) return
+    if(this.choseLock || !this.isBattle) return
     // 當不是自己的回合時無法選擇自己的大小
     if(((this.stepCount == 0) && (sign === this.marks[1])) || ((this.stepCount == 1) && (sign === this.marks[0]))) return
     for(let key in this.OXData[this.stepCount]) {
@@ -286,6 +286,14 @@ export class GameService {
     this.recordService.setCheckRecord(target)
     this.nowFlag[1] = val
     //修改畫面
+    for(let items of target){
+      for(let item of items){
+        if(item.status === clickStatus.grab) break
+
+        if(item.content === 1)this.OXData[0][item.useSize].amount--
+        else this.OXData[1][item.useSize].amount--
+      }
+    }
     for(let i = 0;i<this.checkRecord.length;i++) {
       const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
       if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
