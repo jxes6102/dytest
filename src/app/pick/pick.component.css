@@ -11,6 +11,7 @@
 .block{
     width: 120px;
     height: 120px;
+    padding:2px 2px;
     flex-direction: column;
 }
 
@@ -31,16 +32,22 @@
         background: linear-gradient(to bottom right,#ffc3a0,#ffafbd);
         flex-direction: column;
         border-radius: 10px;
-        gap: 15px;
+        gap: 10px;
     }
     
     .block{
         width: 65px;
         height: 65px;
+        padding:2px 0px;
         flex-direction: column;
     }
 
     .countStyle {
         font-size: 12px;
+    }
+
+    .selectColor {
+        border-radius: 5px;
+        background-color: #ff758c;
     }
 }
