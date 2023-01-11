@@ -151,7 +151,6 @@ export class GameService {
   // 回復畫面資料
   recoverData() {
     if(!this.allRecords[0]?.length) return
-
     for(let items of this.allRecords[0]) {
       for(let item of items){
           const whichSize = item.useSize
@@ -161,8 +160,8 @@ export class GameService {
             this.nowFlag[1]++
             this.OXData[1 - this.stepCount][whichSize].amount--
           }else {
-            this.OXData[this.stepCount][whichSize].amount++
             const last = this.checkRecord[index][this.checkRecord[index].length - 1]
+            this.OXData[this.stepCount][last.useSize].amount++
             this.updateChose(this.marks[this.stepCount],last.useSize)
           }
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
