@@ -25,14 +25,12 @@ export class RecordService {
     if(!this.allRecords[index]?.length) this.allRecords[index] = []
     // 當上一步是拿取時，將點擊和拿取組合成同一步驟
     if(this.grabData.length) {
-      this.allRecords[index].pop()
       this.grabData.push(data)
       this.allRecords[index].push(this.grabData)
       this.grabData = []
     // 當這一步是拿取時，存到grabData
     }else if(data.status === clickStatus.grab){
       this.grabData = [data]
-      this.allRecords[index].push([data])
     }else this.allRecords[index].push([data])
 
   }
@@ -68,10 +66,6 @@ export class RecordService {
     if(localStorage.getItem('record')) this.allRecords = JSON.parse(localStorage.getItem('record') || '[]')
     else this.allRecords = []
   }
-  //紀錄對戰資料
-  saveBattle() {
-    localStorage.setItem('record', JSON.stringify(this.allRecords))
-  }
   //記錄此次遊戲
   noteGame() {
     // 處理歷史紀錄
@@ -90,7 +84,7 @@ export class RecordService {
     // 生成歷史紀錄
     for(let i = 1;i<=5;i++) this.allRecords[i] = historyTarget[i-1]
     this.allRecords[0] = []
-    this.saveBattle()
+    localStorage.setItem('record', JSON.stringify(this.allRecords))
   }
 
 }
