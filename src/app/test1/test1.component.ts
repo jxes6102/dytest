@@ -32,6 +32,30 @@ export class Test1Component {
     this.imgUrlRight = Object.values(resp)[6].url ||  ''
     // console.log('c')
     // console.log('2 ngOnInit')
+
+
+
+    // let target:any = []
+    // let arr = [[0,1,2],[3,4,5],[6,7,8]]
+    // for(let i = 0;i<arr.length;i++) {
+    //   for(let j = 0;j<arr[i].length;j++) {
+    //     console.log('item',arr[i][j])
+    //     let temp = []
+    //     if(j+1 < arr[i].length) temp.push(arr[i][j+1])
+    //     if(i+1 < arr.length) temp.push(arr[i+1][j])
+    //     if(i+1 < arr.length && j+1 < arr[i].length) temp.push(arr[i+1][j+1])
+    //     if(i-1 >= 0 && j-1 >= 0) temp.push(arr[i-1][j-1])
+    //     if(j-1 >= 0) temp.push(arr[i][j-1])
+    //     if(i-1 >= 0) temp.push(arr[i-1][j])
+    //     if(i+1 < arr.length && j-1 >= 0) temp.push(arr[i+1][j-1])
+    //     if(i-1 >= 0 && j+1 < arr[i].length) temp.push(arr[i-1][j+1])
+    //     target[arr[i][j]] = []
+    //     target[arr[i][j]].push(temp)
+    //   }
+    // }
+    // console.log('target',target)
+
+
   }
 
   async httpGET(...args: any[]): Promise<object> {
