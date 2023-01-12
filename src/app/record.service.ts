@@ -36,6 +36,7 @@ export class RecordService {
   //   }else this.allRecords[index].push([data])
   // }
   testaddAllRecords(data:stepType[]) {
+    if(!this.allRecords[0]) this.allRecords[0] = []
     this.allRecords[0].push(data)
   }
   //清除紀錄
