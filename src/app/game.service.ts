@@ -18,7 +18,6 @@ export class GameService {
     canMove 每個格子可下的範圍
     allRecords 所有遊戲紀錄
     checkRecord 紀錄每個格子的修改
-    nowRecord 該局遊戲紀錄
   */
   status:string = clickStatus.click
   result:number = 0
@@ -38,9 +37,9 @@ export class GameService {
     [4,6,8],
     [5,7]
   ]
-  // 拿取該局紀錄資料
-  get nowRecord() {
-    return this.recordService.getNowRecord
+  // 拿取該局紀錄長度
+  get stepLen() {
+    return this.allRecords[this.nowFlag[0]].length
   }
   // 拿取全部對戰資料
   get allRecords() {
@@ -74,7 +73,6 @@ export class GameService {
     this.resetData()
 
     this.nowFlag[0] = val
-    if(!this.isBattle) this.recordService.setNowRecord(val)
   }
   // 拿取勝利者
   get getWin() {
@@ -105,7 +103,6 @@ export class GameService {
   }
   // 重置資料
   resetData () {
-    this.recordService.setNowRecord(0)
     this.result = 0
     this.status = clickStatus.click
     this.recordService.clearCheckRecord()
@@ -115,8 +112,8 @@ export class GameService {
   //拿取步驟訊息
   get getStepMessage() {
     if(this.isBattle && !this.allRecords[0]?.length) return '開始'
-    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.nowRecord[this.nowFlag[1] - 1]
-    if(!target?.length) return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.nowRecord)) + '場'
+    const target = (this.isBattle) ? this.allRecords[0][this.allRecords[0]?.length - 1] : this.allRecords[this.nowFlag[0]][this.nowFlag[1] - 1]
+    if(!target?.length) return '這是上' + ((this.allRecords.filter((item) => item?.length > 0).length + 1) - this.allRecords.indexOf(this.allRecords[this.nowFlag[0]])) + '場'
 
     const sign = (target[target.length - 1].content === 1) ? this.marks[0] : this.marks[1]
     const adjArr = ['bigSize','mediumSize','smallSize']
@@ -202,7 +199,7 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0]?.length || 0
     this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
+    this.recordService.addAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
     // 勝負判斷
     this.judgeVictory()
   }
@@ -224,7 +221,7 @@ export class GameService {
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
     const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0)
-    this.recordService.updatedAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:clickStatus.grab})
+    this.recordService.addAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:clickStatus.grab})
     this.recordService.updatedCheckRecord(index)
     this.setStatus()
   }
@@ -269,14 +266,14 @@ export class GameService {
       }
       if(!proceeStatus) this.result = 2
 
-    } else if(!this.nowRecord[this.nowFlag[1]] && !this.result) this.result = 2
+    } else if(!this.allRecords[this.nowFlag[0]][this.nowFlag[1]] && !this.result) this.result = 2
 
     if(this.result && this.isBattle)this.recordService.noteGame()
   }
   // 執行紀錄(上下步按鈕)
   actionRecord (stepVal:number) {
     // 當按上一步時紀錄已到第0筆 按下一步時紀錄已到最後一筆 不動作
-    if(((this.nowFlag[1] === this.nowRecord.length) && (stepVal === 1)) || ((this.nowFlag[1] < 1) && (stepVal === -1))) return
+    if(((this.nowFlag[1] === this.allRecords[this.nowFlag[0]].length) && (stepVal === 1)) || ((this.nowFlag[1] < 1) && (stepVal === -1))) return
     this.skipAction(this.nowFlag[1] + stepVal)
   }
   // 拿取遊戲紀錄
@@ -287,7 +284,7 @@ export class GameService {
   skipAction(val:number) {
     this.clearView()
     this.result = 0
-    const target = this.nowRecord.slice(0,val)
+    const target = this.allRecords[this.nowFlag[0]].slice(0,val)
     this.recordService.setCheckRecord(target)
     this.nowFlag[1] = val
     //修改畫面

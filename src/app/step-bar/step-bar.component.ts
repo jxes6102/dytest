@@ -16,7 +16,7 @@ export class StepBarComponent {
   constructor(private gameService: GameService) {}
 
   get stepLen() {
-    return this.gameService.nowRecord.length
+    return this.gameService.stepLen
   }
   get step () {
     return this.gameService.getStep
