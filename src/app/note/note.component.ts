@@ -10,7 +10,7 @@ export class NoteComponent {
    * listData 對戰紀錄
    */
   get listData () {
-    return this.gameService.getAllRecords
+    return this.gameService.getRecord
   }
 
   constructor(private gameService: GameService) {}

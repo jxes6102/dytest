@@ -277,7 +277,7 @@ export class GameService {
     this.skipAction(this.nowFlag[1] + stepVal)
   }
   // 拿取遊戲紀錄
-  get getAllRecords() {
+  get getRecord() {
     return this.allRecords.filter((item,index) => ((item?.length > 0) && (index !== 0)))
   }
   // 紀錄模式切換步驟
