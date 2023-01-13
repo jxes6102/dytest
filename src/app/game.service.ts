@@ -163,9 +163,15 @@ export class GameService {
             this.nowFlag[1]++
             this.OXData[1 - this.stepCount][whichSize].amount--
           }else {
-            const grabTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-            this.OXData[this.stepCount][grabTarget.useSize].amount++
-            this.updateChose(this.marks[this.stepCount],grabTarget.useSize)
+            const recordTarget = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index))
+            const nowTarget = recordTarget[recordTarget.length - 1]
+            let lastID = -1
+            for(let item of recordTarget) {
+              if(item.stepID < nowTarget.stepID && item.useSize > nowTarget.useSize) lastID = item.stepID
+            }
+            const lastTarget = this.allRecords[0].flat(1).find((item)=> item.stepID === lastID)
+            this.OXData[this.stepCount][lastTarget?.useSize || 0].amount++
+            this.updateChose(this.marks[this.stepCount],lastTarget?.useSize || 0)
           }
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
           if(item.status === clickStatus.click) this.choseLock = false
@@ -173,6 +179,11 @@ export class GameService {
           //紀錄
           this.recordService.updatedCheckRecord(index,{wherePlace: index,content: item.content,useSize:whichSize,stepID:this.allRecords[0].length ,status:clickStatus.click})
       }
+    }
+    // 切換為對戰模式時回復當下正在拿取中的資料
+    if(this.actionData.length) {
+      const target = this.actionData.find((item)=> item.status === clickStatus.grab)
+      this.grabProcess(target?.wherePlace || 0)
     }
   }
   //點擊格子
@@ -318,15 +329,11 @@ export class GameService {
       for(let item of items){
         this.updateViewData(item.wherePlace,item.content,item.useSize,this.OXData[this.stepCount].length - item.useSize)
         
-        if(item.status === clickStatus.grab) continue
-        if(item.content === 1)this.OXData[0][item.useSize].amount--
-        else this.OXData[1][item.useSize].amount--
+        const hasGrab = items.map((data)=> data.status).includes(clickStatus.grab)
+        if(item.content === 1 && !hasGrab)this.OXData[0][item.useSize].amount--
+        else if (!hasGrab)this.OXData[1][item.useSize].amount--
       }
     }
-    // for(let i = 0;i<this.checkRecord.length;i++) {
-    //   const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
-    //   if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
-    // }
 
     this.judgeVictory()
   }
