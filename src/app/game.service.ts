@@ -316,16 +316,17 @@ export class GameService {
     //修改畫面
     for(let items of target){
       for(let item of items){
-        if(item.status === clickStatus.grab) break
-
+        this.updateViewData(item.wherePlace,item.content,item.useSize,this.OXData[this.stepCount].length - item.useSize)
+        
+        if(item.status === clickStatus.grab) continue
         if(item.content === 1)this.OXData[0][item.useSize].amount--
         else this.OXData[1][item.useSize].amount--
       }
     }
-    for(let i = 0;i<this.checkRecord.length;i++) {
-      const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
-      if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
-    }
+    // for(let i = 0;i<this.checkRecord.length;i++) {
+    //   const viewTarget = this.checkRecord[i].length ? this.checkRecord[i][this.checkRecord[i].length - 1] : false
+    //   if(viewTarget)  this.updateViewData(viewTarget.wherePlace,viewTarget.content,viewTarget.useSize,this.OXData[this.stepCount].length - viewTarget.useSize)
+    // }
 
     this.judgeVictory()
   }
