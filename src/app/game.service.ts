@@ -110,10 +110,6 @@ export class GameService {
     this.nowFlag[1] = 0
     this.choseLock = false
   }
-  // QQQQQ
-  findLast() {
-    return 'findLast'
-  }
   //拿取步驟訊息
   get getStepMessage() {
     if(this.isBattle && !this.allRecords[0]?.length) return '開始'
@@ -167,9 +163,9 @@ export class GameService {
             this.nowFlag[1]++
             this.OXData[1 - this.stepCount][whichSize].amount--
           }else {
-            const last = this.checkRecord[index][this.checkRecord[index].length - 1]
-            this.OXData[this.stepCount][last.useSize].amount++
-            this.updateChose(this.marks[this.stepCount],last.useSize)
+            const grabTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
+            this.OXData[this.stepCount][grabTarget.useSize].amount++
+            this.updateChose(this.marks[this.stepCount],grabTarget.useSize)
           }
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
           if(item.status === clickStatus.click) this.choseLock = false
@@ -225,8 +221,6 @@ export class GameService {
       this.setStatus()
       return
     }
-    // QQQQQQ
-    // console.log('=====================================================')
     const recordTarget = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index))
     const nowTarget = recordTarget[recordTarget.length - 1]
     let lastID = -1
