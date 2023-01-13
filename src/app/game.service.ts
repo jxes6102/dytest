@@ -46,10 +46,6 @@ export class GameService {
   get allRecords() {
     return this.recordService.getAllRecords
   }
-  // 拿取格子紀錄
-  get checkRecord() {
-    return this.recordService.getCheckRecord
-  }
 
   constructor(private recordService: RecordService) {}
   // 拿取當前步驟
@@ -100,13 +96,12 @@ export class GameService {
   resetGame() {
     this.resetData()
     this.recordService.clearAllRecords()
-    this.actionData = []
   }
   // 重置資料
   resetData () {
     this.result = 0
     this.status = clickStatus.click
-    this.recordService.clearCheckRecord()
+    this.actionData = []
     this.nowFlag[1] = 0
     this.choseLock = false
   }
@@ -176,14 +171,7 @@ export class GameService {
           this.updateViewData(index,item.content,whichSize,!item.content ? 0 : this.OXData[this.stepCount].length - whichSize)
           if(item.status === clickStatus.click) this.choseLock = false
           else this.choseLock = true
-          //紀錄
-          this.recordService.updatedCheckRecord(index,{wherePlace: index,content: item.content,useSize:whichSize,stepID:this.allRecords[0].length ,status:clickStatus.click})
       }
-    }
-    // 切換為對戰模式時回復當下正在拿取中的資料
-    if(this.actionData.length) {
-      const target = this.actionData.find((item)=> item.status === clickStatus.grab)
-      this.grabProcess(target?.wherePlace || 0)
     }
   }
   //點擊格子
@@ -209,7 +197,6 @@ export class GameService {
     this.OXData[1 - this.stepCount][whichSize].amount--
     //紀錄
     const stepNum = this.allRecords[0]?.length || 0
-    this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
     this.actionData.push({
       wherePlace: index,
       content: data,
@@ -259,7 +246,7 @@ export class GameService {
         status:clickStatus.grab
       }
     )
-    this.recordService.updatedCheckRecord(index)
+
     this.setStatus()
   }
   // 判斷勝負
@@ -322,7 +309,6 @@ export class GameService {
     this.clearView()
     this.result = 0
     const target = this.allRecords[this.nowFlag[0]].slice(0,val)
-    this.recordService.setCheckRecord(target)
     this.nowFlag[1] = val
     //修改畫面
     for(let items of target){

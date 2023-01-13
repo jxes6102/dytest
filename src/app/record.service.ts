@@ -6,12 +6,8 @@ import { stepType,checkData,clickStatus } from "./gamemodel.model";
 export class RecordService {
   /*
     allRecords 所有遊戲紀錄
-    checkRecord 紀錄每個格子的修改
-    grabData 拿取步驟的暫存資料
   */
   allRecords:stepType[][][] = []
-  checkRecord:stepType[][] = new checkData().getData
-  grabData:stepType[] = []
 
   constructor() {
     this.setLocal()
@@ -28,26 +24,6 @@ export class RecordService {
   //清除紀錄
   clearAllRecords() {
     this.allRecords[0] = []
-  }
-  //拿取格子紀錄
-  get getCheckRecord() {
-    return this.checkRecord
-  }
-  //修改格子紀錄
-  setCheckRecord(data:stepType[][]) {
-    this.clearCheckRecord()
-    for(let items of data){
-      for(let item of items) {
-        this.updatedCheckRecord(item.wherePlace,{wherePlace: item.wherePlace,content: item.content,useSize:item.useSize,stepID:this.checkRecord[item.wherePlace].length,status:item.status})
-      }
-    }
-  }
-  clearCheckRecord() {
-    this.checkRecord = new checkData().getData
-  }
-  updatedCheckRecord(index:number,data?:stepType) {
-    if(data)this.checkRecord[index].push(data)
-    else this.checkRecord[index].pop()
   }
   //拿取本地紀錄
   setLocal() {
