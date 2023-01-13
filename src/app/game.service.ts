@@ -227,15 +227,13 @@ export class GameService {
     }
     // QQQQQQ
     // console.log('=====================================================')
-    // console.log('position',index)
-    // const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
-    // const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-    const recordTarget = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index) && (item.status === clickStatus.click))
-    const lastTarget = recordTarget[recordTarget.length - 2]
-    const nowTarget = recordTarget[recordTarget.length - 1]
-    // console.log('recordTarget',recordTarget)
-    // console.log('testlast',lastTarget)
-    // console.log('testnow',nowTarget)
+    const all = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index))
+    const nowTarget = all[all.length - 1]
+    let lastID = -1
+    for(let item of all) {
+      if(item.stepID < nowTarget.stepID && item.useSize > nowTarget.useSize) lastID = item.stepID
+    }
+    const lastTarget = this.allRecords[0].flat(1).find((item)=> item.stepID === lastID)
     //更新選擇畫面和鎖住選擇畫面跟再次選取
     this.OXData[this.stepCount][where].amount++
     this.updateChose((nowTarget.content === 1) ? this.marks[0] : this.marks[1],nowTarget.useSize)
@@ -250,8 +248,8 @@ export class GameService {
     this.actionData.push(
       {
         wherePlace: index,
-        content: (lastTarget?.content || 0),
-        useSize:(lastTarget?.useSize || nowTarget.useSize),
+        content:lastTarget?.content || 0,
+        useSize:lastTarget?.useSize || 0,
         stepID:this.allRecords[0].length,
         status:clickStatus.grab
       }
