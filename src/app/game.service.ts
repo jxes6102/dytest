@@ -110,6 +110,10 @@ export class GameService {
     this.nowFlag[1] = 0
     this.choseLock = false
   }
+  // QQQQQ
+  findLast() {
+    return 'findLast'
+  }
   //拿取步驟訊息
   get getStepMessage() {
     if(this.isBattle && !this.allRecords[0]?.length) return '開始'
@@ -221,21 +225,37 @@ export class GameService {
       this.setStatus()
       return
     }
+    // QQQQQQ
+    // console.log('=====================================================')
+    // console.log('position',index)
+    // const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
+    // const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
+    const recordTarget = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index) && (item.status === clickStatus.click))
+    const lastTarget = recordTarget[recordTarget.length - 2]
+    const nowTarget = recordTarget[recordTarget.length - 1]
+    // console.log('recordTarget',recordTarget)
+    // console.log('testlast',lastTarget)
+    // console.log('testnow',nowTarget)
     //更新選擇畫面和鎖住選擇畫面跟再次選取
     this.OXData[this.stepCount][where].amount++
-    this.updateChose((this.checkRecord[index][this.checkRecord[index].length - 1].content === 1) ? this.marks[0] : this.marks[1],this.checkRecord[index][this.checkRecord[index].length - 1].useSize)
+    this.updateChose((nowTarget.content === 1) ? this.marks[0] : this.marks[1],nowTarget.useSize)
     this.choseLock = true
     //還原上一次修改的資料
-    const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
-    const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
-    this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0)
-    this.actionData.push({
-      wherePlace: index,
-      content: (lastTarget?.content || 0),
-      useSize:(lastTarget?.useSize || nowTarget.useSize),
-      stepID:this.allRecords[0].length,
-      status:clickStatus.grab
-    })
+    this.updateViewData(
+      index,
+      lastTarget?.content || 0,
+      lastTarget?.useSize || nowTarget.useSize,
+      lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0
+    )
+    this.actionData.push(
+      {
+        wherePlace: index,
+        content: (lastTarget?.content || 0),
+        useSize:(lastTarget?.useSize || nowTarget.useSize),
+        stepID:this.allRecords[0].length,
+        status:clickStatus.grab
+      }
+    )
     this.recordService.updatedCheckRecord(index)
     this.setStatus()
   }
