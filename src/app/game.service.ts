@@ -47,13 +47,13 @@ export class GameService {
   get stepLen() {
     return this.allRecords[this.nowFlag[0]].length
   }
-  // 拿取當前步驟
-  get getStep () {
-    return this.nowFlag[1]
-  }
   // 拿取符號
   get getMarks () {
     return this.marks
+  }
+  // 拿取當前步驟
+  get getStep () {
+    return this.nowFlag[1]
   }
   // 計算步驟
   get stepCount () {
@@ -313,7 +313,7 @@ export class GameService {
     for(let items of target){
       for(let item of items){
         this.updateViewData(item.wherePlace,item.content,item.useSize,this.OXData[this.stepCount].length - item.useSize)
-        
+        // 更新選擇視窗 當有拿取時不動作
         const hasGrab = items.map((data)=> data.status).includes(clickStatus.grab)
         if(item.content === 1 && !hasGrab)this.OXData[0][item.useSize].amount--
         else if (!hasGrab)this.OXData[1][item.useSize].amount--
