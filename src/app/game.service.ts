@@ -227,10 +227,10 @@ export class GameService {
     }
     // QQQQQQ
     // console.log('=====================================================')
-    const all = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index))
-    const nowTarget = all[all.length - 1]
+    const recordTarget = this.allRecords[0].flat(1).filter((item)=> (item.wherePlace === index))
+    const nowTarget = recordTarget[recordTarget.length - 1]
     let lastID = -1
-    for(let item of all) {
+    for(let item of recordTarget) {
       if(item.stepID < nowTarget.stepID && item.useSize > nowTarget.useSize) lastID = item.stepID
     }
     const lastTarget = this.allRecords[0].flat(1).find((item)=> item.stepID === lastID)
@@ -242,8 +242,8 @@ export class GameService {
     this.updateViewData(
       index,
       lastTarget?.content || 0,
-      lastTarget?.useSize || nowTarget.useSize,
-      lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0
+      lastTarget?.useSize || 0,
+      lastTarget?.useSize ? (this.OXData[0].length - (lastTarget?.useSize)) : 0
     )
     this.actionData.push(
       {
