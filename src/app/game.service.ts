@@ -100,7 +100,6 @@ export class GameService {
   resetGame() {
     this.resetData()
     this.recordService.clearAllRecords()
-    // this.recordService.clearGrabData()
     this.actionData = []
   }
   // 重置資料
@@ -187,12 +186,9 @@ export class GameService {
     const whichSize = this.OXData[this.stepCount].findIndex((item) => item.isChose)
     const canClick = (this.OXData[this.stepCount][whichSize]?.amount > 0) && (this.stepCount === 0 ? this.viewData[index].data <= 0 : this.viewData[index].data >= 0)
     const canCover = (this.OXData[this.stepCount].find((item) => item.isChose)?.weight || 0) > this.viewData[index].weight
-    // const lastTarget = (this.allRecords[0]?.length ? this.allRecords[0][this.allRecords[0].length-1][this.allRecords[0][this.allRecords[0].length-1].length - 1] : null)
-    // const grabStatus = (lastTarget?.status === clickStatus.grab) && ((!this.viewData[index].data) || (lastTarget?.wherePlace === index) || !(this.canMove[lastTarget?.wherePlace || 0].includes(index)))
-    const testgrabStatus = this.actionData.length && ((!this.viewData[index].data) || (this.actionData[0].wherePlace === index) || !(this.canMove[this.actionData[0].wherePlace].includes(index)))
-    // console.log('actionData',this.actionData.length)
+    const grabStatus = this.actionData.length && ((!this.viewData[index].data) || (this.actionData[0].wherePlace === index) || !(this.canMove[this.actionData[0].wherePlace].includes(index)))
     // 檢查結果、是否選擇尺寸、是否可覆蓋、是否可點擊、上一步是拿取時只能 下在鄰近格子 不可下在空格和原本的格子
-    if(!canClick || !canCover || this.result || (whichSize === -1) || testgrabStatus) return
+    if(!canClick || !canCover || this.result || (whichSize === -1) || grabStatus) return
     // 重製切換狀態
     this.choseLock = false
     // 給予畫面資料
@@ -203,7 +199,6 @@ export class GameService {
     //紀錄
     const stepNum = this.allRecords[0]?.length || 0
     this.recordService.updatedCheckRecord(index,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
-    // this.recordService.addAllRecords(0,{wherePlace: index,content: data,useSize:whichSize,stepID:stepNum,status:clickStatus.click})
     this.actionData.push({
       wherePlace: index,
       content: data,
@@ -211,7 +206,7 @@ export class GameService {
       stepID:stepNum,
       status:clickStatus.click
     })
-    this.recordService.testaddAllRecords(this.actionData)
+    this.recordService.addAllRecords(this.actionData)
     this.actionData = []
     // 勝負判斷
     this.judgeVictory()
@@ -234,7 +229,6 @@ export class GameService {
     const lastTarget = this.checkRecord[index][this.checkRecord[index].length - 2]
     const nowTarget = this.checkRecord[index][this.checkRecord[index].length - 1]
     this.updateViewData(index,lastTarget?.content || 0,lastTarget?.useSize || nowTarget.useSize,lastTarget?.useSize ? (3 - (lastTarget?.useSize)) : 0)
-    // this.recordService.addAllRecords(0,{wherePlace: index,content: (lastTarget?.content || 0),useSize:(lastTarget?.useSize || nowTarget.useSize),stepID:this.allRecords[0].length,status:clickStatus.grab})
     this.actionData.push({
       wherePlace: index,
       content: (lastTarget?.content || 0),
@@ -242,7 +236,6 @@ export class GameService {
       stepID:this.allRecords[0].length,
       status:clickStatus.grab
     })
-    // this.recordService.testaddAllRecords(this.actionData)
     this.recordService.updatedCheckRecord(index)
     this.setStatus()
   }

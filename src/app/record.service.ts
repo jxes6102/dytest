@@ -21,21 +21,7 @@ export class RecordService {
     return this.allRecords
   }
   //修改紀錄
-  // addAllRecords(index:number,data:stepType) {
-  //   if(!this.allRecords[index]?.length) this.allRecords[index] = []
-  //   // 當上一步是拿取時，將點擊和拿取組合成同一步驟
-  //   if(this.grabData.length) {
-  //     this.allRecords[index].pop()
-  //     this.grabData.push(data)
-  //     this.allRecords[index].push(this.grabData)
-  //     this.grabData = []
-  //   // 當這一步是拿取時，存到grabData
-  //   }else if(data.status === clickStatus.grab){
-  //     this.grabData = [data]
-  //     this.allRecords[index].push([data])
-  //   }else this.allRecords[index].push([data])
-  // }
-  testaddAllRecords(data:stepType[]) {
+  addAllRecords(data:stepType[]) {
     if(!this.allRecords[0]) this.allRecords[0] = []
     this.allRecords[0].push(data)
   }
