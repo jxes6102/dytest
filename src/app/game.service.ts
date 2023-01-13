@@ -17,7 +17,6 @@ export class GameService {
     choseLock 是否可切換選擇大小畫面和動作類別
     canMove 每個格子可下的範圍
     allRecords 所有遊戲紀錄
-    checkRecord 紀錄每個格子的修改
   */
   status:string = clickStatus.click
   result:number = 0
