@@ -37,16 +37,16 @@ export class GameService {
     [4,6,8],
     [5,7]
   ]
-  // 拿取該局紀錄長度
-  get stepLen() {
-    return this.allRecords[this.nowFlag[0]].length
-  }
   // 拿取全部對戰資料
   get allRecords() {
     return this.recordService.getAllRecords
   }
 
   constructor(private recordService: RecordService) {}
+  // 拿取該局紀錄長度
+  get stepLen() {
+    return this.allRecords[this.nowFlag[0]].length
+  }
   // 拿取當前步驟
   get getStep () {
     return this.nowFlag[1]
