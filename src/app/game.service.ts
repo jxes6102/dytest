@@ -63,13 +63,6 @@ export class GameService {
   get isBattle() {
     return !this.nowFlag[0] ? true : false
   }
-  // 設定模式
-  setMode(val:number) {
-    this.clearView()
-    this.resetData()
-
-    this.nowFlag[0] = val
-  }
   // 拿取勝利者
   get getWin() {
     return this.result
@@ -82,27 +75,13 @@ export class GameService {
   get getViewData () {
     return this.viewData
   }
-  // 設定遊戲遊玩狀態
-  setStatus () {
-    if(this.status === clickStatus.click) this.status = clickStatus.grab
-    else this.status = clickStatus.click
-  }
   // 拿取遊戲遊玩狀態
   get getStatus () {
     return this.status
   }
-  //重置遊戲
-  resetGame() {
-    this.resetData()
-    this.recordService.clearAllRecords()
-  }
-  // 重置資料
-  resetData () {
-    this.result = 0
-    this.status = clickStatus.click
-    this.actionData = []
-    this.nowFlag[1] = 0
-    this.choseLock = false
+  // 拿取遊戲紀錄
+  get getRecord() {
+    return this.allRecords.filter((item,index) => ((item?.length > 0) && (index !== 0)))
   }
   //拿取步驟訊息
   get getStepMessage() {
@@ -116,6 +95,31 @@ export class GameService {
       if(target[0].status === clickStatus.grab) return '拿了' + this.marks[this.stepCount]
       else return (sign + '用了' + adjArr[target[0].useSize] + '下在第' + (target[0].wherePlace + 1) + '格')
     }else return ('拿了在第' + ((target[0].wherePlace + 1)) + '格的' + sign + '下在第' + ((target[1].wherePlace + 1)) + '格')
+  }
+  // 設定模式
+  setMode(val:number) {
+    this.clearView()
+    this.resetData()
+
+    this.nowFlag[0] = val
+  }
+  // 設定遊戲遊玩狀態
+  setStatus () {
+    if(this.status === clickStatus.click) this.status = clickStatus.grab
+    else this.status = clickStatus.click
+  }
+  //重置遊戲
+  resetGame() {
+    this.resetData()
+    this.recordService.clearAllRecords()
+  }
+  // 重置資料
+  resetData () {
+    this.result = 0
+    this.status = clickStatus.click
+    this.actionData = []
+    this.nowFlag[1] = 0
+    this.choseLock = false
   }
   //清除畫面
   clearView() {
@@ -298,10 +302,6 @@ export class GameService {
     // 當按上一步時紀錄已到第0筆 按下一步時紀錄已到最後一筆 不動作
     if(((this.nowFlag[1] === this.allRecords[this.nowFlag[0]].length) && (stepVal === 1)) || ((this.nowFlag[1] < 1) && (stepVal === -1))) return
     this.skipAction(this.nowFlag[1] + stepVal)
-  }
-  // 拿取遊戲紀錄
-  get getRecord() {
-    return this.allRecords.filter((item,index) => ((item?.length > 0) && (index !== 0)))
   }
   // 紀錄模式切換步驟
   skipAction(val:number) {
