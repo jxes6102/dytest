@@ -11,6 +11,39 @@ export class Test2Component {
   constructor() {}
 
   ngOnInit(): void {
+    // let test1 = false
+    // let test2 = false
+    // let test3 = true
+    // let test4 = true
+    
+    // try {
+    //   if (test1) throw 'test1'
+    //   try {
+    //     if (test2) throw 'test2'
+    //     try {
+    //       if (test3) throw 'test3'
+    //     } catch (error) {
+    //       console.log(error)
+    //       try {
+    //         if (test4) throw 'test4'
+    //       } catch (error) {
+    //         console.log(error)
+    //       }
+    //       finally {
+    //         console.log('finallyin')
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // } catch (error) {
+    //   console.log(error)
+    // }
+    // finally {
+    //   console.log('finallyout')
+    // }
+    
+
     // console.log('qqq test2')
     // const locations = new Observable((observer) => {
     //   let watchId: number;
@@ -70,26 +103,26 @@ export class Test2Component {
 
 
 
-    function sequenceSubscriber(observer: Observer<number>) {
-      // synchronously deliver 1, 2, and 3, then complete
-      observer.next(1);
-      observer.next(2);
-      observer.next(3);
-      observer.complete();
+    // function sequenceSubscriber(observer: Observer<number>) {
+    //   // synchronously deliver 1, 2, and 3, then complete
+    //   observer.next(1);
+    //   observer.next(2);
+    //   observer.next(3);
+    //   observer.complete();
     
-      // unsubscribe function doesn't need to do anything in this
-      // because values are delivered synchronously
-      return {unsubscribe() {}};
-    }
+    //   // unsubscribe function doesn't need to do anything in this
+    //   // because values are delivered synchronously
+    //   return {unsubscribe() {}};
+    // }
     
-    // Create a new Observable that will deliver the above sequence
-    const sequence = new Observable(sequenceSubscriber);
+    // // Create a new Observable that will deliver the above sequence
+    // const sequence = new Observable(sequenceSubscriber);
     
-    // execute the Observable and print the result of each notification
-    sequence.subscribe({
-      next(num) { console.log(num); },
-      complete() { console.log('Finished sequence'); }
-    });
+    // // execute the Observable and print the result of each notification
+    // sequence.subscribe({
+    //   next(num) { console.log(num); },
+    //   complete() { console.log('Finished sequence'); }
+    // });
 
 
     
