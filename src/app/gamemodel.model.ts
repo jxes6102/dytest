@@ -68,19 +68,3 @@ export class selectData {
     }
 }
  
-export class checkData {
-    private data:stepType[][] = []
-
-    constructor(){
-        this.creatData()
-    }
-
-    creatData() {
-        for(let i = 0;i<9;i++) this.data[i] = []
-    }
-    
-    get getData() {
-        return this.data
-    } 
- }
- 
