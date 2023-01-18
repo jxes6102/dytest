@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { lastValueFrom, Observer } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { GameService } from '../game.service';
 
 @Component({
@@ -28,6 +28,7 @@ export class Test1Component {
 
     // console.log('a')
     const resp = await this.httpGET('https://api.thecatapi.com/v1/images/search?limit=10');
+    console.log('resp',resp)
     this.imgUrlLeft = Object.values(resp)[0].url || ''
     this.imgUrlRight = Object.values(resp)[6].url ||  ''
     // console.log('c')
@@ -64,6 +65,7 @@ export class Test1Component {
     try {
         const result = this.http.get(apiUrl).pipe(
             tap((resp: object) => {
+                // throw new Error("test error")
                 // console.log('resp',resp)
                 return resp;
             })
