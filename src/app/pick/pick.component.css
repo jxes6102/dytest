@@ -24,6 +24,33 @@
     font-size: 20px;
 }
 
+@media screen and (max-height: 768px) {
+  .wrap {
+      width: 150px;
+      height: 400px;
+      background: linear-gradient(to bottom right,#ffc3a0,#ffafbd);
+      flex-direction: column;
+      border-radius: 10px;
+      gap: 20px;
+  }
+
+  .block{
+      width: 110px;
+      height: 110px;
+      padding:2px 2px;
+      flex-direction: column;
+  }
+
+  .countStyle {
+    font-size: 16px;
+  }
+
+  .selectColor {
+      border-radius: 8px;
+      background-color: #ff758c;
+  }
+}
+
 @media screen and (max-width: 768px) {
     .wrap {
         width: 65px;
@@ -34,7 +61,7 @@
         border-radius: 10px;
         gap: 10px;
     }
-    
+
     .block{
         width: 65px;
         height: 65px;

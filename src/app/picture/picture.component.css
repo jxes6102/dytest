@@ -70,6 +70,20 @@
     border-top: 1px solid #252a34;
 }
 
+@media screen and (max-height: 768px) {
+  .baseSize {
+      width: 300px;
+      height: 300px;
+      margin-top: 5px;
+  }
+
+  .blockSize {
+      width: 100px;
+      height: 100px;
+  }
+
+}
+
 @media screen and (max-width: 768px) {
     .baseSize {
         width: 180px;

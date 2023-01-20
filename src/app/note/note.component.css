@@ -22,6 +22,26 @@
     font-size: 20px;
 }
 
+@media screen and (max-height: 768px) {
+  .listStyle {
+      width: 60vh;
+      height: 150px;
+      margin-top: 10px;
+      border-radius: 10px;
+      background: rgb(236, 238, 240);
+  }
+
+  .choseStyle {
+      width: 90%;
+      height: 20px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      background: linear-gradient(to bottom right,#c3cfe2,#e2ebf0);
+      border-radius: 5px;
+      font-size: 12px;
+  }
+}
+
 @media screen and (max-width: 768px) {
     .listStyle {
         width: 100vw;
@@ -30,7 +50,7 @@
         border-radius: 10px;
         background: rgb(236, 238, 240);
     }
-    
+
     .choseStyle {
         width: 90%;
         height: 20px;

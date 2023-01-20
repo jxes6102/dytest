@@ -2,6 +2,8 @@
     width: 100%;
     height: 100vh;
     flex-direction: column;
+    min-height: 100vh;
+    overflow: auto;
 }
 
 .menu {
@@ -34,6 +36,29 @@
 
 .statusStyle {
     font-size: 20px;
+}
+
+@media screen and (max-height: 768px) {
+  .menu {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    gap: 10px;
+  }
+  .statusStyle {
+      font-size: 14px;
+  }
+  .board{
+      width: 100%;
+      gap: 10px;
+  }
+  .winStyle{
+      width: 100vh;
+      height: auto;
+      margin-top: 10px;
+      flex-direction: column;
+      font-size: 20px;
+  }
 }
 
 @media screen and (max-width: 768px) {
