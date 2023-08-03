@@ -1,1 +1,11 @@
-<div>test2 works!</div>
+<!-- <div>test2 works!</div> -->
+<!-- <ng-container *ngFor="let item in 10; let i = index">
+  <div>{{i}}</div>
+</ng-container> -->
+
+<!-- <div class="zxc" *ngFor="let item of [1,2,3]; let i = index">
+  <div>{{i}}</div>
+</div> -->
+<div [innerHTML]="str | markPipe:strKey"></div>
+
+

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';  
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { displayPipe } from './convert.pipe';
 import { winerPipe } from './winer.pipe';
+import { markPipe } from './mark.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { Test1Component } from './test1/test1.component';
@@ -21,6 +22,7 @@ import { Test2Component } from './test2/test2.component';
     AppComponent,
     displayPipe,
     winerPipe,
+    markPipe,
     Test1Component,
     PickComponent,
     PictureComponent,
