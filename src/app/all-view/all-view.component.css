@@ -14,7 +14,7 @@
 }
 
 .winStyle{
-    width: 100%;
+    width: auto;
     height: auto;
     margin-top: 10px;
     flex-direction: row;
@@ -53,7 +53,7 @@
       gap: 10px;
   }
   .winStyle{
-      width: 100vh;
+      width: auto;
       height: auto;
       margin-top: 5px;
       flex-direction: row;
@@ -76,7 +76,7 @@
         gap: 2px;
     }
     .winStyle{
-        width: 100%;
+        width: auto;
         height: auto;
         margin-top: 5px;
         flex-direction: row;
