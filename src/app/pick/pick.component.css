@@ -53,8 +53,8 @@
 
 @media screen and (max-width: 768px) {
     .wrap {
-        width: 65px;
-        height: 245px;
+        width: 45px;
+        height: 200px;
         margin: 10px 0px;
         background: linear-gradient(to bottom right,#ffc3a0,#ffafbd);
         flex-direction: column;
@@ -63,14 +63,14 @@
     }
 
     .block{
-        width: 65px;
+        width: 45px;
         height: 65px;
         padding:2px 0px;
         flex-direction: column;
     }
 
     .countStyle {
-        font-size: 12px;
+        font-size: 8px;
     }
 
     .selectColor {
